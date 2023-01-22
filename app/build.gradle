@@ -1,0 +1,106 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.rob729.newsfeed"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        buildConfigField("String", "NEWS_FEED_API_KEY", NEWS_FEED_API_KEY)
+    }
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        benchmark {
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            debuggable false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.0-beta01"
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+def rootConfiguration = rootProject.ext
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "androidx.compose.ui:ui:${rootConfiguration.compose_version}"
+    implementation "androidx.compose.material:material:${rootConfiguration.material_ui}"
+    implementation "androidx.compose.ui:ui-tooling-preview:${rootConfiguration.compose_version}"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:${rootConfiguration.compose_version}"
+    debugImplementation "androidx.compose.ui:ui-tooling:${rootConfiguration.compose_version}"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:${rootConfiguration.compose_version}"
+    implementation "androidx.navigation:navigation-compose:${rootConfiguration.nav_version}"
+    implementation "androidx.compose.material:material-icons-extended:${rootConfiguration.material_ui}"
+    implementation "androidx.compose.material3:material3:$material3_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+
+    implementation "io.coil-kt:coil:${rootConfiguration.coil_version}"
+    implementation "io.coil-kt:coil-compose:${rootConfiguration.coil_version}"
+
+    implementation "com.squareup.moshi:moshi-kotlin:${rootConfiguration.moshi_version}"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:${rootConfiguration.moshi_version}"
+
+    implementation "org.orbit-mvi:orbit-viewmodel:${rootConfiguration.orbit_version}"
+    implementation("org.orbit-mvi:orbit-compose:${rootConfiguration.orbit_version}")
+
+    implementation "com.squareup.retrofit2:retrofit:${rootConfiguration.retrofit_version}"
+    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:${date_time_version}"
+
+    implementation "androidx.room:room-runtime:${rootConfiguration.room_version}"
+    ksp "androidx.room:room-compiler:${rootConfiguration.room_version}"
+    implementation("androidx.room:room-ktx:${rootConfiguration.room_version}")
+
+    implementation "io.insert-koin:koin-android:$koin_android_version"
+
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    implementation "androidx.browser:browser:1.4.0"
+}
