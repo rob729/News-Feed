@@ -4,4 +4,5 @@
     <queries>
         <package android:name="com.rob729.newsfeed" />
     </queries>
+    <application android:requestLegacyExternalStorage="true" />
 </manifest>

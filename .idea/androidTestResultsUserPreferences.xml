@@ -3,18 +3,80 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-288534696">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RZCTB1HYFED" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-M336BU" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="345440395">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RZCTB1HYFED" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-M336BU" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="506779602">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="192.168.1.92:39537" value="120" />
+                  <entry key="192.168.1.92:39707" value="120" />
                   <entry key="192.168.1.92:41185" value="120" />
+                  <entry key="192.168.1.92:42337" value="120" />
+                  <entry key="192.168.1.92:42723" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_3a_API_33_arm64-v8a" value="120" />
                   <entry key="Pixel_6_API_30" value="120" />
+                  <entry key="RZCTB1HYFED" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="Xiaomi&#10; M2012K11AI" value="120" />
                   <entry key="db905a0b" value="120" />
+                  <entry key="samsung&#10; SM-M336BU" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1489892905">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RZCTB1HYFED" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-M336BU" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1509784306">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="192.168.1.92:42337" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="Xiaomi&#10; M2012K11AI" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

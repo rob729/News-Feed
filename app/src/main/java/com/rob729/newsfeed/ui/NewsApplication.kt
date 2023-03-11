@@ -26,45 +26,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class NewsApplication : Application() {
 
-    private val appModule by lazy {
-        module {
-            single {
-                val newsDatabase = NewsDatabase.getDatabase(applicationContext)
-                newsDatabase.newsDao()
-            }
-
-            single {
-                val loggingInterceptor =
-                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                val okHttpClient = OkHttpClient.Builder()
-                    .addInterceptor(loggingInterceptor)
-                    .build()
-
-                val retrofitInstance = Retrofit.Builder()
-                    .baseUrl(Constants.BASE_URL)
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .client(okHttpClient)
-                    .build()
-
-                retrofitInstance.create(NewsApi::class.java)
-            }
-
-            singleOf(::NewsApiDataSourceImpl) { bind<NewsApiDataSource>() }
-            singleOf(::NewsDBDataSource)
-            singleOf(::NewsRepository)
-            viewModelOf(::NewsViewModel)
-        }
-    }
-
     override fun onCreate() {
         super.onCreate()
-        startKoin {
-            androidContext(this@NewsApplication)
-            modules(appModule)
-        }
-
-        val newsSourceImagePreloadRequest = OneTimeWorkRequestBuilder<NewsSourceImagePrefetch>()
-            .build()
-        WorkManager.getInstance(this).enqueue(newsSourceImagePreloadRequest)
     }
 }

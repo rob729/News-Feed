@@ -14,16 +14,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.rob729.newsfeed.ui.components.NewsSourcePill
 import com.rob729.newsfeed.utils.Constants
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun showNewsSourceDialog(
+fun ShowNewsSourceDialog(
     dismissDialog: () -> Unit,
     onNewsSourceClicked: (String) -> Unit,
     currentSelectedNewsSource: String
@@ -33,6 +38,7 @@ fun showNewsSourceDialog(
     val newsSourceList = Constants.newsSourceUiDataLists
     Dialog(onDismissRequest = { dismissDialog() }) {
         Surface(
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             shape = RoundedCornerShape(16.dp),
             color = Color.DarkGray,
         ) {
@@ -41,7 +47,7 @@ fun showNewsSourceDialog(
                 modifier = Modifier.padding(8.dp)
             ) {
                 Column {
-                    LazyVerticalGrid(modifier = Modifier, columns = GridCells.Fixed(3)) {
+                    LazyVerticalGrid(modifier = Modifier.testTag("news_source_list"), columns = GridCells.Fixed(3)) {
                         items(
                             Constants.newsSourceUiDataLists.size,
                             { index: Int -> newsSourceList[index].domain },

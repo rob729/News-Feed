@@ -10,10 +10,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.rob729.newsfeed.BuildConfig
 import com.rob729.newsfeed.R
 import com.rob729.newsfeed.ui.screen.HomeScreen
 import com.rob729.newsfeed.ui.theme.NewsFeedTheme
@@ -22,6 +27,7 @@ import com.rob729.newsfeed.utils.NotificationHelper
 import com.rob729.newsfeed.vm.NewsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 class NewsActivity : ComponentActivity() {
 
     private val newsViewModel: NewsViewModel by viewModel()
@@ -49,7 +55,8 @@ class NewsActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = NavigationScreens.HOME.routeName
+                    startDestination = NavigationScreens.HOME.routeName,
+                    modifier = Modifier.semantics { testTagsAsResourceId = true }
                 ) {
                     composable(NavigationScreens.HOME.routeName) {
                         HomeScreen(newsViewModel) {
@@ -79,6 +86,9 @@ class NewsActivity : ComponentActivity() {
     }
 
     private fun requestNotificationPermission() {
+        if(BuildConfig.BUILD_TYPE == "benchmark") {
+            return
+        }
         if (ContextCompat.checkSelfPermission(
                 baseContext,
                 Manifest.permission.POST_NOTIFICATIONS

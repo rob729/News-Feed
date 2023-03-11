@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -80,7 +81,7 @@ fun HomeScreen(
     }
 
     if (newsState.showDialog) {
-        showNewsSourceDialog(
+        ShowNewsSourceDialog(
             { viewModel.dismissNewsSourceDialog() },
             { selectedNewsSource ->
                 viewModel.newsSourceClicked(selectedNewsSource)
@@ -119,7 +120,7 @@ fun HomeScreen(
                     }
                 }
             } else {
-                LazyColumn(Modifier, listState) {
+                LazyColumn(Modifier.testTag("news_list"), listState) {
                     items(newsState.news) { item ->
                         NewsFeedItem(newsArticleUiData = item,
                             Modifier
@@ -136,7 +137,8 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = 16.dp)
-                .offset(y = if (listState.isScrollingUp() && !isFirstItemVisible.value) (-16).dp else 48.dp),
+                .offset(y = if (listState.isScrollingUp() && !isFirstItemVisible.value) (-16).dp else 48.dp)
+                .testTag("scroll_up_fab"),
             onClick = { viewModel.scrollToTopClicked() },
             containerColor = colorResource(R.color.status_bar)
         ) {
@@ -150,7 +152,8 @@ fun HomeScreen(
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .padding(16.dp)
-                .align(Alignment.BottomEnd),
+                .align(Alignment.BottomEnd)
+                .testTag("news_source_fab"),
             onClick = {
                 viewModel.newsSourceFabClicked()
             },
