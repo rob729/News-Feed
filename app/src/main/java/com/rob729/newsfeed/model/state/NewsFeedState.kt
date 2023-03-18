@@ -7,5 +7,5 @@ data class NewsFeedState(
     val isLoading: Boolean = true,
     val selectedNewsSource: String = "theverge.com",
     val selectedNewsUrl: String = "",
-    val showDialog: Boolean = false
+    val showNewsSourceBottomSheet: Boolean = false
 )

@@ -50,22 +50,24 @@ fun NewsFeedItem(newsArticleUiData: NewsArticleUiData, modifier: Modifier = Modi
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(165.dp)
+                    .height(150.dp)
                     .padding(bottom = 4.dp)
                     .clip(RoundedCornerShape(12.dp)),
             )
             Text(
                 text = newsArticleUiData.title,
+                maxLines = 2,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .padding(horizontal = 6.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
                 fontFamily = lexendDecaFontFamily
             )
             Text(
                 text = newsArticleUiData.description,
-                maxLines = 3,
+                maxLines = 2,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                 fontSize = 12.sp,

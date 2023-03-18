@@ -56,36 +56,31 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel(),
     }
 
     fun newsSourceClicked(newsSource: String) = intent {
+        postSideEffect(NewsFeedSideEffect.NewsSourceClicked(newsSource))
         if (state.selectedNewsSource != newsSource) {
             reduce {
-                state.copy(selectedNewsSource = newsSource, isLoading = true, showDialog = false)
+                state.copy(selectedNewsSource = newsSource, isLoading = true, showNewsSourceBottomSheet = false)
             }
             this.updateStateFromNewsResource(newsRepository.getNewsArticles(newsSource))
         } else {
             reduce {
-                state.copy(showDialog = false)
+                state.copy(showNewsSourceBottomSheet = false)
             }
         }
-        postSideEffect(NewsFeedSideEffect.NewsSourceClicked(newsSource))
     }
 
     fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
         reduce {
             state.copy(selectedNewsUrl = item.url)
         }
-        postSideEffect(NewsFeedSideEffect.NewsfeedItemClicked)
+        postSideEffect(NewsFeedSideEffect.NewsFeedItemClicked)
     }
 
     fun newsSourceFabClicked() = intent {
         reduce {
-            state.copy(showDialog = true)
+            state.copy(showNewsSourceBottomSheet = true)
         }
-    }
-
-    fun dismissNewsSourceDialog() = intent {
-        reduce {
-            state.copy(showDialog = false)
-        }
+        postSideEffect(NewsFeedSideEffect.NewsSourceFabClicked)
     }
 
     fun scrollToTopClicked() = intent {

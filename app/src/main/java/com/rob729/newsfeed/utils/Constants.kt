@@ -1,15 +1,14 @@
 package com.rob729.newsfeed.utils
 
-import androidx.compose.ui.unit.dp
 import com.rob729.newsfeed.model.ui.NewsSourceUiData
 
 object Constants {
     const val BASE_URL = "https://newsapi.org/v2/"
     const val NOTIFICATION_TITLE = "notification_title"
     const val NOTIFICATION_MESSAGE = "notification_message"
+    const val TOOLBAR_TITLE = "News Feed"
     const val FAB_TITLE = "News Sources"
     const val CHROME_PACKAGE_NAME = "com.android.chrome"
-    val BOTTOM_BAR_HEIGHT = 70.dp
     val newsSourceUiDataLists = listOf(
         NewsSourceUiData("theverge.com", "https://kahoot.com/files/2020/10/the-verge-logo.jpg"),
         NewsSourceUiData(
@@ -17,20 +16,16 @@ object Constants {
             "https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1489030150/i1jbqbfetqzi8dr9nmvb.png"
         ),
         NewsSourceUiData(
-            "techcrunch.com",
-            "https://pbs.twimg.com/profile_images/1096066608034918401/m8wnTWsX.png"
+            "androidauthority.com",
+            "https://yt3.googleusercontent.com/_Tya4y1GTYtsEzEztJIoeHV8ZQhKZN11GyyUx3VFBNnKa_CfN8csGDhiACHfMB519iCHgDjh8ls=s900-c-k-c0x00ffffff-no-rj"
         ),
         NewsSourceUiData(
             "wsj.com",
             "https://kairosaerospace.com/wp-content/uploads/2020/02/wsj-social-share.png"
         ),
         NewsSourceUiData(
-            "espncricinfo.com",
-            "https://images-na.ssl-images-amazon.com/images/I/21h-OE4-X7L._SY355_.png"
-        ),
-        NewsSourceUiData(
-            "thenextweb.com",
-            "https://assets.stickpng.com/thumbs/5841a001a6515b1e0ad75a6e.png"
+            "9to5mac.com",
+            "https://scontent.fdel1-3.fna.fbcdn.net/v/t39.30808-6/278026543_10158794281932291_4945991951311318753_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=_99-VbSrv0kAX_Fc-1X&_nc_ht=scontent.fdel1-3.fna&oh=00_AfDas8tAwkB5kGQyTKZlrd3fGSZfsm_y7cRK8S76uAFNMw&oe=641A9F67"
         ),
         NewsSourceUiData(
             "newscientist.com",
@@ -38,7 +33,11 @@ object Constants {
         ),
         NewsSourceUiData(
             "bbc.com",
-            "https://i2-prod.mirror.co.uk/incoming/article83771.ece/ALTERNATES/s1200d/bbc-logo-21217808.jpg"
-        )
+            "https://radiotoday.co.uk/wp-content/uploads/2021/10/bbc.png"
+        ),
+        NewsSourceUiData(
+            "techcrunch.com",
+            "https://pbs.twimg.com/profile_images/1096066608034918401/m8wnTWsX.png"
+        ),
     )
 }

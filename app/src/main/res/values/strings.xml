@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">News Feed</string>
-    <string name="news_api_key">4663b6001744472eaac1f5aa16076a7a</string>
+    <string name="notification_title">Your Daily News Feed is Ready</string>
+    <string name="notification_sub_title">Click here to see the latest things happening around the world</string>
 </resources>

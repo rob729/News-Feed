@@ -55,7 +55,7 @@ class NotificationHelper(private val context: Context) {
                 CHANNEL_ID,
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "News Reminder Channel Description"
+                description = NOTIFICATION_CHANNEL_DESCRIPTION
             }
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -78,14 +78,14 @@ class NotificationHelper(private val context: Context) {
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .setInputData(
                 workDataOf(
-                    Constants.NOTIFICATION_TITLE to "Your Daily News Feed is Ready",
-                    Constants.NOTIFICATION_MESSAGE to "Click here to see the latest things happening around the world"
+                    Constants.NOTIFICATION_TITLE to  context.getString(R.string.notification_title),
+                    Constants.NOTIFICATION_MESSAGE to context.getString(R.string.notification_sub_title),
                 )
             )
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
-            "DAILY_NEWS_REMINDER",
+            WORK_NAME,
             ExistingWorkPolicy.REPLACE,
             newsReminderWorkRequest
         )
@@ -95,5 +95,7 @@ class NotificationHelper(private val context: Context) {
     companion object {
         private const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "Daily News Reminder"
+        private const val WORK_NAME = "DAILY_NEWS_REMINDER"
+        private const val NOTIFICATION_CHANNEL_DESCRIPTION = "News Reminder Channel Description"
     }
 }

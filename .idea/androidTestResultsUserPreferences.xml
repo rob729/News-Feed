@@ -36,6 +36,7 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="192.168.1.92:38793" value="120" />
                   <entry key="192.168.1.92:39537" value="120" />
                   <entry key="192.168.1.92:39707" value="120" />
                   <entry key="192.168.1.92:41185" value="120" />
