@@ -1,13 +1,16 @@
 package com.rob729.newsfeed.ui.screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -15,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -30,14 +34,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.rob729.newsfeed.model.state.NewsFeedSideEffect
-import com.rob729.newsfeed.ui.components.LoadingShimmer
+import androidx.navigation.NavController
+import com.rob729.newsfeed.model.state.UiStatus
+import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
+import com.rob729.newsfeed.ui.NavigationScreens
+import com.rob729.newsfeed.ui.components.LoadingView
 import com.rob729.newsfeed.ui.components.NewsFeedItem
 import com.rob729.newsfeed.ui.components.NewsSourceBottomSheetContent
 import com.rob729.newsfeed.ui.components.NewsSourceExtendedFab
+import com.rob729.newsfeed.ui.components.NoInternetView
 import com.rob729.newsfeed.ui.components.ScrollToTopFab
 import com.rob729.newsfeed.ui.components.Toolbar
-import com.rob729.newsfeed.vm.NewsViewModel
+import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -48,7 +56,9 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 )
 @Composable
 fun HomeScreen(
-    viewModel: NewsViewModel,
+    navController: NavController,
+    viewModel: HomeViewModel,
+    paddingValues: PaddingValues,
     openCustomTab: (url: String) -> Unit
 ) {
 
@@ -56,13 +66,25 @@ fun HomeScreen(
 
     val newsState = viewModel.collectAsState().value
 
-    val isFirstItemVisible = remember {
-        derivedStateOf { listState.firstVisibleItemIndex == 0 }
+    val isMinItemsScrolledForScrollToTopVisibility by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 2
+        }
+    }
+
+    val toolbarElevation by remember {
+        derivedStateOf {
+            if(listState.firstVisibleItemIndex == 0) {
+                minOf(listState.firstVisibleItemScrollOffset.toFloat().dp, 12.dp)
+            } else {
+                12.dp
+            }
+        }
     }
 
     val modalSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = true,
     )
 
@@ -70,21 +92,21 @@ fun HomeScreen(
 
     viewModel.collectSideEffect {
         when (it) {
-            is NewsFeedSideEffect.NewsSourceClicked -> {
+            is HomeFeedSideEffect.HomeSourceClicked -> {
                 coroutineScope.launch(Dispatchers.Main.immediate) {
-                    modalSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                    modalSheetState.hide()
                 }
                 listState.scrollToItem(0)
             }
-            NewsFeedSideEffect.NewsFeedItemClicked -> {
-                openCustomTab(newsState.selectedNewsUrl)
+            is HomeFeedSideEffect.HomeFeedItemClicked -> {
+                openCustomTab(it.selectedItemUrl)
             }
-            NewsFeedSideEffect.NewsSourceFabClicked -> {
+            HomeFeedSideEffect.HomeSourceFabClicked -> {
                 coroutineScope.launch {
-                    modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                    modalSheetState.show()
                 }
             }
-            NewsFeedSideEffect.ScrollToTopClicked -> {
+            HomeFeedSideEffect.ScrollToTopClicked -> {
                 listState.animateScrollToItem(0)
             }
         }
@@ -103,49 +125,57 @@ fun HomeScreen(
             )
         }
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(MaterialTheme.colors.background)
+                .padding(paddingValues)
         ) {
             Column {
-                Toolbar()
+                Toolbar(toolbarElevation) {
+                    navController.navigate(NavigationScreens.SEARCH.routeName)
+                }
 
-                if (newsState.isLoading) {
-                    LazyColumn {
-                        repeat(4) {
-                            item {
-                                LoadingShimmer()
+                when (newsState.uiStatus) {
+                    UiStatus.Error -> {
+                        NoInternetView(viewModel::tryAgainClicked)
+                    }
+                    UiStatus.Loading -> {
+                        LoadingView()
+                    }
+                    is UiStatus.Success -> {
+                        LazyColumn(Modifier.testTag("news_list"), listState) {
+                            items(newsState.uiStatus.news) { item ->
+                                NewsFeedItem(newsArticleUiData = item,
+                                    Modifier
+                                        .animateItemPlacement()
+                                        .clickable {
+                                            viewModel.newsFeedItemClicked(item)
+                                        })
                             }
                         }
                     }
-                } else {
-                    LazyColumn(Modifier.testTag("news_list"), listState) {
-                        items(newsState.news) { item ->
-                            NewsFeedItem(newsArticleUiData = item,
-                                Modifier
-                                    .animateItemPlacement()
-                                    .clickable {
-                                        viewModel.newsFeedItemClicked(item)
-                                    })
-                        }
-                    }
+
+                    else -> {}
                 }
             }
 
-            ScrollToTopFab(modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 16.dp)
-                .offset(y = if (listState.isScrollingUp() && !isFirstItemVisible.value) (-16).dp else 48.dp)
-                .testTag("scroll_up_fab"), onClick = { viewModel.scrollToTopClicked() })
+            if(newsState.uiStatus is UiStatus.Success) {
+                AnimatedVisibility(modifier = Modifier.align(Alignment.BottomStart), visible = listState.isScrollingUp() && isMinItemsScrolledForScrollToTopVisibility, enter = fadeIn(), exit = fadeOut()) {
+                    ScrollToTopFab(modifier = Modifier
+                        .padding(16.dp)
+                        .testTag("scroll_up_fab"), onClick = { viewModel.scrollToTopClicked() })
+                }
 
-            NewsSourceExtendedFab(modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomEnd)
-                .testTag("news_source_fab"), isExpanded = listState.isScrollingUp(),
-                onClick = {
-                    viewModel.newsSourceFabClicked()
-                })
+                NewsSourceExtendedFab(modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomEnd)
+                    .testTag("news_source_fab"), isExpanded = listState.isScrollingUp(),
+                    onClick = {
+                        viewModel.newsSourceFabClicked()
+                    })
+            }
         }
     }
 

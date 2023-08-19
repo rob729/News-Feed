@@ -25,7 +25,7 @@ object Constants {
         ),
         NewsSourceUiData(
             "9to5mac.com",
-            "https://scontent.fdel1-3.fna.fbcdn.net/v/t39.30808-6/278026543_10158794281932291_4945991951311318753_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=_99-VbSrv0kAX_Fc-1X&_nc_ht=scontent.fdel1-3.fna&oh=00_AfDas8tAwkB5kGQyTKZlrd3fGSZfsm_y7cRK8S76uAFNMw&oe=641A9F67"
+            "https://yt3.googleusercontent.com/IQG90t76dAEx1ELUD60rrMJKiI5J2tzfWBgN7FnpJSwBw-CHWhDEAieKeA-DrHFuxii-xZGS_iw=s900-c-k-c0x00ffffff-no-rj"
         ),
         NewsSourceUiData(
             "newscientist.com",
@@ -40,4 +40,7 @@ object Constants {
             "https://pbs.twimg.com/profile_images/1096066608034918401/m8wnTWsX.png"
         ),
     )
+    const val ERROR_MESSAGE_PREFIX = "Something went wrong"
+    const val API_RESULT_LANGUAGE = "en"
+    const val SORT_RESULT_FILTER_PUBLISHED_AT = "publishedAt"
 }

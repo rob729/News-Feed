@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.rob729.benchmark'
-    compileSdk 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.test.ext:junit:1.1.5'
     implementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    implementation 'androidx.benchmark:benchmark-macro-junit4:1.2.0-alpha11'
+    implementation 'androidx.benchmark:benchmark-macro-junit4:1.2.0-beta03'
     implementation 'androidx.test:rules:1.5.0'
 }
 

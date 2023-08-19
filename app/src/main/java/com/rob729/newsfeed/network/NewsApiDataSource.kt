@@ -4,4 +4,6 @@ import com.rob729.newsfeed.model.NewsResource
 
 interface NewsApiDataSource {
     suspend fun getNews(domain: String): NewsResource
+
+    suspend fun getNewsSearchResults(query: String): NewsResource
 }

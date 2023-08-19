@@ -2,14 +2,16 @@ package com.rob729.newsfeed.initalizers
 
 import android.content.Context
 import androidx.startup.Initializer
+import com.pluto.plugins.network.PlutoInterceptor
 import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.database.NewsDatabase
 import com.rob729.newsfeed.network.NewsApi
 import com.rob729.newsfeed.network.NewsApiDataSource
 import com.rob729.newsfeed.network.NewsApiDataSourceImpl
 import com.rob729.newsfeed.utils.Constants
+import com.rob729.newsfeed.vm.HomeViewModel
 import com.rob729.newsfeed.vm.NewsRepository
-import com.rob729.newsfeed.vm.NewsViewModel
+import com.rob729.newsfeed.vm.SearchViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -40,6 +42,7 @@ class KoinInitializer : Initializer<KoinApplication> {
                             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
                         val okHttpClient = OkHttpClient.Builder()
                             .addInterceptor(loggingInterceptor)
+                            .addInterceptor(PlutoInterceptor())
                             .build()
 
                         val retrofitInstance = Retrofit.Builder()
@@ -55,7 +58,8 @@ class KoinInitializer : Initializer<KoinApplication> {
                     singleOf(::NewsApiDataSourceImpl) { bind<NewsApiDataSource>() }
                     singleOf(::NewsDBDataSource)
                     singleOf(::NewsRepository)
-                    viewModelOf(::NewsViewModel)
+                    viewModelOf(::HomeViewModel)
+                    viewModelOf(::SearchViewModel)
                 }
             )
         }

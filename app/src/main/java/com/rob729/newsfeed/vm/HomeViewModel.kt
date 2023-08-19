@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.model.database.ArticleDbData
 import com.rob729.newsfeed.model.mapper.mapArticleDbDataToNewsArticleUiData
-import com.rob729.newsfeed.model.state.NewsFeedSideEffect
-import com.rob729.newsfeed.model.state.NewsFeedState
+import com.rob729.newsfeed.model.state.UiStatus
+import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
+import com.rob729.newsfeed.model.state.home.HomeFeedState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
@@ -15,39 +17,40 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel(),
-    ContainerHost<NewsFeedState, NewsFeedSideEffect> {
+class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(),
+    ContainerHost<HomeFeedState, HomeFeedSideEffect> {
 
-    override val container: Container<NewsFeedState, NewsFeedSideEffect> = container(
-        NewsFeedState()
+    override val container: Container<HomeFeedState, HomeFeedSideEffect> = container(
+        HomeFeedState()
     )
 
     init {
         intent {
-            this.updateStateFromNewsResource(newsRepository.getNewsArticles(state.selectedNewsSource))
+            newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+                this.updateStateFromNewsResource(it)
+            }
         }
     }
 
-    private suspend fun SimpleSyntax<NewsFeedState, NewsFeedSideEffect>.updateStateFromNewsResource(
+    private suspend fun SimpleSyntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
         newsResource: NewsResource
     ) {
         when (newsResource) {
             is NewsResource.Error -> {
                 reduce {
-                    state.copy(isLoading = false)
+                    state.copy(uiStatus = UiStatus.Error)
                 }
             }
             NewsResource.Loading -> {
                 reduce {
-                    state.copy(isLoading = true)
+                    state.copy(uiStatus = UiStatus.Loading)
                 }
             }
             is NewsResource.Success<*> -> {
                 (newsResource.data as? List<ArticleDbData>)?.let {
                     reduce {
                         state.copy(
-                            isLoading = false,
-                            news = it.mapNotNull(::mapArticleDbDataToNewsArticleUiData)
+                            uiStatus = UiStatus.Success(it.mapNotNull(::mapArticleDbDataToNewsArticleUiData))
                         )
                     }
                 }
@@ -56,12 +59,14 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel(),
     }
 
     fun newsSourceClicked(newsSource: String) = intent {
-        postSideEffect(NewsFeedSideEffect.NewsSourceClicked(newsSource))
+        postSideEffect(HomeFeedSideEffect.HomeSourceClicked(newsSource))
         if (state.selectedNewsSource != newsSource) {
             reduce {
-                state.copy(selectedNewsSource = newsSource, isLoading = true, showNewsSourceBottomSheet = false)
+                state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
             }
-            this.updateStateFromNewsResource(newsRepository.getNewsArticles(newsSource))
+            newsRepository.getNewsArticles(newsSource).collectLatest {
+                this.updateStateFromNewsResource(it)
+            }
         } else {
             reduce {
                 state.copy(showNewsSourceBottomSheet = false)
@@ -70,22 +75,24 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel(),
     }
 
     fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
-        reduce {
-            state.copy(selectedNewsUrl = item.url)
-        }
-        postSideEffect(NewsFeedSideEffect.NewsFeedItemClicked)
+        postSideEffect(HomeFeedSideEffect.HomeFeedItemClicked(item.url))
     }
 
     fun newsSourceFabClicked() = intent {
         reduce {
             state.copy(showNewsSourceBottomSheet = true)
         }
-        postSideEffect(NewsFeedSideEffect.NewsSourceFabClicked)
+        postSideEffect(HomeFeedSideEffect.HomeSourceFabClicked)
     }
 
     fun scrollToTopClicked() = intent {
-        postSideEffect(NewsFeedSideEffect.ScrollToTopClicked)
+        postSideEffect(HomeFeedSideEffect.ScrollToTopClicked)
     }
 
+    fun tryAgainClicked() = intent {
+        newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+            this.updateStateFromNewsResource(it)
+        }
+    }
 }
 

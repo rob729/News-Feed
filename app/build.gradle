@@ -14,12 +14,12 @@ android {
             storePassword 'q1w2e3r4t5y'
         }
     }
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.rob729.newsfeed"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -48,17 +48,20 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
+    }
+    kotlin {
+        jvmToolchain(11)
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packagingOptions {
         resources {
@@ -72,12 +75,12 @@ def rootConfiguration = rootProject.ext
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation "androidx.compose.ui:ui:${rootConfiguration.compose_version}"
     implementation "androidx.compose.material:material:${rootConfiguration.material_ui}"
     implementation "androidx.compose.ui:ui-tooling-preview:${rootConfiguration.compose_version}"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
-    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -88,8 +91,9 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:${rootConfiguration.nav_version}"
     implementation "androidx.compose.material:material-icons-extended:${rootConfiguration.material_ui}"
     implementation "androidx.compose.material3:material3:$material3_version"
+    implementation "androidx.compose.runtime:runtime-tracing:$compose_tracing"
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:${rootConfiguration.compose_viewmodel}"
 
     implementation "io.coil-kt:coil:${rootConfiguration.coil_version}"
     implementation "io.coil-kt:coil-compose:${rootConfiguration.coil_version}"
@@ -118,5 +122,11 @@ dependencies {
 
     implementation "androidx.profileinstaller:profileinstaller:${rootConfiguration.profile_installer}"
 
-    implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation "androidx.startup:startup-runtime:${rootConfiguration.startup_runtime}"
+
+    debugImplementation "com.plutolib:pluto:${rootConfiguration.pluto}"
+    releaseImplementation "com.plutolib:pluto-no-op:${rootConfiguration.pluto}"
+
+    debugImplementation "com.plutolib.plugins:bundle-core:${rootConfiguration.pluto}"
+    releaseImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
 }

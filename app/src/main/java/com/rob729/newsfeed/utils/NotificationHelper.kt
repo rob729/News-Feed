@@ -18,7 +18,7 @@ import androidx.work.workDataOf
 import com.rob729.newsfeed.R
 import com.rob729.newsfeed.ui.NewsActivity
 import com.rob729.newsfeed.workManager.NewsReminder
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class NotificationHelper(private val context: Context) {

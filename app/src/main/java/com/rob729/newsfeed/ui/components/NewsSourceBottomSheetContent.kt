@@ -4,19 +4,16 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
@@ -32,21 +29,22 @@ fun NewsSourceBottomSheetContent(
 ) {
     val vibrator = LocalContext.current.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     val newsSourceList = Constants.newsSourceUiDataLists
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val visibleCards = 4.25f
+    val itemSpacing = 12
+    val itemWidth = (screenWidthDp - (itemSpacing * visibleCards)).div(visibleCards)
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.padding(8.dp).semantics { testTagsAsResourceId = true }
+        modifier = Modifier
+            .semantics { testTagsAsResourceId = true }
     ) {
         Column {
-            LazyVerticalGrid(
-                modifier = Modifier.testTag("news_source_list"),
-                columns = GridCells.Fixed(4)
-            ) {
-                items(
-                    Constants.newsSourceUiDataLists.size,
-                    { index: Int -> newsSourceList[index].domain },
-                    { GridItemSpan(1) }) { index ->
+            LazyRow(modifier = Modifier.testTag("news_source_list").padding(top = 12.dp, bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)) {
+                items(Constants.newsSourceUiDataLists.size,
+                    { index: Int -> newsSourceList[index].domain }) { index ->
                     NewsSourcePill(
+                        itemSize = itemWidth.dp,
                         imageUrl = newsSourceList[index].imageUrl,
                         isSelected = newsSourceList[index].domain == currentSelectedNewsSource
                     ) {

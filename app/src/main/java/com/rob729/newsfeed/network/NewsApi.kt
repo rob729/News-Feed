@@ -14,4 +14,13 @@ interface NewsApi {
         @Query("language") language: String
     ): Response<NetworkNews>
 
+
+    @GET("everything")
+    suspend fun getNewsSearchResults(
+        @Query("q") query: String,
+        @Query("apiKey") apiKey: String,
+        @Query("from") startDate: String,
+        @Query("sortBy") sortBy: String,
+        @Query("language") language: String
+    ): Response<NetworkNews>
 }

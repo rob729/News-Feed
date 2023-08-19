@@ -25,3 +25,15 @@ fun mapArticleDbDataToNewsArticleUiData(articleDbData: ArticleDbData): NewsArtic
         articleDbData.publishedAt
     )
 }
+
+fun mapNetworkArticleToNewsArticleUiData(networkArticle: NetworkArticle): NewsArticleUiData? {
+    if (networkArticle.title.isNullOrBlank() || networkArticle.description.isNullOrBlank() || networkArticle.imageUrl.isNullOrBlank())
+        return null
+    return NewsArticleUiData(
+        networkArticle.title,
+        networkArticle.description,
+        networkArticle.imageUrl,
+        networkArticle.url,
+        networkArticle.publishedAt
+    )
+}
