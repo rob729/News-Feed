@@ -91,7 +91,7 @@ fun MacrobenchmarkScope.scrollAndNavigate() {
     list.fling(Direction.UP)
 
     val scrollUpButton = device.findObject(By.res("scroll_up_fab"))
-    scrollUpButton.click()
+    scrollUpButton?.click()
 
     val newsSourceButton = device.findObject(By.res("news_source_fab"))
     newsSourceButton.click()
@@ -101,7 +101,7 @@ fun MacrobenchmarkScope.scrollAndNavigate() {
         fail("Could not find news_source_list resource")
     }
     val newsSourceList = device.findObject(By.res("news_source_list"))
-    if(newsSourceList.children != null && newsSourceList.children.size > 7 && newsSourceList.children[0] != null) {
+    if(newsSourceList.children != null && newsSourceList.children[3] != null) {
         newsSourceList.children[3].click()
     }
 

@@ -39,11 +39,11 @@
             tools:node="merge">
 
             <meta-data
-                android:name="com.rob729.newsfeed.initalizers.KoinInitializer"
+                android:name="com.rob729.newsfeed.initalizers.PlutoInitializer"
                 android:value="androidx.startup" />
 
             <meta-data
-                android:name="com.rob729.newsfeed.initalizers.PlutoInitializer"
+                android:name="com.rob729.newsfeed.initalizers.KoinInitializer"
                 android:value="androidx.startup" />
 
             <meta-data

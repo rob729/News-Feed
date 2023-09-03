@@ -64,6 +64,7 @@
                   <entry key="RZCTB1HYFED" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-M336BU" value="120" />
+                  <entry key="samsung SM-M336BU" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

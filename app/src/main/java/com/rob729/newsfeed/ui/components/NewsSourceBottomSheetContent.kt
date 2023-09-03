@@ -21,7 +21,6 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.rob729.newsfeed.utils.Constants
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NewsSourceBottomSheetContent(
     onNewsSourceClicked: (String) -> Unit,
@@ -35,9 +34,7 @@ fun NewsSourceBottomSheetContent(
     val itemWidth = (screenWidthDp - (itemSpacing * visibleCards)).div(visibleCards)
 
     Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .semantics { testTagsAsResourceId = true }
+        contentAlignment = Alignment.Center
     ) {
         Column {
             LazyRow(modifier = Modifier.testTag("news_source_list").padding(top = 12.dp, bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)) {

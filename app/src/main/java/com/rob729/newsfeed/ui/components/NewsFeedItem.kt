@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import kotlinx.datetime.Clock
@@ -46,7 +48,14 @@ fun NewsFeedItem(newsArticleUiData: NewsArticleUiData, modifier: Modifier = Modi
     ) {
         Column {
             AsyncImage(
-                model = newsArticleUiData.imageUrl,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(newsArticleUiData.imageUrl)
+                    .crossfade(true)
+                    .crossfade(200)
+                    .networkCachePolicy(CachePolicy.ENABLED)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .diskCachePolicy(CachePolicy.DISABLED)
+                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

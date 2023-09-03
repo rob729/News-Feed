@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
+    id 'dev.shreyaspatil.compose-compiler-report-generator'
 }
 
 def final debugAppSuffix = ".debug"
@@ -61,7 +62,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packagingOptions {
         resources {
@@ -125,8 +126,10 @@ dependencies {
     implementation "androidx.startup:startup-runtime:${rootConfiguration.startup_runtime}"
 
     debugImplementation "com.plutolib:pluto:${rootConfiguration.pluto}"
+    benchmarkImplementation "com.plutolib:pluto-no-op:${rootConfiguration.pluto}"
     releaseImplementation "com.plutolib:pluto-no-op:${rootConfiguration.pluto}"
 
     debugImplementation "com.plutolib.plugins:bundle-core:${rootConfiguration.pluto}"
+    benchmarkImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
     releaseImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
 }
