@@ -34,6 +34,17 @@ jobs:
           echo $KEYSTORE_PROPERTIES | base64 --decode > keystore.properties
           echo $KEYSTORE_FILE | base64 --decode > Keystore.p12
 
+      - name: Create debug directory
+        run: mkdir -p app/src/debug
+
+      - name: Decode google-services.json
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+          GOOGLE_SERVICES_DEBUG: ${{ secrets.GOOGLE_SERVICES_DEBUG }}
+        run: |
+          echo $GOOGLE_SERVICES > app/google-services.json
+          echo $GOOGLE_SERVICES_DEBUG > app/src/debug/google-services.json    
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
