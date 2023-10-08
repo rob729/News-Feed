@@ -48,16 +48,17 @@ import com.rob729.newsfeed.ui.components.Toolbar
 import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
+    ExperimentalMaterialApi::class,
 )
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = koinViewModel(),
     paddingValues: PaddingValues,
     openCustomTab: (url: String) -> Unit
 ) {
@@ -147,12 +148,9 @@ fun HomeScreen(
                     is UiStatus.Success -> {
                         LazyColumn(Modifier.testTag("news_list"), listState) {
                             items(newsState.uiStatus.news) { item ->
-                                NewsFeedItem(newsArticleUiData = item,
-                                    Modifier
-                                        .animateItemPlacement()
-                                        .clickable {
-                                            viewModel.newsFeedItemClicked(item)
-                                        })
+                                NewsFeedItem(newsArticleUiData = item) {
+                                    viewModel.newsFeedItemClicked(item)
+                                }
                             }
                         }
                     }

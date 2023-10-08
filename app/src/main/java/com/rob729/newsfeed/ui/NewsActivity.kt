@@ -35,9 +35,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 @OptIn(ExperimentalComposeUiApi::class)
 class NewsActivity : ComponentActivity() {
 
-    private val homeViewModel: HomeViewModel by viewModel()
-    private val searchViewModel: SearchViewModel by viewModel()
-
     private val notificationHelper: NotificationHelper by lazy {
         NotificationHelper(baseContext)
     }
@@ -90,7 +87,7 @@ class NewsActivity : ComponentActivity() {
                                     animationSpec = tween(500)
                                 )
                             }) {
-                            HomeScreen(navController, homeViewModel, paddingValues) {
+                            HomeScreen(navController, paddingValues = paddingValues) {
                                 openCustomTab(it)
                             }
                         }
@@ -120,7 +117,7 @@ class NewsActivity : ComponentActivity() {
                                     animationSpec = tween(500)
                                 )
                             }) {
-                            SearchScreen(navController, searchViewModel) {
+                            SearchScreen(navController) {
                                 openCustomTab(it)
                             }
                         }

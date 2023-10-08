@@ -13,9 +13,9 @@ import com.rob729.newsfeed.database.NewsDatabase
 class PlutoInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         Pluto.Installer(context as Application)
-            .addPlugin(PlutoNetworkPlugin("network"))
-            .addPlugin(PlutoLayoutInspectorPlugin("layout-inspector"))
-            .addPlugin(PlutoRoomsDatabasePlugin("rooms-db"))
+            .addPlugin(PlutoNetworkPlugin())
+            .addPlugin(PlutoLayoutInspectorPlugin())
+            .addPlugin(PlutoRoomsDatabasePlugin())
             .install()
 
         PlutoRoomsDBWatcher.watch("news_database", NewsDatabase::class.java)

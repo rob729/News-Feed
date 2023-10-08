@@ -37,14 +37,14 @@ import com.rob729.newsfeed.ui.components.LoadingView
 import com.rob729.newsfeed.ui.components.NewsFeedItem
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import com.rob729.newsfeed.vm.SearchViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    viewModel: SearchViewModel,
+    viewModel: SearchViewModel = koinViewModel(),
     openCustomTab: (url: String) -> Unit
 ) {
 
@@ -122,12 +122,9 @@ fun SearchScreen(
                 is UiStatus.Success -> {
                     LazyColumn(Modifier.testTag("news_list"), listState) {
                         items(searchState.uiStatus.news) { item ->
-                            NewsFeedItem(newsArticleUiData = item,
-                                Modifier
-                                    .animateItemPlacement()
-                                    .clickable {
-                                        viewModel.newsFeedItemClicked(item)
-                                    })
+                            NewsFeedItem(newsArticleUiData = item) {
+                                viewModel.newsFeedItemClicked(item)
+                            }
                         }
                     }
                 }

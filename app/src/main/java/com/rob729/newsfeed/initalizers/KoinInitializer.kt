@@ -2,7 +2,7 @@ package com.rob729.newsfeed.initalizers
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.pluto.plugins.network.PlutoInterceptor
+import com.pluto.plugins.network.okhttp.addPlutoOkhttpInterceptor
 import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.database.NewsDatabase
 import com.rob729.newsfeed.network.NewsApi
@@ -42,7 +42,7 @@ class KoinInitializer : Initializer<KoinApplication> {
                             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
                         val okHttpClient = OkHttpClient.Builder()
                             .addInterceptor(loggingInterceptor)
-                            .addInterceptor(PlutoInterceptor())
+                            .also { it.addPlutoOkhttpInterceptor() }
                             .build()
 
                         val retrofitInstance = Retrofit.Builder()
