@@ -147,11 +147,7 @@ class NewsActivity : ComponentActivity() {
         )
     }
 
-    @Suppress("KotlinConstantConditions")
     private fun requestNotificationPermission() {
-        if(BuildConfig.BUILD_TYPE == "benchmark") {
-            return
-        }
         if (ContextCompat.checkSelfPermission(
                 baseContext,
                 Manifest.permission.POST_NOTIFICATIONS

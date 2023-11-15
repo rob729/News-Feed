@@ -4,11 +4,14 @@ plugins {
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
     id 'dev.shreyaspatil.compose-compiler-report-generator'
+    id 'androidx.baselineprofile'
 }
 
 def final debugAppSuffix = ".debug"
 
 android {
+    experimentalProperties["android.experimental.art-profile-r8-rewriting"] = true
+    experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
     signingConfigs {
         release {
         storeFile file('/Users/robinsingh/Keystore')
@@ -30,6 +33,10 @@ android {
         }
 
         buildConfigField("String", "NEWS_FEED_API_KEY", NEWS_FEED_API_KEY)
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -43,9 +50,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         benchmark {
-            signingConfig signingConfigs.debug
+            initWith(release)
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles("benchmark-rules.pro")
             matchingFallbacks = ['release']
-            debuggable false
         }
     }
     compileOptions {
@@ -59,7 +67,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packagingOptions {
         resources {
@@ -67,6 +75,12 @@ android {
         }
     }
     namespace 'com.rob729.newsfeed'
+}
+
+baselineProfile {
+    dexLayoutOptimization(true)
+    baselineProfileRulesRewrite(true)
+    baselineProfileOutputDir = "../../src/main/baselineProfiles"
 }
 
 def rootConfiguration = rootProject.ext
@@ -84,6 +98,7 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    baselineProfile project(':baselineprofile')
     debugImplementation "androidx.compose.ui:ui-tooling"
     debugImplementation "androidx.compose.ui:ui-test-manifest"
     implementation "androidx.navigation:navigation-compose:${rootConfiguration.nav_version}"
@@ -92,6 +107,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-tracing:$compose_tracing"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:${rootConfiguration.compose_viewmodel}"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
     implementation "io.coil-kt:coil:${rootConfiguration.coil_version}"
     implementation "io.coil-kt:coil-compose:${rootConfiguration.coil_version}"
@@ -130,4 +146,6 @@ dependencies {
     debugImplementation "com.plutolib.plugins:bundle-core:${rootConfiguration.pluto}"
     benchmarkImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
     releaseImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
+
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }

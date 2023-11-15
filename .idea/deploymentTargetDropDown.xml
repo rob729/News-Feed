@@ -2,10 +2,28 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="BaselineProfileGenerator">
+      <entry key="BaselineProfileGenerator (1)">
+        <State />
+      </entry>
+      <entry key="Generate Baseline Profile">
+        <State />
+      </entry>
+      <entry key="Generate Baseline Profile for app">
+        <State />
+      </entry>
+      <entry key="StartupBenchmarks">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="scrollCompilationNone()">
+        <State />
+      </entry>
+      <entry key="searchScrollAndNavigateCompilationModeNone()">
+        <State />
+      </entry>
+      <entry key="startupCompilationNone()">
         <State />
       </entry>
     </value>
