@@ -75,7 +75,8 @@ fun SearchScreen(
                 TextField(
                     modifier = Modifier
                         .padding(12.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("search_input_text_field"),
                     value = searchState.searchQuery,
                     textStyle = TextStyle(fontFamily = lexendDecaFontFamily),
                     onValueChange = {
@@ -120,7 +121,7 @@ fun SearchScreen(
                     LoadingView()
                 }
                 is UiStatus.Success -> {
-                    LazyColumn(Modifier.testTag("news_list"), listState) {
+                    LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
                         items(searchState.uiStatus.news) { item ->
                             NewsFeedItem(newsArticleUiData = item) {
                                 viewModel.newsFeedItemClicked(item)
