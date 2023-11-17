@@ -1,10 +1,9 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'com.google.devtools.ksp'
-    id 'kotlin-parcelize'
-    id 'dev.shreyaspatil.compose-compiler-report-generator'
-    id 'androidx.baselineprofile'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 def final debugAppSuffix = ".debug"
@@ -65,6 +64,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
@@ -83,69 +83,62 @@ baselineProfile {
     baselineProfileOutputDir = "../../src/main/baselineProfiles"
 }
 
-def rootConfiguration = rootProject.ext
-
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation platform("androidx.compose:compose-bom:${rootConfiguration.compose_bom_version}")
-    implementation "androidx.compose.ui:ui"
-    implementation "androidx.compose.material:material"
-    implementation "androidx.compose.ui:ui-tooling-preview"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation 'androidx.activity:activity-compose:1.8.0'
-    testImplementation 'junit:junit:4.13.2'
+    implementation libs.androidx.core.ktx
+    implementation platform(libs.compose.bom)
+    implementation libs.compose.ui
+    implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    testImplementation libs.junit
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
     baselineProfile project(':baselineprofile')
-    debugImplementation "androidx.compose.ui:ui-tooling"
-    debugImplementation "androidx.compose.ui:ui-test-manifest"
-    implementation "androidx.navigation:navigation-compose:${rootConfiguration.nav_version}"
-    implementation "androidx.compose.material:material-icons-extended"
-    implementation "androidx.compose.material3:material3"
-    implementation "androidx.compose.runtime:runtime-tracing:$compose_tracing"
+    debugImplementation libs.androidx.compose.ui.tooling
+    debugImplementation libs.androidx.compose.ui.test.manifest
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.compose.material.icons.extended
+    implementation libs.androidx.compose.material3
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.constraintlayout.compose
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:${rootConfiguration.compose_viewmodel}"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    implementation libs.androidx.work.runtime.ktx
+    implementation libs.androidx.browser
+    implementation libs.androidx.profileinstaller
+    implementation libs.androidx.startup.runtime
+    implementation libs.androidx.datastore.preferences
+    implementation libs.androidx.runtime.tracing
 
-    implementation "io.coil-kt:coil:${rootConfiguration.coil_version}"
-    implementation "io.coil-kt:coil-compose:${rootConfiguration.coil_version}"
+    implementation libs.coil
+    implementation libs.coil.compose
 
-    implementation "com.squareup.moshi:moshi-kotlin:${rootConfiguration.moshi_version}"
-    ksp "com.squareup.moshi:moshi-kotlin-codegen:${rootConfiguration.moshi_version}"
+    implementation libs.moshi.kotlin
+    ksp libs.moshi.codegen
 
-    implementation "org.orbit-mvi:orbit-viewmodel:${rootConfiguration.orbit_version}"
-    implementation("org.orbit-mvi:orbit-compose:${rootConfiguration.orbit_version}")
+    implementation libs.orbit.viewmodel
+    implementation libs.orbit.compose
 
-    implementation "com.squareup.retrofit2:retrofit:${rootConfiguration.retrofit_version}"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+    implementation libs.retrofit
+    implementation libs.converter.moshi
+    implementation libs.logging.interceptor
 
-    implementation "org.jetbrains.kotlinx:kotlinx-datetime:${date_time_version}"
+    implementation libs.kotlinx.datetime
 
-    implementation "androidx.room:room-runtime:${rootConfiguration.room_version}"
-    ksp "androidx.room:room-compiler:${rootConfiguration.room_version}"
-    implementation("androidx.room:room-ktx:${rootConfiguration.room_version}")
+    implementation libs.androidx.room.runtime
+    ksp libs.androidx.room.compiler
+    implementation libs.androidx.room.ktx
 
-    implementation "io.insert-koin:koin-android:$koin_android_version"
-    implementation "io.insert-koin:koin-androidx-compose:$koin_android_version"
+    implementation libs.koin.android
+    implementation libs.koin.androidx.compose
 
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    debugImplementation libs.pluto
+    benchmarkImplementation libs.pluto.no.op
+    releaseImplementation libs.pluto.no.op
 
-    implementation "androidx.browser:browser:${rootConfiguration.browser}"
-
-    implementation "androidx.profileinstaller:profileinstaller:${rootConfiguration.profile_installer}"
-
-    implementation "androidx.startup:startup-runtime:${rootConfiguration.startup_runtime}"
-
-    debugImplementation "com.plutolib:pluto:${rootConfiguration.pluto}"
-    benchmarkImplementation "com.plutolib:pluto-no-op:${rootConfiguration.pluto}"
-    releaseImplementation "com.plutolib:pluto-no-op:${rootConfiguration.pluto}"
-
-    debugImplementation "com.plutolib.plugins:bundle-core:${rootConfiguration.pluto}"
-    benchmarkImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
-    releaseImplementation "com.plutolib.plugins:bundle-core-no-op:${rootConfiguration.pluto}"
-
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    debugImplementation libs.bundle.core
+    benchmarkImplementation libs.bundle.core.no.op
+    releaseImplementation libs.bundle.core.no.op
 }
