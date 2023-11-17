@@ -11,13 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.rob729.newsfeed.utils.Constants
 
@@ -37,7 +34,12 @@ fun NewsSourceBottomSheetContent(
         contentAlignment = Alignment.Center
     ) {
         Column {
-            LazyRow(modifier = Modifier.testTag("news_source_list").padding(top = 12.dp, bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)) {
+            LazyRow(
+                modifier = Modifier
+                    .testTag("news_source_list")
+                    .padding(top = 12.dp, bottom = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)
+            ) {
                 items(Constants.newsSourceUiDataLists.size,
                     { index: Int -> newsSourceList[index].domain }) { index ->
                     NewsSourcePill(
