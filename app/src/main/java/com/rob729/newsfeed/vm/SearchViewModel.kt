@@ -31,9 +31,10 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            container.stateFlow.debounce(1000).distinctUntilChangedBy { it.searchQuery  }.collectLatest {
-                searchNewsResultsForQuery(it.searchQuery)
-            }
+            container.stateFlow.debounce(1000).distinctUntilChangedBy { it.searchQuery }
+                .collectLatest {
+                    searchNewsResultsForQuery(it.searchQuery)
+                }
         }
     }
 
@@ -41,6 +42,7 @@ class SearchViewModel(
     fun updateSearchQuery(query: String) = intent {
         reduce { state.copy(searchQuery = query) }
     }
+
     private fun searchNewsResultsForQuery(query: String) = intent {
         reduce {
             state.copy(searchQuery = query)

@@ -1,19 +1,19 @@
 package com.rob729.newsfeed.ui.components
 
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.rob729.newsfeed.R
 import com.rob729.newsfeed.utils.Constants
 
 @Composable
@@ -31,7 +31,8 @@ fun NewsSourceExtendedFab(modifier: Modifier, isExpanded: Boolean, onClick: () -
         },
         elevation = FloatingActionButtonDefaults.elevation(8.dp),
         expanded = isExpanded,
-        containerColor = colorResource(R.color.status_bar)
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
@@ -40,7 +41,8 @@ fun ScrollToTopFab(modifier: Modifier, onClick: () -> Unit) {
     SmallFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        containerColor = colorResource(R.color.status_bar)
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        shape = RoundedCornerShape(12.dp)
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
