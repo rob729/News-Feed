@@ -1,5 +1,5 @@
 [versions]
-activityCompose = "1.8.0"
+activityCompose = "1.8.1"
 androidGradlePlugin = "8.3.0-alpha13"
 baselineProfile = "1.2.1"
 benchmarkMacroJunit4 = "1.2.1"
