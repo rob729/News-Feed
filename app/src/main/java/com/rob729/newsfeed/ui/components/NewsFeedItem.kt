@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -62,7 +62,7 @@ fun NewsFeedItem(
     )
 
     Surface(
-        modifier
+        modifier = modifier
             .padding(8.dp)
             .clickable(
                 interactionSource = interactionSource,
@@ -70,7 +70,7 @@ fun NewsFeedItem(
                 onClick = onItemClick
             )
             .scale(scale),
-        elevation = 4.dp,
+        tonalElevation = 4.dp,
         shape = RoundedCornerShape(12.dp)
     ) {
         Column {
@@ -99,7 +99,8 @@ fun NewsFeedItem(
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = lexendDecaFontFamily
+                fontFamily = lexendDecaFontFamily,
+                lineHeight = 22.sp
             )
             Text(
                 text = newsArticleUiData.description,
@@ -108,7 +109,8 @@ fun NewsFeedItem(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                 fontSize = 12.sp,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = lexendDecaFontFamily
+                fontFamily = lexendDecaFontFamily,
+                lineHeight = 18.sp
             )
             Row(
                 modifier = Modifier

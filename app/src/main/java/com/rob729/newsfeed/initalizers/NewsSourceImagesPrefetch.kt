@@ -7,7 +7,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
 import com.rob729.newsfeed.workManager.NewsSourceImagePrefetch
 
-class NewsSourceImagesPrefetch: Initializer<Unit> {
+class NewsSourceImagesPrefetch : Initializer<Unit> {
     override fun create(context: Context) {
         val newsSourceImagePreloadRequest = OneTimeWorkRequestBuilder<NewsSourceImagePrefetch>()
             .build()

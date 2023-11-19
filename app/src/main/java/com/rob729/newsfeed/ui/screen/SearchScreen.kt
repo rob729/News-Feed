@@ -1,6 +1,5 @@
 package com.rob729.newsfeed.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,15 +12,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -41,6 +46,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     navController: NavHostController,
@@ -52,11 +58,14 @@ fun SearchScreen(
 
     val listState = rememberLazyListState()
 
+    var active by rememberSaveable { mutableStateOf(false) }
+
     viewModel.collectSideEffect {
         when (it) {
             is SearchSideEffects.SearchQueryChanged -> {
 
             }
+
             is SearchSideEffects.SearchResultClicked -> {
                 openCustomTab(it.selectedResultUrl)
             }
@@ -71,7 +80,7 @@ fun SearchScreen(
 
         Column {
 
-            Surface(elevation = 4.dp, color = colorResource(R.color.status_bar)) {
+            Surface(tonalElevation = 4.dp, color = colorResource(R.color.status_bar)) {
                 TextField(
                     modifier = Modifier
                         .padding(12.dp)
@@ -108,7 +117,9 @@ fun SearchScreen(
                         disabledTextColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
+                        disabledIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 )
             }
@@ -117,9 +128,11 @@ fun SearchScreen(
                 UiStatus.Error -> {
 //                    NoInternetView(viewModel::tryAgainClicked)
                 }
+
                 UiStatus.Loading -> {
                     LoadingView()
                 }
+
                 is UiStatus.Success -> {
                     LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
                         items(searchState.uiStatus.news) { item ->

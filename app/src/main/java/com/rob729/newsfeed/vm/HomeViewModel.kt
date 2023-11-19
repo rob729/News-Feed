@@ -41,11 +41,13 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(),
                     state.copy(uiStatus = UiStatus.Error)
                 }
             }
+
             NewsResource.Loading -> {
                 reduce {
                     state.copy(uiStatus = UiStatus.Loading)
                 }
             }
+
             is NewsResource.Success<*> -> {
                 (newsResource.data as? List<ArticleDbData>)?.let {
                     reduce {
@@ -59,7 +61,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(),
     }
 
     fun newsSourceClicked(newsSource: String) = intent {
-        postSideEffect(HomeFeedSideEffect.HomeSourceClicked(newsSource))
+        postSideEffect(HomeFeedSideEffect.NewsSourceClicked(newsSource))
         if (state.selectedNewsSource != newsSource) {
             reduce {
                 state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
@@ -75,14 +77,14 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(),
     }
 
     fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
-        postSideEffect(HomeFeedSideEffect.HomeFeedItemClicked(item.url))
+        postSideEffect(HomeFeedSideEffect.FeedItemClicked(item.url))
     }
 
     fun newsSourceFabClicked() = intent {
         reduce {
             state.copy(showNewsSourceBottomSheet = true)
         }
-        postSideEffect(HomeFeedSideEffect.HomeSourceFabClicked)
+        postSideEffect(HomeFeedSideEffect.NewsSourceFabClicked)
     }
 
     fun scrollToTopClicked() = intent {

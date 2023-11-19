@@ -21,16 +21,12 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.rob729.newsfeed.BuildConfig
 import com.rob729.newsfeed.R
 import com.rob729.newsfeed.ui.screen.HomeScreen
 import com.rob729.newsfeed.ui.screen.SearchScreen
 import com.rob729.newsfeed.ui.theme.NewsFeedTheme
 import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.utils.NotificationHelper
-import com.rob729.newsfeed.vm.HomeViewModel
-import com.rob729.newsfeed.vm.SearchViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 class NewsActivity : ComponentActivity() {

@@ -7,7 +7,7 @@ import android.os.Vibrator
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,13 +31,13 @@ fun NewsSourceBottomSheetContent(
     val itemWidth = (screenWidthDp - (itemSpacing * visibleCards)).div(visibleCards)
 
     Box(
+        modifier = Modifier.navigationBarsPadding(),
         contentAlignment = Alignment.Center
     ) {
         Column {
             LazyRow(
                 modifier = Modifier
-                    .testTag("news_source_list")
-                    .padding(top = 12.dp, bottom = 6.dp),
+                    .testTag("news_source_list"),
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)
             ) {
                 items(Constants.newsSourceUiDataLists.size,

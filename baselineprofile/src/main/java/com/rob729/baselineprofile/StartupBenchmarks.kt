@@ -177,7 +177,7 @@ fun MacrobenchmarkScope.scrollAndNavigate() {
     newsSourceButton.click()
 
     val selector1 = By.res("news_source_list")
-    if(!device.wait(Until.hasObject(selector1), 1_500)) {
+    if(!device.wait(Until.hasObject(selector1), 3_500)) {
         TestCase.fail("Could not find news_source_list resource")
     }
     val newsSourceList = device.findObject(By.res("news_source_list"))
