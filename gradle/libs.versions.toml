@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.8.1"
-androidGradlePlugin = "8.3.0-alpha15"
+androidGradlePlugin = "8.3.0-alpha16"
 baselineProfile = "1.2.2"
 benchmarkMacroJunit4 = "1.2.1"
 browser = "1.7.0"
