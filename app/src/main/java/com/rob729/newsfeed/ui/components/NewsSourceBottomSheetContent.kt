@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.rob729.newsfeed.utils.Constants
 
+private const val VISIBLE_CARDS = 4.25f
+private const val ITEM_SPACING = 12
 @Composable
 fun NewsSourceBottomSheetContent(
     onNewsSourceClicked: (String) -> Unit,
@@ -26,9 +28,7 @@ fun NewsSourceBottomSheetContent(
     val vibrator = LocalContext.current.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     val newsSourceList = Constants.newsSourceUiDataLists
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val visibleCards = 4.25f
-    val itemSpacing = 12
-    val itemWidth = (screenWidthDp - (itemSpacing * visibleCards)).div(visibleCards)
+    val itemWidth = (screenWidthDp - (ITEM_SPACING * VISIBLE_CARDS)).div(VISIBLE_CARDS)
 
     Box(
         modifier = Modifier.navigationBarsPadding(),
@@ -38,7 +38,7 @@ fun NewsSourceBottomSheetContent(
             LazyRow(
                 modifier = Modifier
                     .testTag("news_source_list"),
-                horizontalArrangement = Arrangement.spacedBy(itemSpacing.dp)
+                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING.dp)
             ) {
                 items(Constants.newsSourceUiDataLists.size,
                     { index: Int -> newsSourceList[index].domain }) { index ->

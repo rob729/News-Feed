@@ -4,6 +4,7 @@ import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.model.api.NetworkNews
 import com.rob729.newsfeed.network.NewsApiDataSource
+import com.rob729.newsfeed.utils.Constants.MAX_CACHE_DATA_VALID_DURATION_IN_HOURS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.Clock
@@ -44,7 +45,7 @@ class NewsRepository(
                 newsResource
             }
         } catch (e: IOException) {
-            return NewsResource.Error("No Internet")
+            return NewsResource.Error("No Internet ${e.localizedMessage}")
         }
     }
 
@@ -53,13 +54,14 @@ class NewsRepository(
         try {
             emit(newsApiDataSource.getNewsSearchResults(query))
         } catch (e: IOException) {
-            emit(NewsResource.Error("No Internet"))
+            emit(NewsResource.Error("No Internet ${e.localizedMessage}"))
         }
     }
 
     private fun checkIfNewsSourceDataIsOutdated(newsSourceFetchTimeInMillis: Long?): Boolean {
         if (newsSourceFetchTimeInMillis == null)
             return true
-        return (Clock.System.now() - Instant.fromEpochMilliseconds(newsSourceFetchTimeInMillis)).inWholeHours > 6
+        return (Clock.System.now() - Instant.fromEpochMilliseconds(newsSourceFetchTimeInMillis))
+            .inWholeHours > MAX_CACHE_DATA_VALID_DURATION_IN_HOURS
     }
 }

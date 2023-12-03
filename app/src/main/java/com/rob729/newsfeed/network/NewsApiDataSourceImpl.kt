@@ -11,6 +11,8 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.todayIn
+import okio.IOException
+import retrofit2.HttpException
 
 class NewsApiDataSourceImpl(
     private val newsApi: NewsApi
@@ -55,9 +57,14 @@ class NewsApiDataSourceImpl(
                         "${Constants.ERROR_MESSAGE_PREFIX} ${result.message()}"
                     )
                 }
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-                NewsResource.Error("${Constants.ERROR_MESSAGE_PREFIX} ${exception.message}")
+            } catch (httpException: HttpException) {
+                // Handle HTTP exceptions (non-2xx responses)
+                httpException.printStackTrace()
+                NewsResource.Error("${Constants.ERROR_MESSAGE_PREFIX} ${httpException.message}")
+            } catch (ioException: IOException) {
+                // Handle network or I/O exceptions
+                ioException.printStackTrace()
+                NewsResource.Error("${Constants.ERROR_MESSAGE_PREFIX} ${ioException.message}")
             }
         }
 }

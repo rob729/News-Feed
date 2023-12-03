@@ -15,7 +15,10 @@ fun mapNetworkArticleToArticleDbData(networkArticle: NetworkArticle): ArticleDbD
 }
 
 fun mapArticleDbDataToNewsArticleUiData(articleDbData: ArticleDbData): NewsArticleUiData? {
-    if (articleDbData.title.isNullOrBlank() || articleDbData.description.isNullOrBlank() || articleDbData.imageUrl.isNullOrBlank())
+    if (articleDbData.title.isNullOrBlank()
+        || articleDbData.description.isNullOrBlank()
+        || articleDbData.imageUrl.isNullOrBlank()
+    )
         return null
     return NewsArticleUiData(
         articleDbData.title,
@@ -27,7 +30,10 @@ fun mapArticleDbDataToNewsArticleUiData(articleDbData: ArticleDbData): NewsArtic
 }
 
 fun mapNetworkArticleToNewsArticleUiData(networkArticle: NetworkArticle): NewsArticleUiData? {
-    if (networkArticle.title.isNullOrBlank() || networkArticle.description.isNullOrBlank() || networkArticle.imageUrl.isNullOrBlank())
+    if (networkArticle.title.isNullOrBlank()
+        || networkArticle.description.isNullOrBlank()
+        || networkArticle.imageUrl.isNullOrBlank()
+    )
         return null
     return NewsArticleUiData(
         networkArticle.title,

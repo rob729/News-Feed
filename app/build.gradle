@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.androidx.baselineprofile)
+    alias(libs.plugins.detekt)
 }
 
 def final debugAppSuffix = ".debug"
@@ -13,7 +14,7 @@ android {
     experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
     signingConfigs {
         release {
-        storeFile file('/Users/robinsingh/Keystore')
+            storeFile file('/Users/robinsingh/Keystore')
             storePassword 'q1w2e3r4t5y'
         }
     }
