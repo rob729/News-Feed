@@ -58,8 +58,6 @@ fun SearchScreen(
 
     val listState = rememberLazyListState()
 
-    var active by rememberSaveable { mutableStateOf(false) }
-
     viewModel.collectSideEffect {
         when (it) {
             is SearchSideEffects.SearchQueryChanged -> {

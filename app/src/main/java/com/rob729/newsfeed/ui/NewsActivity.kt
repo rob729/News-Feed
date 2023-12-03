@@ -26,6 +26,7 @@ import com.rob729.newsfeed.ui.screen.HomeScreen
 import com.rob729.newsfeed.ui.screen.SearchScreen
 import com.rob729.newsfeed.ui.theme.NewsFeedTheme
 import com.rob729.newsfeed.utils.Constants
+import com.rob729.newsfeed.utils.Constants.ANIMATION_DURATION
 import com.rob729.newsfeed.utils.NotificationHelper
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -62,25 +63,25 @@ class NewsActivity : ComponentActivity() {
                             enterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             exitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             popEnterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             popExitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             }) {
                             HomeScreen(navController, paddingValues = paddingValues) {
@@ -92,25 +93,25 @@ class NewsActivity : ComponentActivity() {
                             enterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             exitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             popEnterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             },
                             popExitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(500)
+                                    animationSpec = tween(ANIMATION_DURATION)
                                 )
                             }) {
                             SearchScreen(navController) {

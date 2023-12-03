@@ -41,6 +41,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
+import com.rob729.newsfeed.utils.Constants.NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toInstant
 
@@ -78,7 +79,7 @@ fun NewsFeedItem(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(newsArticleUiData.imageUrl)
                     .crossfade(true)
-                    .crossfade(200)
+                    .crossfade(NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION)
                     .networkCachePolicy(CachePolicy.ENABLED)
                     .memoryCachePolicy(CachePolicy.ENABLED)
                     .diskCachePolicy(CachePolicy.DISABLED)

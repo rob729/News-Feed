@@ -159,7 +159,12 @@ fun HomeScreen(
         }
     }
 
-    NewsSourceBottomSheet(bottomSheetState, isNewsSourceBottomSheetVisible, viewModel::newsSourceClicked, newsState.selectedNewsSource) {
+    NewsSourceBottomSheet(
+        bottomSheetState,
+        isNewsSourceBottomSheetVisible,
+        viewModel::newsSourceClicked,
+        newsState.selectedNewsSource
+    ) {
         isNewsSourceBottomSheetVisible = false
     }
 

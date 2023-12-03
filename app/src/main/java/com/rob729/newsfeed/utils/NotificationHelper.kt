@@ -71,11 +71,11 @@ class NotificationHelper(private val context: Context) {
     fun scheduleNotification() {
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
-        dueDate.set(Calendar.HOUR_OF_DAY, 8)
-        dueDate.set(Calendar.MINUTE, 30)
-        dueDate.set(Calendar.SECOND, 0)
+        dueDate.set(Calendar.HOUR_OF_DAY, NOTIFICATION_HOUR)
+        dueDate.set(Calendar.MINUTE, NOTIFICATION_MINUTE)
+        dueDate.set(Calendar.SECOND, NOTIFICATION_SECONDS)
         if (dueDate.before(currentDate)) {
-            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+            dueDate.add(Calendar.HOUR_OF_DAY, HOURS_IN_A_DAY)
         }
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
@@ -102,5 +102,9 @@ class NotificationHelper(private val context: Context) {
         private const val CHANNEL_ID = "Daily News Reminder"
         private const val WORK_NAME = "DAILY_NEWS_REMINDER"
         private const val NOTIFICATION_CHANNEL_DESCRIPTION = "News Reminder Channel Description"
+        private const val NOTIFICATION_HOUR = 8
+        private const val NOTIFICATION_MINUTE = 30
+        private const val NOTIFICATION_SECONDS = 0
+        private const val HOURS_IN_A_DAY = 24
     }
 }

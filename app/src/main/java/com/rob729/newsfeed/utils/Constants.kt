@@ -43,4 +43,10 @@ object Constants {
     const val ERROR_MESSAGE_PREFIX = "Something went wrong"
     const val API_RESULT_LANGUAGE = "en"
     const val SORT_RESULT_FILTER_PUBLISHED_AT = "publishedAt"
+    const val SHIMMER_ITEM_COUNT = 4
+    const val ANIMATION_DURATION = 500
+    const val MAX_CACHE_DATA_VALID_DURATION_IN_HOURS = 6
+    const val SEARCH_QUERY_UPDATE_DEBOUNCE_TIME = 1000L
+    const val NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION = 200
+    const val GRADIENT_START_COORDINATE = 200f
 }

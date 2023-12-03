@@ -9,6 +9,7 @@ import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.model.state.search.SearchState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.utils.Constants.SEARCH_QUERY_UPDATE_DEBOUNCE_TIME
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -31,7 +32,8 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            container.stateFlow.debounce(1000).distinctUntilChangedBy { it.searchQuery }
+            container.stateFlow
+                .debounce(SEARCH_QUERY_UPDATE_DEBOUNCE_TIME).distinctUntilChangedBy { it.searchQuery }
                 .collectLatest {
                     searchNewsResultsForQuery(it.searchQuery)
                 }
@@ -80,7 +82,10 @@ class SearchViewModel(
                 (newsResource.data as? NetworkNews)?.let {
                     reduce {
                         state.copy(
-                            uiStatus = UiStatus.Success(it.networkArticles.mapNotNull(::mapNetworkArticleToNewsArticleUiData))
+                            uiStatus = UiStatus.Success(
+                                it.networkArticles
+                                    .mapNotNull(::mapNetworkArticleToNewsArticleUiData)
+                            )
                         )
                     }
                 }

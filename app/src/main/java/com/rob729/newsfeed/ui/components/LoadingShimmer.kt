@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import com.rob729.newsfeed.utils.Constants.GRADIENT_START_COORDINATE
 
 @Composable
 fun LoadingShimmer() {
@@ -33,7 +34,7 @@ fun LoadingShimmer() {
     )
     val brush = Brush.linearGradient(
         colors = gradient,
-        start = Offset(200f, 200f),
+        start = Offset(GRADIENT_START_COORDINATE, GRADIENT_START_COORDINATE),
         end = Offset(
             x = translateAnimation.value,
             y = translateAnimation.value
