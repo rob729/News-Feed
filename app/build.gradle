@@ -9,6 +9,17 @@ plugins {
 
 def final debugAppSuffix = ".debug"
 
+def localPropertiesFile = rootProject.file('local.properties')
+Properties localProperties = new Properties()
+def newsFeedApiKey = ""
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+    newsFeedApiKey = localProperties['NEWS_FEED_API_KEY'] ?: "\"${System.getenv('NEWS_FEED_API_KEY')}\""
+} else {
+    newsFeedApiKey = "\"${System.getenv('NEWS_FEED_API_KEY')}\""
+}
+
 android {
     experimentalProperties["android.experimental.art-profile-r8-rewriting"] = true
     experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
@@ -32,7 +43,7 @@ android {
             useSupportLibrary true
         }
 
-        buildConfigField("String", "NEWS_FEED_API_KEY", NEWS_FEED_API_KEY)
+        buildConfigField("String", "NEWS_FEED_API_KEY", newsFeedApiKey)
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
