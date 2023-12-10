@@ -24,4 +24,6 @@ jobs:
           cache: 'gradle'
 
       - name: Run Detekt
+        env:
+          NEWS_FEED_API_KEY: ${{ secrets.NEWS_FEED_API_KEY }}
         run: ./gradlew detekt
