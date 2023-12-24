@@ -29,7 +29,7 @@ rules = "1.5.0"
 runtimeTracing = "1.0.0-beta01"
 startupRuntime = "1.1.1"
 uiautomator = "2.2.0"
-workRuntimeKtx = "2.8.1"
+workRuntimeKtx = "2.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
