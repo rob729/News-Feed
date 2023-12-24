@@ -1,6 +1,12 @@
 # News Feed
 
-![banner](./readme_images/banner.png)
+![CI-MAIN](https://github.com/rob729/News-Feed/actions/workflows/build.yml/badge.svg?branch=main)
+
+<p style="text-align: center;">
+  <img src="readme_images/banner_1.png" width="250" alt="Home Screen"/>
+  <img src="readme_images/banner_2.png" width="250" alt="Home Screen with news sources"/>
+  <img src="readme_images/banner_3.png" width="250" alt="Search Screen"/>
+</p>
 
 ## Download
 
@@ -16,7 +22,7 @@
 - [Retrofit](https://square.github.io/retrofit/)
 - [Room](https://developer.android.com/reference/androidx/room/package-summary)
 
-For full list of dependencies used, please take a look at the [build.gradle](/app/build.gradle) file
+For full list of dependencies used, please take a look at the [catalog](/gradle/libs.versions.toml) file
 
 ## License
 
