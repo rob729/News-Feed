@@ -20,13 +20,23 @@ if (localPropertiesFile.exists()) {
     newsFeedApiKey = "\"${System.getenv('NEWS_FEED_API_KEY')}\""
 }
 
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.newDataInputStream())
+}
+
 android {
     experimentalProperties["android.experimental.art-profile-r8-rewriting"] = true
     experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
     signingConfigs {
         release {
-            storeFile file('/Users/robinsingh/Keystore')
-            storePassword 'q1w2e3r4t5y'
+            release {
+                storeFile file('../Keystore.p12')
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
     compileSdk 34
@@ -58,6 +68,7 @@ android {
             shrinkResources true
             minifyEnabled true
             debuggable false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         benchmark {

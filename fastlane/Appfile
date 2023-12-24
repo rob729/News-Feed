@@ -1,2 +1,2 @@
-json_key_file("/news-feed-play-config.json")
+json_key_file("./news-feed-play-config.json")
 package_name("com.rob729.newsfeed")
