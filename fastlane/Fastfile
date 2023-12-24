@@ -16,23 +16,66 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+
+  desc "Deploy a internal testing version to the Google Play"
+  lane :beta do
+    gradle(task: "clean bundleRelease")
+    upload_to_play_store(track: 'internal', release_status: 'draft')
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Version bump"
+  lane :version_bump do |options|
+    require 'fileutils'
+
+    fastfile_directory = __dir__
+    gradle_file_path = File.join(fastfile_directory, '../app/build.gradle')
+     UI.message("xyz #{fastfile_directory}")
+    gradle_file = File.read(gradle_file_path)
+
+    type = options[:type]
+
+    # Regex to find the versionName
+    version_name_regex = /versionName "(\d+\.\d+\.\d+)"/
+    version_code_regex = /versionCode (\d+)/
+
+    version_name = gradle_file[version_name_regex, 1]
+    version_code = gradle_file[version_code_regex, 1].to_i
+
+    # Increment the versionName
+    major, minor, patch = version_name.split('.').map(&:to_i)
+    if type == "major"
+      major += 1
+      minor = 0
+      patch = 0
+    elsif type == "minor"
+      minor += 1
+      patch = 0
+    elsif type == "patch"
+      patch += 1
+    end
+
+    new_version_name = "#{major}.#{minor}.#{patch}"
+    new_version_code = version_code + 1
+
+    # Replace the versionName and versionCode in the file
+    new_gradle_file = gradle_file.sub(version_name_regex, "versionName \"#{new_version_name}\"")
+    new_gradle_file = new_gradle_file.sub(version_code_regex, "versionCode #{new_version_code}")
+
+    File.open(gradle_file_path, 'w') { |file| file.puts new_gradle_file }
+
+    UI.message("Version name incremented to #{new_version_name}")
+    UI.message("Version code incremented to #{new_version_code}")
+
+
+    git_commit(
+        path: "./app/build.gradle",
+        message: "Version bumped from #{version_name} to #{new_version_name}"
+      )
   end
 
   desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :production do
+    gradle(task: "clean bundleRelease")
+    upload_to_play_store(release_status: 'draft')
   end
 end
