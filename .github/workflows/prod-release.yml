@@ -1,0 +1,29 @@
+name: Prod Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      fastlane-input:
+        description: "Fastlane input"
+        required: false
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Run Fastlane lane for prod release
+        run: fastlane android production
