@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "News Feed"
-include ':app'
-include ':baselineprofile'
+include(":app")
+include(":baselineprofile")

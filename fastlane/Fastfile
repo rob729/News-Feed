@@ -28,15 +28,15 @@ platform :android do
     require 'fileutils'
 
     fastfile_directory = __dir__
-    gradle_file_path = File.join(fastfile_directory, '../app/build.gradle')
+    gradle_file_path = File.join(fastfile_directory, '../app/build.gradle.kts')
      UI.message("xyz #{fastfile_directory}")
     gradle_file = File.read(gradle_file_path)
 
     type = options[:type]
 
     # Regex to find the versionName
-    version_name_regex = /versionName "(\d+\.\d+\.\d+)"/
-    version_code_regex = /versionCode (\d+)/
+    version_name_regex = /versionName = "(\d+\.\d+\.\d+)"/
+    version_code_regex = /versionCode = (\d+)/
 
     version_name = gradle_file[version_name_regex, 1]
     version_code = gradle_file[version_code_regex, 1].to_i
@@ -68,7 +68,7 @@ platform :android do
 
 
     git_commit(
-        path: "./app/build.gradle",
+        path: "./app/build.gradle.kts",
         message: "Version bumped from #{version_name} to #{new_version_name}"
       )
   end

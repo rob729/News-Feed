@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    namespace 'com.rob729.baselineprofile'
-    compileSdk 34
+    namespace = "com.rob729.baselineprofile"
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -18,10 +18,10 @@ android {
     }
 
     defaultConfig {
-        minSdk 28
-        targetSdk 34
+        minSdk =  28
+        targetSdk = 34
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     targetProjectPath = ":app"
@@ -35,9 +35,9 @@ baselineProfile {
 }
 
 dependencies {
-    implementation libs.androidx.junit
-    implementation libs.androidx.espresso.core
-    implementation libs.androidx.uiautomator
-    implementation libs.androidx.benchmark.macro.junit4
-    implementation libs.androidx.rules
+    implementation(libs.androidx.junit)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.uiautomator)
+    implementation(libs.androidx.benchmark.macro.junit4)
+    implementation(libs.androidx.rules)
 }
