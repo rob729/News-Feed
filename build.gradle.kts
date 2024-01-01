@@ -7,6 +7,10 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.detekt)
+    if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
+        alias(libs.plugins.google.services) apply false
+        alias(libs.plugins.firebase.crashlytics) apply false
+    }
 }
 
 dependencies {
@@ -20,6 +24,6 @@ detekt {
     config.setFrom("$projectDir/config/detekt/detekt.yml")
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }

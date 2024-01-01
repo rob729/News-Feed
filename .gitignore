@@ -18,3 +18,4 @@ keystore.properties
 Keystore.p12
 app/release
 news-feed-play-config.json
+google-services.json
