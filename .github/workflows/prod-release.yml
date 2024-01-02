@@ -54,4 +54,6 @@ jobs:
         run: gem install fastlane
 
       - name: Run Fastlane lane for prod release
+        env:
+          NEWS_FEED_API_KEY: ${{ secrets.NEWS_FEED_API_KEY }}
         run: fastlane android production
