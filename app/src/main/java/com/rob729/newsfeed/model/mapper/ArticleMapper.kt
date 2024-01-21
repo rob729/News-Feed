@@ -10,7 +10,8 @@ fun mapNetworkArticleToArticleDbData(networkArticle: NetworkArticle): ArticleDbD
         networkArticle.url,
         networkArticle.imageUrl,
         networkArticle.description,
-        networkArticle.publishedAt
+        networkArticle.publishedAt,
+        networkArticle.source?.name
     )
 }
 
@@ -25,7 +26,8 @@ fun mapArticleDbDataToNewsArticleUiData(articleDbData: ArticleDbData): NewsArtic
         articleDbData.description,
         articleDbData.imageUrl,
         articleDbData.url,
-        articleDbData.publishedAt
+        articleDbData.publishedAt,
+        articleDbData.source.orEmpty()
     )
 }
 
@@ -40,6 +42,7 @@ fun mapNetworkArticleToNewsArticleUiData(networkArticle: NetworkArticle): NewsAr
         networkArticle.description,
         networkArticle.imageUrl,
         networkArticle.url,
-        networkArticle.publishedAt
+        networkArticle.publishedAt,
+        networkArticle.source?.name.orEmpty()
     )
 }

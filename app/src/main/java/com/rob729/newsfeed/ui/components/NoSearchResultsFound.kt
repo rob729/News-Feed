@@ -3,12 +3,13 @@ package com.rob729.newsfeed.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,69 +28,55 @@ import com.rob729.newsfeed.R
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 
 @Composable
-fun NoInternetView(onTryAgainClicked: () -> Unit) {
+fun NoSearchResultsFound() {
 
     val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.no_result_found),
+            contentDescription = "no results found",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.5f)
+                .padding(top = 36.dp)
+                .align(Alignment.CenterHorizontally)
+                .clip(RoundedCornerShape(8.dp))
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.CenterHorizontally),
-            text = context.getString(R.string.error_message),
-            fontSize = 18.sp,
+            text = context.getString(R.string.no_result_found_title),
+            fontSize = 24.sp,
             color = Color.White,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.SemiBold,
             fontFamily = lexendDecaFontFamily
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 4.dp),
-            text = context.getString(R.string.no_internet),
-            fontSize = 32.sp,
+            text = context.getString(R.string.no_result_found_subtitle),
+            fontSize = 14.sp,
             color = Color.White,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Normal,
             fontFamily = lexendDecaFontFamily,
             textAlign = TextAlign.Center
         )
-
-        Image(
-            painter = painterResource(id = R.drawable.no_internet),
-            contentDescription = "no internet",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 36.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
-
-        Button(
-            onClick = onTryAgainClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(
-                text = context.getString(R.string.try_again),
-                fontWeight = FontWeight.Medium,
-                fontFamily = lexendDecaFontFamily
-            )
-        }
     }
 }
 
+
 @Preview
 @Composable
-fun NoInternetViewPreview() {
-    NoInternetView {
-
-    }
+fun NoSearchResultsFoundPreview() {
+    NoSearchResultsFound()
 }

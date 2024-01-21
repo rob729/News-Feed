@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -39,14 +38,15 @@ import com.rob729.newsfeed.R
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.ui.components.LoadingView
-import com.rob729.newsfeed.ui.components.NewsFeedItem
-import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
+import com.rob729.newsfeed.ui.components.NoSearchResultsFound
+import com.rob729.newsfeed.ui.components.SearchBar
+import com.rob729.newsfeed.ui.components.SearchResultItem
+import com.rob729.newsfeed.utils.ScreenType
 import com.rob729.newsfeed.vm.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     navController: NavHostController,
@@ -55,13 +55,12 @@ fun SearchScreen(
 ) {
 
     val searchState = viewModel.collectAsState().value
-
     val listState = rememberLazyListState()
 
     viewModel.collectSideEffect {
         when (it) {
             is SearchSideEffects.SearchQueryChanged -> {
-
+                viewModel.addSearchQueryToHistoryList(it.query)
             }
 
             is SearchSideEffects.SearchResultClicked -> {
@@ -73,53 +72,18 @@ fun SearchScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
+            .testTag("search_screen_box")
     ) {
 
         Column {
 
             Surface(tonalElevation = 4.dp, color = colorResource(R.color.status_bar)) {
-                TextField(
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                        .testTag("search_input_text_field"),
-                    value = searchState.searchQuery,
-                    textStyle = TextStyle(fontFamily = lexendDecaFontFamily),
-                    onValueChange = {
-                        viewModel.updateSearchQuery(it)
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "back",
-                            modifier = Modifier.clickable {
-                                navController.popBackStack()
-                            })
-                    },
-                    trailingIcon = {
-                        if (searchState.searchQuery.isNotBlank()) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "clear",
-                                modifier = Modifier.clickable {
-                                    viewModel.updateSearchQuery("")
-                                })
-                        }
-                    },
-                    placeholder = { Text("search here", fontFamily = lexendDecaFontFamily) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.colors(
-                        disabledTextColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
-                )
+                SearchBar(
+                    searchState.editTextInput,
+                    { viewModel.updateSearchQuery(it) },
+                    { viewModel.updateSearchQuery("") },
+                    { navController.popBackStack() })
             }
 
             when (searchState.uiStatus) {
@@ -128,20 +92,30 @@ fun SearchScreen(
                 }
 
                 UiStatus.Loading -> {
-                    LoadingView()
+                    LoadingView(ScreenType.SEARCH)
                 }
 
                 is UiStatus.Success -> {
-                    LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
-                        items(searchState.uiStatus.news) { item ->
-                            NewsFeedItem(newsArticleUiData = item) {
-                                viewModel.newsFeedItemClicked(item)
+                    if (searchState.uiStatus.news.isEmpty()) {
+                        NoSearchResultsFound()
+                    } else {
+                        LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
+                            items(searchState.uiStatus.news) { item ->
+                                SearchResultItem(newsArticleUiData = item) {
+                                    viewModel.newsFeedItemClicked(item)
+                                }
                             }
                         }
                     }
                 }
 
-                else -> {}
+                is UiStatus.EmptyScreen -> {
+                    EmptySearchScreen(
+                        searchHistoryList = searchState.searchHistoryList,
+                        viewModel::searchHistoryItemClicked,
+                        viewModel::clearSearchHistory
+                    )
+                }
             }
         }
     }

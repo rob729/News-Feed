@@ -13,12 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,11 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
-import com.rob729.newsfeed.utils.Constants.NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION
+import com.rob729.newsfeed.utils.CommonUtils
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toInstant
 
@@ -51,8 +44,6 @@ fun NewsFeedItem(
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit
 ) {
-    val context = LocalContext.current
-
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
@@ -76,14 +67,10 @@ fun NewsFeedItem(
     ) {
         Column {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(newsArticleUiData.imageUrl)
-                    .crossfade(true)
-                    .crossfade(NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION)
-                    .networkCachePolicy(CachePolicy.ENABLED)
-                    .memoryCachePolicy(CachePolicy.ENABLED)
-                    .diskCachePolicy(CachePolicy.DISABLED)
-                    .build(),
+                model = CommonUtils.getImageRequestModel(
+                    LocalContext.current,
+                    newsArticleUiData.imageUrl
+                ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -119,11 +106,8 @@ fun NewsFeedItem(
                     .padding(end = 12.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.Schedule, contentDescription = "time",
-                    Modifier
-                        .size(14.dp)
-                        .align(Alignment.CenterVertically)
+                TimeIcon(
+                    Modifier.align(Alignment.CenterVertically)
                 )
                 Text(
                     text = getHowOldIsArticle(newsArticleUiData.publishedAt),
@@ -134,13 +118,7 @@ fun NewsFeedItem(
                         .padding(end = 12.dp)
                         .align(Alignment.CenterVertically)
                 )
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = "share",
-                    modifier
-                        .size(14.dp)
-                        .align(Alignment.CenterVertically)
-                        .clickable { shareArticle(context, newsArticleUiData.url) })
+                ShareIcon(modifier.align(Alignment.CenterVertically), newsArticleUiData.url)
             }
         }
     }

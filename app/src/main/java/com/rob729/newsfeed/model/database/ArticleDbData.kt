@@ -7,5 +7,6 @@ data class ArticleDbData(
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "urlToImage") val imageUrl: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "publishedAt") val publishedAt: String
+    @ColumnInfo(name = "publishedAt") val publishedAt: String,
+    @ColumnInfo(name = "source") val source: String?
 )

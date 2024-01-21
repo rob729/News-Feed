@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ShimmerListItem(brush: Brush) {
+fun NewsFeedItemShimmer(brush: Brush) {
 
     Card(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),

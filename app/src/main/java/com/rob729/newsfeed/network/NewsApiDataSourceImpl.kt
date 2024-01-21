@@ -38,7 +38,8 @@ class NewsApiDataSourceImpl(
                 BuildConfig.NEWS_FEED_API_KEY,
                 startDate,
                 Constants.SORT_RESULT_FILTER_PUBLISHED_AT,
-                Constants.API_RESULT_LANGUAGE
+                Constants.API_RESULT_LANGUAGE,
+                Constants.SEARCH_RESPONSE_PAGE_SIZE
             )
         )
     }
