@@ -21,6 +21,7 @@ interface NewsApi {
         @Query("apiKey") apiKey: String,
         @Query("from") startDate: String,
         @Query("sortBy") sortBy: String,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("pageSize") pageSize: Int,
     ): Response<NetworkNews>
 }

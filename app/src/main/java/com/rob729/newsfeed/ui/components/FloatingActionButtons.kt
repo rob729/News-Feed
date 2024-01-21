@@ -21,17 +21,17 @@ fun NewsSourceExtendedFab(modifier: Modifier, isExpanded: Boolean, onClick: () -
     ExtendedFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        text = { Text(text = Constants.FAB_TITLE, color = Color.White) },
+        text = { Text(text = Constants.FAB_TITLE, color = MaterialTheme.colorScheme.onPrimary) },
         icon = {
             Icon(
                 imageVector = Icons.Default.Newspaper,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 contentDescription = Constants.FAB_TITLE
             )
         },
         elevation = FloatingActionButtonDefaults.elevation(8.dp),
         expanded = isExpanded,
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        containerColor = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(12.dp)
     )
 }
@@ -41,12 +41,12 @@ fun ScrollToTopFab(modifier: Modifier, onClick: () -> Unit) {
     SmallFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        containerColor = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(12.dp)
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.onPrimary,
             contentDescription = Constants.FAB_TITLE
         )
     }

@@ -1,6 +1,9 @@
 package com.rob729.newsfeed.initalizers
 
 import android.content.Context
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.startup.Initializer
 import com.pluto.plugins.network.okhttp.addPlutoOkhttpInterceptor
 import com.rob729.newsfeed.database.NewsDBDataSource
@@ -9,6 +12,7 @@ import com.rob729.newsfeed.network.NewsApi
 import com.rob729.newsfeed.network.NewsApiDataSource
 import com.rob729.newsfeed.network.NewsApiDataSourceImpl
 import com.rob729.newsfeed.utils.Constants
+import com.rob729.newsfeed.utils.SearchHistoryHelper
 import com.rob729.newsfeed.vm.HomeViewModel
 import com.rob729.newsfeed.vm.NewsRepository
 import com.rob729.newsfeed.vm.SearchViewModel
@@ -52,6 +56,14 @@ class KoinInitializer : Initializer<KoinApplication> {
                             .build()
 
                         retrofitInstance.create(NewsApi::class.java)
+                    }
+                },
+                module {
+                    single {
+                        val dataStore = PreferenceDataStoreFactory.create(produceFile = {
+                            context.preferencesDataStoreFile(Constants.PREFS_NAME)
+                        })
+                        SearchHistoryHelper(dataStore)
                     }
                 },
                 module {

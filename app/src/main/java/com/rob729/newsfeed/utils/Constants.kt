@@ -13,7 +13,7 @@ object Constants {
         NewsSourceUiData("theverge.com", "https://kahoot.com/files/2020/10/the-verge-logo.jpg"),
         NewsSourceUiData(
             "wired.com",
-            "https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1489030150/i1jbqbfetqzi8dr9nmvb.png"
+            "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1489030150/i1jbqbfetqzi8dr9nmvb.png"
         ),
         NewsSourceUiData(
             "androidauthority.com",
@@ -42,11 +42,14 @@ object Constants {
     )
     const val ERROR_MESSAGE_PREFIX = "Something went wrong"
     const val API_RESULT_LANGUAGE = "en"
+    const val SEARCH_RESPONSE_PAGE_SIZE = 15
     const val SORT_RESULT_FILTER_PUBLISHED_AT = "publishedAt"
-    const val SHIMMER_ITEM_COUNT = 4
     const val ANIMATION_DURATION = 500
     const val MAX_CACHE_DATA_VALID_DURATION_IN_HOURS = 6
     const val SEARCH_QUERY_UPDATE_DEBOUNCE_TIME = 1000L
-    const val NEWS_FEED_ITEM_IMAGE_CROSS_FADE_DURATION = 200
-    const val GRADIENT_START_COORDINATE = 200f
+    const val PREFS_NAME = "prefs_name"
+}
+
+enum class ScreenType {
+    HOME, SEARCH
 }

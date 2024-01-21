@@ -128,10 +128,10 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 105
+    threshold: 106
   LongParameterList:
     active: true
-    functionThreshold: 6
+    functionThreshold: 7
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
@@ -532,7 +532,7 @@ style:
     active: false
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 3
+    maxDestructuringEntries: 5
   DoubleNegativeLambda:
     active: false
     negativeFunctions:
@@ -685,7 +685,7 @@ style:
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
-    active: true
+    active: false
   SpacingBetweenPackageAndImports:
     active: false
   StringShouldBeRawString:

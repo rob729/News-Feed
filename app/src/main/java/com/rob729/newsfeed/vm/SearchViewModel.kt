@@ -10,6 +10,8 @@ import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.model.state.search.SearchState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.utils.Constants.SEARCH_QUERY_UPDATE_DEBOUNCE_TIME
+import com.rob729.newsfeed.utils.SearchHistoryHelper
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -22,8 +24,10 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
+@OptIn(FlowPreview::class)
 class SearchViewModel(
     private val newsRepository: NewsRepository,
+    private val searchHistoryHelper: SearchHistoryHelper
 ) : ViewModel(),
     ContainerHost<SearchState, SearchSideEffects> {
     override val container: Container<SearchState, SearchSideEffects> = container(
@@ -33,22 +37,33 @@ class SearchViewModel(
     init {
         viewModelScope.launch {
             container.stateFlow
-                .debounce(SEARCH_QUERY_UPDATE_DEBOUNCE_TIME).distinctUntilChangedBy { it.searchQuery }
-                .collectLatest {
-                    searchNewsResultsForQuery(it.searchQuery)
+                .debounce(SEARCH_QUERY_UPDATE_DEBOUNCE_TIME)
+                .distinctUntilChangedBy { it.editTextInput }.collectLatest {
+                    if (it.editTextInput != it.searchQuery) {
+                        searchNewsResultsForQuery(it.editTextInput)
+                    }
                 }
+        }
+
+        viewModelScope.launch {
+            searchHistoryHelper.searchHistoryFlow.collectLatest { searchHistorySet ->
+                intent {
+                    reduce { state.copy(searchHistoryList = searchHistorySet?.toList().orEmpty()) }
+                }
+            }
         }
     }
 
 
     fun updateSearchQuery(query: String) = intent {
-        reduce { state.copy(searchQuery = query) }
+        reduce { state.copy(editTextInput = query) }
     }
 
     private fun searchNewsResultsForQuery(query: String) = intent {
         reduce {
-            state.copy(searchQuery = query)
+            state.copy(searchQuery = query, editTextInput = query)
         }
+        postSideEffect(SearchSideEffects.SearchQueryChanged(query))
         if (query.isBlank()) {
             reduce { state.copy(uiStatus = UiStatus.EmptyScreen) }
         } else {
@@ -61,6 +76,22 @@ class SearchViewModel(
     fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
         postSideEffect(SearchSideEffects.SearchResultClicked(item.url))
     }
+
+    fun searchHistoryItemClicked(searchHistoryItemText: String) = searchNewsResultsForQuery(searchHistoryItemText)
+
+    fun addSearchQueryToHistoryList(query: String) {
+        viewModelScope.launch {
+            searchHistoryHelper.addSearchQueryToHistoryList(query.trim())
+        }
+    }
+
+    fun clearSearchHistory() {
+        viewModelScope.launch {
+            searchHistoryHelper.clearSearchHistory()
+        }
+    }
+
+    fun clearEditTextInput() = searchNewsResultsForQuery("")
 
     private suspend fun SimpleSyntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(
         newsResource: NewsResource
@@ -84,6 +115,7 @@ class SearchViewModel(
                         state.copy(
                             uiStatus = UiStatus.Success(
                                 it.networkArticles
+                                    .distinctBy { it.imageUrl }
                                     .mapNotNull(::mapNetworkArticleToNewsArticleUiData)
                             )
                         )
