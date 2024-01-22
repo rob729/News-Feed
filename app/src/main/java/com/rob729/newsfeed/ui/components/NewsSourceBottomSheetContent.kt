@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -29,6 +31,11 @@ fun NewsSourceBottomSheetContent(
     val newsSourceList = Constants.newsSourceUiDataLists
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val itemWidth = (screenWidthDp - (ITEM_SPACING * VISIBLE_CARDS)).div(VISIBLE_CARDS)
+    val rowState = rememberLazyListState()
+
+    LaunchedEffect(currentSelectedNewsSource, newsSourceList) {
+        rowState.scrollToItem(newsSourceList.indexOfFirst { it.domain == currentSelectedNewsSource })
+    }
 
     Box(
         modifier = Modifier.navigationBarsPadding(),
@@ -38,7 +45,8 @@ fun NewsSourceBottomSheetContent(
             LazyRow(
                 modifier = Modifier
                     .testTag("news_source_list"),
-                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING.dp)
+                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING.dp),
+                state = rowState
             ) {
                 items(Constants.newsSourceUiDataLists.size,
                     { index: Int -> newsSourceList[index].domain }) { index ->
