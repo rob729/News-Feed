@@ -7,9 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
@@ -100,26 +97,12 @@ fun NewsFeedItem(
                 fontFamily = lexendDecaFontFamily,
                 lineHeight = 18.sp
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 12.dp, bottom = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TimeIcon(
-                    Modifier.align(Alignment.CenterVertically)
-                )
-                Text(
-                    text = getHowOldIsArticle(newsArticleUiData.publishedAt),
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                        .align(Alignment.CenterVertically)
-                )
-                ShareIcon(modifier.align(Alignment.CenterVertically), newsArticleUiData.url)
-            }
+            BottomStrip(
+                newsArticleUiData.source,
+                newsArticleUiData.publishedAt,
+                newsArticleUiData.url,
+                Modifier.padding(start = 12.dp, end = 12.dp, bottom = 8.dp)
+            )
         }
     }
 
