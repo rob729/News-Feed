@@ -99,62 +99,11 @@ fun SearchResultItem(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                val (sourceIcon, sourceText, publishedTimeIcon, publishedTimeText, shareIcon) = createRefs()
-
-                Icon(
-                    imageVector = Icons.Default.Web, contentDescription = "source",
-                    Modifier
-                        .size(14.dp)
-                        .padding(end = 4.dp)
-                        .constrainAs(sourceIcon) {
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                )
-                Text(
-                    text = newsArticleUiData.source,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                        .constrainAs(sourceText) {
-                            start.linkTo(sourceIcon.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                )
-                TimeIcon(
-                    Modifier.constrainAs(publishedTimeIcon) {
-                        end.linkTo(publishedTimeText.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                )
-                Text(
-                    text = getHowOldIsArticle(newsArticleUiData.publishedAt),
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                        .constrainAs(publishedTimeText) {
-                            end.linkTo(shareIcon.start)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                )
-                ShareIcon(modifier.constrainAs(shareIcon) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }, newsArticleUiData.url)
-            }
+            BottomStrip(
+                newsArticleUiData.source,
+                newsArticleUiData.publishedAt,
+                newsArticleUiData.url,
+            )
         }
     }
 }
