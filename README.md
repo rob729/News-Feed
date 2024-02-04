@@ -3,9 +3,17 @@
 ![CI-MAIN](https://github.com/rob729/News-Feed/actions/workflows/build.yml/badge.svg?branch=main)
 
 <p style="text-align: center;">
-  <img src="readme_images/banner_1.png" width="250" alt="Home Screen"/>
-  <img src="readme_images/banner_2.png" width="250" alt="Home Screen with news sources"/>
-  <img src="readme_images/banner_3.png" width="250" alt="Search Screen"/>
+  <img src="readme_images/screenshot_light_mode_home.png" width="200" alt="Home Screen"/>
+  <img src="readme_images/screenshot_light_mode_news_source.png" width="200" alt="Home Screen with news sources"/>
+  <img src="readme_images/screenshot_light_mode_empty_search.png" width="200" alt="Empty Search Screen"/>
+  <img src="readme_images/screenshot_light_mode_search.png" width="200" alt="Search Screen"/>
+</p>
+
+<p style="text-align: center;">
+  <img src="readme_images/screenshot_dark_mode_home.png" width="200" alt="Home Screen"/>
+  <img src="readme_images/screenshot_dark_mode_news_source.png" width="200" alt="Home Screen with news sources"/>
+  <img src="readme_images/screenshot_dark_mode_empty_search.png" width="200" alt="Empty Search Screen"/>
+  <img src="readme_images/screenshot_dark_mode_search.png" width="200" alt="Search Screen"/>
 </p>
 
 ## Download
