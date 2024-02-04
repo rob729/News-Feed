@@ -52,7 +52,7 @@ fun NewsSourceBottomSheetContent(
                     { index: Int -> newsSourceList[index].domain }) { index ->
                     NewsSourcePill(
                         itemSize = itemWidth.dp,
-                        imageUrl = newsSourceList[index].imageUrl,
+                        newsSourceUiData = newsSourceList[index],
                         isSelected = newsSourceList[index].domain == currentSelectedNewsSource
                     ) {
                         onNewsSourceClicked(newsSourceList[index].domain)
