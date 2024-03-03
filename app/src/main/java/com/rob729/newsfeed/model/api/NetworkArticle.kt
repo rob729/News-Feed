@@ -14,10 +14,10 @@ data class NetworkArticle(
     @Json(name = "description") val description: String?,
     @Json(name = "publishedAt") val publishedAt: String,
     @Json(name = "source") val source: ArticleSource? = null
-): Serializable
+) : Serializable
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class ArticleSource(
     @Json(name = "name") val name: String? = null
-): Serializable
+) : Serializable

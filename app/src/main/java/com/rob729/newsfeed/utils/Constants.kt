@@ -6,7 +6,8 @@ object Constants {
     const val BASE_URL = "https://newsapi.org/v2/"
     const val NOTIFICATION_TITLE = "notification_title"
     const val NOTIFICATION_MESSAGE = "notification_message"
-    const val TOOLBAR_TITLE = "News Feed"
+    const val HOME_TOOLBAR_TITLE = "News Feed"
+    const val BOOKMARK_TOOLBAR_TITLE = "Bookmarks"
     const val FAB_TITLE = "News Sources"
     const val CHROME_PACKAGE_NAME = "com.android.chrome"
     val newsSourceUiDataLists = listOf(
@@ -59,6 +60,7 @@ object Constants {
     const val MAX_CACHE_DATA_VALID_DURATION_IN_HOURS = 6
     const val SEARCH_QUERY_UPDATE_DEBOUNCE_TIME = 1000L
     const val PREFS_NAME = "prefs_name"
+    const val MAX_TOOLBAR_ELEVATION = 12
 }
 
 enum class ScreenType {

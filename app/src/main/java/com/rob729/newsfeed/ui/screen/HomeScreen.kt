@@ -14,6 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -29,10 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.rob729.newsfeed.R
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
+import com.rob729.newsfeed.model.ui.IconData
 import com.rob729.newsfeed.ui.NavigationScreens
 import com.rob729.newsfeed.ui.bottomSheet.NewsSourceBottomSheet
 import com.rob729.newsfeed.ui.components.LoadingView
@@ -41,9 +47,11 @@ import com.rob729.newsfeed.ui.components.NewsSourceExtendedFab
 import com.rob729.newsfeed.ui.components.NoInternetView
 import com.rob729.newsfeed.ui.components.ScrollToTopFab
 import com.rob729.newsfeed.ui.components.Toolbar
+import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -62,7 +70,6 @@ fun HomeScreen(
     val listState = rememberLazyListState()
     val newsState = viewModel.collectAsState().value
     val bottomSheetState = rememberModalBottomSheetState()
-    val coroutineScope = rememberCoroutineScope()
 
     val isMinItemsScrolledForScrollToTopVisibility by remember {
         derivedStateOf {
@@ -73,9 +80,9 @@ fun HomeScreen(
     val toolbarElevation by remember {
         derivedStateOf {
             if (listState.firstVisibleItemIndex == 0) {
-                minOf(listState.firstVisibleItemScrollOffset.toFloat().dp, 12.dp)
+                minOf(listState.firstVisibleItemScrollOffset.toFloat().dp, Constants.MAX_TOOLBAR_ELEVATION.dp)
             } else {
-                12.dp
+                Constants.MAX_TOOLBAR_ELEVATION.dp
             }
         }
     }
@@ -83,7 +90,7 @@ fun HomeScreen(
     viewModel.collectSideEffect {
         when (it) {
             is HomeFeedSideEffect.NewsSourceClicked -> {
-                coroutineScope.launch(Dispatchers.Main.immediate) {
+                withContext(Dispatchers.Main.immediate) {
                     bottomSheetState.hide()
                     isNewsSourceBottomSheetVisible = false
                 }
@@ -111,9 +118,18 @@ fun HomeScreen(
             .padding(paddingValues)
     ) {
         Column {
-            Toolbar(toolbarElevation) {
-                navController.navigate(NavigationScreens.SEARCH.routeName)
-            }
+            Toolbar(
+                Constants.HOME_TOOLBAR_TITLE,
+                null,
+                painterResource(id = R.mipmap.ic_launcher_foreground),
+                IconData(Icons.Default.Search) {
+                    navController.navigate(NavigationScreens.SEARCH.routeName)
+                },
+                IconData(Icons.Default.Bookmarks) {
+                    navController.navigate(NavigationScreens.BOOKMARKED_ARTICLES.routeName)
+                },
+                toolbarElevation
+            )
 
             when (newsState.uiStatus) {
                 UiStatus.Error -> {
@@ -126,10 +142,20 @@ fun HomeScreen(
 
                 is UiStatus.Success -> {
                     LazyColumn(Modifier.testTag("news_list"), listState) {
-                        items(newsState.uiStatus.news) { item ->
-                            NewsFeedItem(newsArticleUiData = item) {
-                                viewModel.newsFeedItemClicked(item)
-                            }
+                        items(newsState.uiStatus.news, key = {
+                            it.url
+                        }) { item ->
+                            NewsFeedItem(
+                                Modifier,
+                                newsArticleUiData = item,
+                                false,
+                                { viewModel.newsFeedItemClicked(item) },
+                                { isBookmarked ->
+                                    viewModel.newsFeedItemBookmarkClicked(
+                                        item,
+                                        isBookmarked
+                                    )
+                                })
                         }
                     }
                 }

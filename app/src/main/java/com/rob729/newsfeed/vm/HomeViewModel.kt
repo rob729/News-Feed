@@ -96,5 +96,14 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(),
             this.updateStateFromNewsResource(it)
         }
     }
+
+    fun newsFeedItemBookmarkClicked(newsArticleUiData: NewsArticleUiData, isBookmarked: Boolean) =
+        intent {
+            if (isBookmarked) {
+                newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
+            } else {
+                newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
+            }
+        }
 }
 

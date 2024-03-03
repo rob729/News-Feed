@@ -7,4 +7,6 @@
     <string name="no_result_found_title">No results found</string>
     <string name="no_result_found_subtitle">Try adjusting your search to find what you are looking for</string>
     <string name="try_again">Try again</string>
+    <string name="no_bookmarked_item_title">No Bookmarked Item</string>
+    <string name="no_bookmarked_item_subtitle">You can add an item to bookmarks by clicking on the bookmark icon</string>
 </resources>

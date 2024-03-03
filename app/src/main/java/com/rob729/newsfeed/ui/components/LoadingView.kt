@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -24,7 +23,8 @@ fun LoadingView(screenType: ScreenType = ScreenType.HOME) {
         Color.LightGray.copy(alpha = 0.8f)
     )
 
-    val transition = rememberInfiniteTransition(label = "loading_shimmer_transition") // animate infinite times
+    val transition =
+        rememberInfiniteTransition(label = "loading_shimmer_transition") // animate infinite times
 
     val translateAnimation by transition.animateFloat( //animate the transition
         initialValue = 0f,
@@ -47,7 +47,7 @@ fun LoadingView(screenType: ScreenType = ScreenType.HOME) {
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        when(screenType) {
+        when (screenType) {
             ScreenType.HOME -> {
                 repeat(times = 4) {
                     item {
@@ -55,6 +55,7 @@ fun LoadingView(screenType: ScreenType = ScreenType.HOME) {
                     }
                 }
             }
+
             ScreenType.SEARCH -> {
                 repeat(times = 7) {
                     item {

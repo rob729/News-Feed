@@ -6,10 +6,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
 import com.rob729.newsfeed.model.database.NewsSourceDbData
 
 @TypeConverters(DataConverter::class)
-@Database(entities = [NewsSourceDbData::class], version = 2, autoMigrations = [AutoMigration(from = 1, to = 2)])
+@Database(
+    entities = [NewsSourceDbData::class, BookmarkedNewsArticleDbData::class],
+    version = 3,
+    autoMigrations = [AutoMigration(from = 1, to = 2)]
+)
 abstract class NewsDatabase : RoomDatabase() {
 
     abstract fun newsDao(): NewsDao

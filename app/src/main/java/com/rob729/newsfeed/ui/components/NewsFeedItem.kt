@@ -37,9 +37,11 @@ import kotlinx.datetime.toInstant
 
 @Composable
 fun NewsFeedItem(
-    newsArticleUiData: NewsArticleUiData,
     modifier: Modifier = Modifier,
-    onItemClick: () -> Unit
+    newsArticleUiData: NewsArticleUiData,
+    isArticleBookmarked: Boolean,
+    onItemClick: () -> Unit,
+    onBookmarkClick: (isBookmarked: Boolean) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -101,6 +103,8 @@ fun NewsFeedItem(
                 newsArticleUiData.source,
                 newsArticleUiData.publishedAt,
                 newsArticleUiData.url,
+                isArticleBookmarked,
+                onBookmarkClick,
                 Modifier.padding(start = 12.dp, end = 12.dp, bottom = 8.dp)
             )
         }

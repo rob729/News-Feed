@@ -12,13 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Web
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,8 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
@@ -46,9 +38,10 @@ const val SEARCH_IMAGE_ASPECT_RATIO = 1.7f
 
 @Composable
 fun SearchResultItem(
-    newsArticleUiData: NewsArticleUiData,
     modifier: Modifier = Modifier,
-    onItemClick: () -> Unit
+    newsArticleUiData: NewsArticleUiData,
+    onItemClick: () -> Unit,
+    onBookmarkClick: (isBookmarked: Boolean) -> Unit
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -103,6 +96,8 @@ fun SearchResultItem(
                 newsArticleUiData.source,
                 newsArticleUiData.publishedAt,
                 newsArticleUiData.url,
+                false,
+                onBookmarkClick
             )
         }
     }
@@ -112,15 +107,12 @@ fun SearchResultItem(
 @Composable
 fun PreviewSearchResultItem() {
     SearchResultItem(
-        NewsArticleUiData(
+        newsArticleUiData = NewsArticleUiData(
             "News title",
             "News Description",
             "",
             "",
             "6 Sept 2023",
             "news source"
-        )
-    ) {
-
-    }
+        ),  onItemClick = {}, onBookmarkClick = {})
 }
