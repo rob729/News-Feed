@@ -22,6 +22,7 @@ import com.rob729.newsfeed.utils.Constants
 
 private const val VISIBLE_CARDS = 4.25f
 private const val ITEM_SPACING = 12
+
 @Composable
 fun NewsSourceBottomSheetContent(
     onNewsSourceClicked: (String) -> Unit,

@@ -2,6 +2,7 @@ package com.rob729.newsfeed.database
 
 import com.rob729.newsfeed.model.api.NetworkArticle
 import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
 import com.rob729.newsfeed.model.database.NewsSourceDbData
 import com.rob729.newsfeed.model.mapper.mapNetworkArticleToArticleDbData
 
@@ -33,5 +34,13 @@ class NewsDBDataSource(private val newsDao: NewsDao) {
     suspend fun getNewsSourceFetchTimeInMillis(newsSourceDomain: String): Long? {
         return newsDao.getNewsSourceDomainFetchTimeInMillis(newsSourceDomain)
     }
+
+    fun getBookmarkedNewsArticles() = newsDao.getBookmarkedNewsArticles()
+
+    suspend fun addBookmarkedArticle(bookmarkedNewsArticleDbData: BookmarkedNewsArticleDbData) =
+        newsDao.addBookmarkedNewsArticle(bookmarkedNewsArticleDbData)
+
+    suspend fun removeBookmarkedArticle(newsArticleUrl: String) =
+        newsDao.removeBookmarkedNewsArticle(newsArticleUrl)
 
 }

@@ -3,6 +3,8 @@ package com.rob729.newsfeed.vm
 import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.model.api.NetworkNews
+import com.rob729.newsfeed.model.mapper.mapNewsArticleUiDataToBookmarkedNewsArticle
+import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.network.NewsApiDataSource
 import com.rob729.newsfeed.utils.Constants.MAX_CACHE_DATA_VALID_DURATION_IN_HOURS
 import kotlinx.coroutines.flow.Flow
@@ -64,4 +66,14 @@ class NewsRepository(
         return (Clock.System.now() - Instant.fromEpochMilliseconds(newsSourceFetchTimeInMillis))
             .inWholeHours > MAX_CACHE_DATA_VALID_DURATION_IN_HOURS
     }
+
+    fun getBookmarkedNewsArticles() = newsDBDataSource.getBookmarkedNewsArticles()
+
+    suspend fun addBookmarkedNewsArticle(newsArticleUiData: NewsArticleUiData) =
+        newsDBDataSource.addBookmarkedArticle(
+            mapNewsArticleUiDataToBookmarkedNewsArticle(newsArticleUiData)
+        )
+
+    suspend fun removeBookmarkedNewsArticle(newsArticleUrl: String) =
+        newsDBDataSource.removeBookmarkedArticle(newsArticleUrl)
 }

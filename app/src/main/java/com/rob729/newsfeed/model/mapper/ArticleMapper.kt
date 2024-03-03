@@ -2,6 +2,7 @@ package com.rob729.newsfeed.model.mapper
 
 import com.rob729.newsfeed.model.api.NetworkArticle
 import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 
 fun mapNetworkArticleToArticleDbData(networkArticle: NetworkArticle): ArticleDbData {
@@ -46,3 +47,23 @@ fun mapNetworkArticleToNewsArticleUiData(networkArticle: NetworkArticle): NewsAr
         networkArticle.source?.name.orEmpty()
     )
 }
+
+fun mapNewsArticleUiDataToBookmarkedNewsArticle(newsArticleUiData: NewsArticleUiData) =
+    BookmarkedNewsArticleDbData(
+        newsArticleUiData.url,
+        newsArticleUiData.title,
+        newsArticleUiData.imageUrl,
+        newsArticleUiData.description,
+        newsArticleUiData.publishedAt,
+        newsArticleUiData.source
+    )
+
+fun mapBookmarkedNewsArticleToNewsArticleUiData(bookmarkedNewsArticleDbData: BookmarkedNewsArticleDbData) =
+    NewsArticleUiData(
+        bookmarkedNewsArticleDbData.title,
+        bookmarkedNewsArticleDbData.description,
+        bookmarkedNewsArticleDbData.imageUrl,
+        bookmarkedNewsArticleDbData.url,
+        bookmarkedNewsArticleDbData.publishedAt,
+        bookmarkedNewsArticleDbData.source
+    )

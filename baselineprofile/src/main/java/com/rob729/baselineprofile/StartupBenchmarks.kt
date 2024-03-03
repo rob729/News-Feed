@@ -115,41 +115,6 @@ class StartupBenchmarks {
             searchScrollAndNavigate()
         }
     }
-
-    private fun MacrobenchmarkScope.searchScrollAndNavigate() {
-        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        if (uiDevice.findObject(UiSelector().textMatches("Allow")).exists()) {
-            uiDevice.findObject(UiSelector().textMatches("Allow")).click()
-        }
-
-        val searchIconSelector = By.res("search_icon")
-        if(!device.wait(Until.hasObject(searchIconSelector), 2_000)) {
-            TestCase.fail("Could not find search icon resource")
-        }
-        val searchIcon = device.findObject(searchIconSelector)
-        searchIcon.click()
-
-        val searchInputTextFieldSelector = By.res("search_input_text_field")
-        if(!device.wait(Until.hasObject(searchInputTextFieldSelector), 2_500)) {
-            TestCase.fail("Search input text field not found on clicking search icon")
-        }
-        val searchInputTextField = device.findObject(searchInputTextFieldSelector)
-        searchInputTextField.click()
-        searchInputTextField.text = "Nasa"
-
-        val searchResultNewsListSelector = By.res("search_result_news_list")
-        if(!device.wait(Until.hasObject(searchResultNewsListSelector), 2_500)) {
-            TestCase.fail("Search input text field not found on clicking search icon")
-        }
-        val list = device.findObject(searchResultNewsListSelector)
-        if (list.children != null && list.children.size > 0) {
-            val searchResultItemIndex = Random.nextInt(list.children.size)
-            list.children[searchResultItemIndex].click()
-            if(!device.wait(Until.hasObject(By.desc("Close tab")), 3_500)) {
-                TestCase.fail("News details screen didn't opened")
-            }
-        }
-    }
 }
 
 fun MacrobenchmarkScope.scrollAndNavigate() {
@@ -182,17 +147,50 @@ fun MacrobenchmarkScope.scrollAndNavigate() {
     }
     val newsSourceList = device.findObject(By.res("news_source_list"))
 
-    if(newsSourceList.children != null) {
-        val newsSourceChildIndex = Random.nextInt(1, newsSourceList.children.size)
-        newsSourceList.children[newsSourceChildIndex].click()
-    }
+    val newsSourceChildIndex = Random.nextInt(1, newsSourceList.children.size)
+    newsSourceList.children[newsSourceChildIndex].click()
 
     if(!device.wait(Until.hasObject(selector), 5_000)) {
         TestCase.fail("Could not find news_list resource")
     }
     list = device.findObject(selector)
-    if (list.children != null && list.children.size > 0 && list.children[0] != null) {
+    if (list.children.size > 0 && list.children[0] != null) {
         list.children[0].click()
+        if(!device.wait(Until.hasObject(By.text(Pattern.compile("^.*com.*\$"))), 3_500)) {
+            TestCase.fail("News details screen didn't opened")
+        }
+    }
+}
+
+fun MacrobenchmarkScope.searchScrollAndNavigate() {
+    val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    if (uiDevice.findObject(UiSelector().textMatches("Allow")).exists()) {
+        uiDevice.findObject(UiSelector().textMatches("Allow")).click()
+    }
+
+    val searchIconSelector = By.res("right_icon_1")
+    if(!device.wait(Until.hasObject(searchIconSelector), 2_000)) {
+        TestCase.fail("Could not find search icon resource")
+    }
+    val searchIcon = device.findObject(searchIconSelector)
+    searchIcon.click()
+
+    val searchInputTextFieldSelector = By.res("search_input_text_field")
+    if(!device.wait(Until.hasObject(searchInputTextFieldSelector), 2_500)) {
+        TestCase.fail("Search input text field not found on clicking search icon")
+    }
+    val searchInputTextField = device.findObject(searchInputTextFieldSelector)
+    searchInputTextField.click()
+    searchInputTextField.text = "Samsung"
+
+    val searchResultNewsListSelector = By.res("search_result_news_list")
+    if(!device.wait(Until.hasObject(searchResultNewsListSelector), 3_500)) {
+        TestCase.fail("Search news list not found on clicking search icon")
+    }
+    val list = device.findObject(searchResultNewsListSelector)
+    if (list.children.size > 0) {
+        val searchResultItemIndex = Random.nextInt(list.children.size)
+        list.children[searchResultItemIndex].click()
         if(!device.wait(Until.hasObject(By.text(Pattern.compile("^.*com.*\$"))), 3_500)) {
             TestCase.fail("News details screen didn't opened")
         }

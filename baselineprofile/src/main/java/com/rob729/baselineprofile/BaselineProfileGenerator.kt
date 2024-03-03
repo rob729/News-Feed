@@ -48,4 +48,12 @@ class BaselineProfileGenerator {
             scrollAndNavigate()
         }
     }
+
+    fun generateForSearchFlow() {
+        rule.collect("com.rob729.newsfeed") {
+            pressHome()
+            startActivityAndWait()
+            searchScrollAndNavigate()
+        }
+    }
 }

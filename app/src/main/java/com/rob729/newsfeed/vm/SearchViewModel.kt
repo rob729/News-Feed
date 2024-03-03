@@ -77,7 +77,8 @@ class SearchViewModel(
         postSideEffect(SearchSideEffects.SearchResultClicked(item.url))
     }
 
-    fun searchHistoryItemClicked(searchHistoryItemText: String) = searchNewsResultsForQuery(searchHistoryItemText)
+    fun searchHistoryItemClicked(searchHistoryItemText: String) =
+        searchNewsResultsForQuery(searchHistoryItemText)
 
     fun addSearchQueryToHistoryList(query: String) {
         viewModelScope.launch {
@@ -91,7 +92,14 @@ class SearchViewModel(
         }
     }
 
-    fun clearEditTextInput() = searchNewsResultsForQuery("")
+    fun newsFeedItemBookmarkClicked(newsArticleUiData: NewsArticleUiData, isBookmarked: Boolean) =
+        intent {
+            if (isBookmarked) {
+                newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
+            } else {
+                newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
+            }
+        }
 
     private suspend fun SimpleSyntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(
         newsResource: NewsResource

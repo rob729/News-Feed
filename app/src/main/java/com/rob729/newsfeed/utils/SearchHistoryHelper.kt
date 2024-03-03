@@ -30,10 +30,11 @@ class SearchHistoryHelper(private val dataStore: DataStore<Preferences>) {
             return
         }
         dataStore.edit { pref ->
-            pref[searchHistoryListPrefKey]?.filterNot { searchQuery.contains(it) }?.toMutableList()?.also {
-                it.add(searchQuery)
-                pref[searchHistoryListPrefKey] = it.toSet()
-            } ?: run {
+            pref[searchHistoryListPrefKey]?.filterNot { searchQuery.contains(it) }?.toMutableList()
+                ?.also {
+                    it.add(searchQuery)
+                    pref[searchHistoryListPrefKey] = it.toSet()
+                } ?: run {
                 pref[searchHistoryListPrefKey] = setOf(searchQuery)
             }
         }

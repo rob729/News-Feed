@@ -5,7 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
 import com.rob729.newsfeed.model.database.NewsSourceDbData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
@@ -21,4 +23,13 @@ interface NewsDao {
 
     @Query("DELETE FROM news_source_table where news_source_domain = :newsSourceDomain")
     suspend fun removeSavedNewsArticlesListForNews(newsSourceDomain: String)
+
+    @Query("SELECT * from bookmarked_news_article")
+    fun getBookmarkedNewsArticles(): Flow<List<BookmarkedNewsArticleDbData>>
+
+    @Insert(entity = BookmarkedNewsArticleDbData::class)
+    suspend fun addBookmarkedNewsArticle(bookmarkedNewsArticleDbData: BookmarkedNewsArticleDbData)
+
+    @Query("DELETE FROM bookmarked_news_article where url = :articleUrl")
+    suspend fun removeBookmarkedNewsArticle(articleUrl: String)
 }

@@ -1,7 +1,6 @@
 package com.rob729.newsfeed.ui
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -13,17 +12,18 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rob729.newsfeed.R
+import com.rob729.newsfeed.ui.screen.BookmarkedArticlesScreen
 import com.rob729.newsfeed.ui.screen.HomeScreen
 import com.rob729.newsfeed.ui.screen.SearchScreen
 import com.rob729.newsfeed.ui.theme.NewsFeedTheme
@@ -46,6 +46,7 @@ class NewsActivity : ComponentActivity() {
         }
     }
 
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationPermission()
@@ -61,31 +62,7 @@ class NewsActivity : ComponentActivity() {
                         startDestination = NavigationScreens.HOME.routeName,
                         modifier = Modifier.semantics { testTagsAsResourceId = true }
                     ) {
-                        composable(NavigationScreens.HOME.routeName,
-                            enterTransition = {
-                                slideIntoContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            },
-                            exitTransition = {
-                                slideOutOfContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            },
-                            popEnterTransition = {
-                                slideIntoContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            },
-                            popExitTransition = {
-                                slideOutOfContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            }) {
+                        composable(NavigationScreens.HOME.routeName) {
                             HomeScreen(navController, paddingValues = paddingValues) {
                                 openCustomTab(it)
                             }
@@ -100,23 +77,29 @@ class NewsActivity : ComponentActivity() {
                             },
                             exitTransition = {
                                 slideOutOfContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            },
-                            popEnterTransition = {
-                                slideIntoContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                                    animationSpec = tween(ANIMATION_DURATION)
-                                )
-                            },
-                            popExitTransition = {
-                                slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
                                     animationSpec = tween(ANIMATION_DURATION)
                                 )
                             }) {
                             SearchScreen(navController) {
+                                openCustomTab(it)
+                            }
+                        }
+
+                        composable(NavigationScreens.BOOKMARKED_ARTICLES.routeName,
+                            enterTransition = {
+                                slideIntoContainer(
+                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                                    animationSpec = tween(ANIMATION_DURATION)
+                                )
+                            },
+                            exitTransition = {
+                                slideOutOfContainer(
+                                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                                    animationSpec = tween(ANIMATION_DURATION)
+                                )
+                            }) {
+                            BookmarkedArticlesScreen(navController) {
                                 openCustomTab(it)
                             }
                         }

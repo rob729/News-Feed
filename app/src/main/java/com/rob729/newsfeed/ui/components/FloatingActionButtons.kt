@@ -12,8 +12,9 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import com.rob729.newsfeed.utils.Constants
 
 @Composable
@@ -21,7 +22,14 @@ fun NewsSourceExtendedFab(modifier: Modifier, isExpanded: Boolean, onClick: () -
     ExtendedFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        text = { Text(text = Constants.FAB_TITLE, color = MaterialTheme.colorScheme.onPrimary) },
+        text = {
+            Text(
+                text = Constants.FAB_TITLE,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Medium,
+                fontFamily = lexendDecaFontFamily
+            )
+        },
         icon = {
             Icon(
                 imageVector = Icons.Default.Newspaper,
