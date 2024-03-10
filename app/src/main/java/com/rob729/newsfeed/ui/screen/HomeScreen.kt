@@ -26,13 +26,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rob729.newsfeed.R
@@ -47,10 +48,10 @@ import com.rob729.newsfeed.ui.components.NewsSourceExtendedFab
 import com.rob729.newsfeed.ui.components.NoInternetView
 import com.rob729.newsfeed.ui.components.ScrollToTopFab
 import com.rob729.newsfeed.ui.components.Toolbar
+import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
 import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
@@ -61,15 +62,14 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = koinViewModel(),
-    paddingValues: PaddingValues,
-    openCustomTab: (url: String) -> Unit
+    paddingValues: PaddingValues
 ) {
-
     var isNewsSourceBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
     val listState = rememberLazyListState()
     val newsState = viewModel.collectAsState().value
     val bottomSheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
 
     val isMinItemsScrolledForScrollToTopVisibility by remember {
         derivedStateOf {
@@ -98,7 +98,7 @@ fun HomeScreen(
             }
 
             is HomeFeedSideEffect.FeedItemClicked -> {
-                openCustomTab(it.selectedItemUrl)
+                openCustomTab(context, it.selectedItemUrl)
             }
 
             HomeFeedSideEffect.NewsSourceFabClicked -> {
@@ -118,18 +118,7 @@ fun HomeScreen(
             .padding(paddingValues)
     ) {
         Column {
-            Toolbar(
-                Constants.HOME_TOOLBAR_TITLE,
-                null,
-                painterResource(id = R.mipmap.ic_launcher_foreground),
-                IconData(Icons.Default.Search) {
-                    navController.navigate(NavigationScreens.SEARCH.routeName)
-                },
-                IconData(Icons.Default.Bookmarks) {
-                    navController.navigate(NavigationScreens.BOOKMARKED_ARTICLES.routeName)
-                },
-                toolbarElevation
-            )
+            HomeScreenToolbar(toolbarElevation, navController)
 
             when (newsState.uiStatus) {
                 UiStatus.Error -> {
@@ -198,6 +187,22 @@ fun HomeScreen(
     BackHandler(isNewsSourceBottomSheetVisible) {
         isNewsSourceBottomSheetVisible = false
     }
+}
+
+@Composable
+private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController) {
+    Toolbar(
+        Constants.HOME_TOOLBAR_TITLE,
+        null,
+        painterResource(id = R.mipmap.ic_launcher_foreground),
+        IconData(Icons.Default.Search) {
+            navController.navigate(NavigationScreens.SEARCH.routeName)
+        },
+        IconData(Icons.Default.Bookmarks) {
+            navController.navigate(NavigationScreens.BOOKMARKED_ARTICLES.routeName)
+        },
+        toolbarElevation
+    )
 }
 
 @Composable

@@ -63,9 +63,7 @@ class NewsActivity : ComponentActivity() {
                         modifier = Modifier.semantics { testTagsAsResourceId = true }
                     ) {
                         composable(NavigationScreens.HOME.routeName) {
-                            HomeScreen(navController, paddingValues = paddingValues) {
-                                openCustomTab(it)
-                            }
+                            HomeScreen(navController, paddingValues = paddingValues)
                         }
 
                         composable(NavigationScreens.SEARCH.routeName,
@@ -81,9 +79,7 @@ class NewsActivity : ComponentActivity() {
                                     animationSpec = tween(ANIMATION_DURATION)
                                 )
                             }) {
-                            SearchScreen(navController) {
-                                openCustomTab(it)
-                            }
+                            SearchScreen(navController)
                         }
 
                         composable(NavigationScreens.BOOKMARKED_ARTICLES.routeName,
@@ -99,34 +95,12 @@ class NewsActivity : ComponentActivity() {
                                     animationSpec = tween(ANIMATION_DURATION)
                                 )
                             }) {
-                            BookmarkedArticlesScreen(navController) {
-                                openCustomTab(it)
-                            }
+                            BookmarkedArticlesScreen(navController)
                         }
                     }
                 }
             }
         }
-    }
-
-    private fun openCustomTab(url: String) {
-        if (url.isBlank()) {
-            return
-        }
-        val builder = CustomTabsIntent.Builder()
-        builder.setShowTitle(true)
-        builder.setInstantAppsEnabled(true)
-        val params = CustomTabColorSchemeParams.Builder()
-            .setNavigationBarColor(ContextCompat.getColor(this, R.color.black))
-            .setToolbarColor(ContextCompat.getColor(this, R.color.status_bar))
-            .build()
-        builder.setDefaultColorSchemeParams(params)
-        val customBuilder = builder.build()
-        customBuilder.intent.setPackage(Constants.CHROME_PACKAGE_NAME)
-        customBuilder.launchUrl(
-            this,
-            Uri.parse(url)
-        )
     }
 
     private fun requestNotificationPermission() {

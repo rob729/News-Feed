@@ -15,6 +15,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,6 +24,7 @@ import com.rob729.newsfeed.model.ui.IconData
 import com.rob729.newsfeed.ui.components.NewsFeedItem
 import com.rob729.newsfeed.ui.components.NoBookmarkedItems
 import com.rob729.newsfeed.ui.components.Toolbar
+import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
 import com.rob729.newsfeed.utils.Constants.BOOKMARK_TOOLBAR_TITLE
 import com.rob729.newsfeed.utils.Constants.MAX_TOOLBAR_ELEVATION
 import com.rob729.newsfeed.vm.BookmarkedArticlesVM
@@ -34,13 +36,13 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun BookmarkedArticlesScreen(
     navController: NavHostController,
-    viewModel: BookmarkedArticlesVM = koinViewModel(),
-    openCustomTab: (url: String) -> Unit
+    viewModel: BookmarkedArticlesVM = koinViewModel()
 ) {
 
     val bookmarkedArticlesState = viewModel.collectAsState().value
-
+    val context = LocalContext.current
     val listState = rememberLazyListState()
+
     val toolbarElevation by remember {
         derivedStateOf {
             if (listState.firstVisibleItemIndex == 0) {
@@ -54,7 +56,7 @@ fun BookmarkedArticlesScreen(
     viewModel.collectSideEffect {
         when (it) {
             is BookmarkedArticleSideEffect.BookmarkedArticleClicked -> {
-                openCustomTab(it.selectedItemUrl)
+                openCustomTab(context, it.selectedItemUrl)
             }
         }
     }

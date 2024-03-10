@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ import com.rob729.newsfeed.ui.components.LoadingView
 import com.rob729.newsfeed.ui.components.NoSearchResultsFound
 import com.rob729.newsfeed.ui.components.SearchBar
 import com.rob729.newsfeed.ui.components.SearchResultItem
+import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
 import com.rob729.newsfeed.utils.ScreenType
 import com.rob729.newsfeed.vm.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -31,12 +33,12 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    viewModel: SearchViewModel = koinViewModel(),
-    openCustomTab: (url: String) -> Unit
+    viewModel: SearchViewModel = koinViewModel()
 ) {
 
     val searchState = viewModel.collectAsState().value
     val listState = rememberLazyListState()
+    val context = LocalContext.current
 
     viewModel.collectSideEffect {
         when (it) {
@@ -45,7 +47,7 @@ fun SearchScreen(
             }
 
             is SearchSideEffects.SearchResultClicked -> {
-                openCustomTab(it.selectedResultUrl)
+                openCustomTab(context, it.selectedResultUrl)
             }
         }
     }
