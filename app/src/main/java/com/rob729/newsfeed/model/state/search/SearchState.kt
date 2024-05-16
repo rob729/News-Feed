@@ -6,5 +6,6 @@ data class SearchState(
     val uiStatus: UiStatus = UiStatus.EmptyScreen,
     val editTextInput: String = "",
     val searchQuery: String = "",
-    val searchHistoryList: List<String> = listOf()
+    val searchHistoryList: List<String> = listOf(),
+    val shouldOpenLinksUsingInAppBrowser: Boolean = true
 )

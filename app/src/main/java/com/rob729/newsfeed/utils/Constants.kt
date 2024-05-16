@@ -8,6 +8,7 @@ object Constants {
     const val NOTIFICATION_MESSAGE = "notification_message"
     const val HOME_TOOLBAR_TITLE = "News Feed"
     const val BOOKMARK_TOOLBAR_TITLE = "Bookmarks"
+    const val SETTINGS_TOOLBAR_TITLE = "Settings"
     const val FAB_TITLE = "News Sources"
     const val CHROME_PACKAGE_NAME = "com.android.chrome"
     val newsSourceUiDataLists = listOf(
@@ -54,6 +55,7 @@ object Constants {
     )
     const val ERROR_MESSAGE_PREFIX = "Something went wrong"
     const val API_RESULT_LANGUAGE = "en"
+    const val PAGE_SIZE = 15
     const val SEARCH_RESPONSE_PAGE_SIZE = 15
     const val SORT_RESULT_FILTER_PUBLISHED_AT = "publishedAt"
     const val ANIMATION_DURATION = 500
@@ -61,6 +63,13 @@ object Constants {
     const val SEARCH_QUERY_UPDATE_DEBOUNCE_TIME = 1000L
     const val PREFS_NAME = "prefs_name"
     const val MAX_TOOLBAR_ELEVATION = 12
+    const val OVERFLOW_MENU_ITEM_SETTINGS = "Settings"
+}
+
+object SettingsConstants {
+    const val THEME_PREF_TITLE = "Theme"
+    const val IN_APP_BROWSER_PREF_TITLE = "Use in-app browser"
+    const val IN_APP_BROWSER_PREF_SUBTITLE = "When turned off, links open in your default browser"
 }
 
 enum class ScreenType {

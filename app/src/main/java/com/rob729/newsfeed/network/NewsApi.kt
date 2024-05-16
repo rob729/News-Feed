@@ -11,7 +11,8 @@ interface NewsApi {
     suspend fun getNews(
         @Query("domains") domain: String,
         @Query("apiKey") apiKey: String,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("pageSize") pageSize: Int
     ): Response<NetworkNews>
 
 

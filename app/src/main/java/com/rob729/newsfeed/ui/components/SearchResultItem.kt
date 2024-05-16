@@ -114,5 +114,5 @@ fun PreviewSearchResultItem() {
             "",
             "6 Sept 2023",
             "news source"
-        ),  onItemClick = {}, onBookmarkClick = {})
+        ), onItemClick = {}, onBookmarkClick = {})
 }

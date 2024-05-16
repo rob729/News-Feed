@@ -1,6 +1,8 @@
 package com.rob729.newsfeed.initalizers
 
 import android.content.Context
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.startup.Initializer
@@ -10,12 +12,18 @@ import com.rob729.newsfeed.database.NewsDatabase
 import com.rob729.newsfeed.network.NewsApi
 import com.rob729.newsfeed.network.NewsApiDataSource
 import com.rob729.newsfeed.network.NewsApiDataSourceImpl
+import com.rob729.newsfeed.repository.AppPreferencesSerializer
+import com.rob729.newsfeed.repository.NewsRepository
+import com.rob729.newsfeed.repository.PreferenceRepository
 import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.utils.SearchHistoryHelper
 import com.rob729.newsfeed.vm.BookmarkedArticlesVM
 import com.rob729.newsfeed.vm.HomeViewModel
-import com.rob729.newsfeed.vm.NewsRepository
 import com.rob729.newsfeed.vm.SearchViewModel
+import com.rob729.newsfeed.vm.SettingsViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -65,14 +73,24 @@ class KoinInitializer : Initializer<KoinApplication> {
                         })
                         SearchHistoryHelper(dataStore)
                     }
+                    single {
+                        DataStoreFactory.create(
+                            serializer = AppPreferencesSerializer,
+                            produceFile = { context.dataStoreFile("app_pref.pb") },
+                            corruptionHandler = null,
+                            scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+                        )
+                    }
                 },
                 module {
                     singleOf(::NewsApiDataSourceImpl) { bind<NewsApiDataSource>() }
                     singleOf(::NewsDBDataSource)
                     singleOf(::NewsRepository)
+                    singleOf(::PreferenceRepository)
                     viewModelOf(::HomeViewModel)
                     viewModelOf(::SearchViewModel)
                     viewModelOf(::BookmarkedArticlesVM)
+                    viewModelOf(::SettingsViewModel)
                 }
             )
         }

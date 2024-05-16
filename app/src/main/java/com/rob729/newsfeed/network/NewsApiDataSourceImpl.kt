@@ -23,7 +23,8 @@ class NewsApiDataSourceImpl(
             newsApi.getNews(
                 domain,
                 BuildConfig.NEWS_FEED_API_KEY,
-                Constants.API_RESULT_LANGUAGE
+                Constants.API_RESULT_LANGUAGE,
+                Constants.PAGE_SIZE,
             )
         )
     }

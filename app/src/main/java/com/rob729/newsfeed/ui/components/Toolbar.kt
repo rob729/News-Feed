@@ -5,10 +5,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -34,8 +41,15 @@ fun Toolbar(
     titleSuffixImage: Painter? = null,
     rightIcon1: IconData? = null,
     rightIcon2: IconData? = null,
-    toolbarElevation: Dp
+    toolbarElevation: Dp,
+    overflowMenuContent: @Composable ((
+        isOverflowMenuExpanded: Boolean,
+        dismissOverflowMenu: () -> Unit
+    ) -> Unit)? = null,
 ) {
+
+    var isOverflowMenuExpanded by remember { mutableStateOf(false) }
+
     Surface(tonalElevation = toolbarElevation, color = colorResource(R.color.status_bar)) {
         ConstraintLayout(
             modifier = Modifier
@@ -43,7 +57,7 @@ fun Toolbar(
                 .padding(all = 8.dp)
         ) {
             val (titleConstraint, leftIconConstraint, titleSuffixImageConstraint,
-                rightIcon1Constraint, rightIcon2Constraint) = createRefs()
+                rightIcon1Constraint, rightIcon2Constraint, overflowMenuContentConstraint) = createRefs()
             leftIcon?.let {
                 Icon(
                     imageVector = it.icon,
@@ -91,31 +105,61 @@ fun Toolbar(
             }
 
             rightIcon2?.let {
-                Icon(imageVector = it.icon, contentDescription = "right_icon_2",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .constrainAs(rightIcon2Constraint) {
-                            end.linkTo(rightIcon1Constraint.start)
-                            top.linkTo(rightIcon1Constraint.top)
-                            bottom.linkTo(rightIcon1Constraint.bottom)
-                        }
-                        .padding(end = 12.dp)
-                        .testTag("right_icon_2")
-                        .clickable(onClick = it.clickAction))
+                IconButton(modifier = Modifier
+                    .constrainAs(rightIcon2Constraint) {
+                        end.linkTo(rightIcon1Constraint.start)
+                        top.linkTo(rightIcon1Constraint.top)
+                        bottom.linkTo(rightIcon1Constraint.bottom)
+                    }
+                    .padding(end = 12.dp)
+                    .size(28.dp)
+                    .testTag("right_icon_2"), onClick = it.clickAction) {
+                    Icon(
+                        imageVector = it.icon, contentDescription = "right_icon_2",
+                        tint = Color.White
+                    )
+                }
             }
 
             rightIcon1?.let {
-                Icon(imageVector = it.icon,
-                    contentDescription = "right_icon_1",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .constrainAs(rightIcon1Constraint) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .testTag("right_icon_1")
-                        .clickable(onClick = it.clickAction))
+                IconButton(modifier = Modifier
+                    .constrainAs(rightIcon1Constraint) {
+                        end.linkTo(overflowMenuContentConstraint.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .size(28.dp)
+                    .testTag("right_icon_1"), onClick = it.clickAction
+                ) {
+
+                    Icon(
+                        imageVector = it.icon,
+                        contentDescription = "right_icon_1",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            overflowMenuContent?.let {
+                IconButton(modifier = Modifier
+                    .constrainAs(overflowMenuContentConstraint) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .size(28.dp)
+                    .testTag("overflow_menu_icon"),
+                    onClick = { isOverflowMenuExpanded = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        contentDescription = "More options",
+                        tint = Color.White,
+                    )
+
+                    overflowMenuContent(isOverflowMenuExpanded) {
+                        isOverflowMenuExpanded = false
+                    }
+                }
             }
 
         }

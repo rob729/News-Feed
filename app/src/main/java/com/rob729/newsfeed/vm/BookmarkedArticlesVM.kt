@@ -5,6 +5,8 @@ import com.rob729.newsfeed.model.mapper.mapBookmarkedNewsArticleToNewsArticleUiD
 import com.rob729.newsfeed.model.state.bookmarkedArticles.BookmarkedArticleSideEffect
 import com.rob729.newsfeed.model.state.bookmarkedArticles.BookmarkedArticlesState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.repository.NewsRepository
+import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -13,7 +15,10 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-class BookmarkedArticlesVM(private val newsRepository: NewsRepository) : ViewModel(),
+class BookmarkedArticlesVM(
+    private val newsRepository: NewsRepository,
+    private val preferenceRepository: PreferenceRepository
+) : ViewModel(),
     ContainerHost<BookmarkedArticlesState, BookmarkedArticleSideEffect> {
 
     override val container: Container<BookmarkedArticlesState, BookmarkedArticleSideEffect> =
@@ -29,6 +34,14 @@ class BookmarkedArticlesVM(private val newsRepository: NewsRepository) : ViewMod
                         bookmarkedArticles =
                         bookmarkedArticles.map(::mapBookmarkedNewsArticleToNewsArticleUiData)
                     )
+                }
+            }
+        }
+
+        intent {
+            preferenceRepository.shouldOpenLinksUsingInAppBrowser().collectLatest {
+                this.reduce {
+                    state.copy(shouldOpenLinksUsingInAppBrowser = it)
                 }
             }
         }

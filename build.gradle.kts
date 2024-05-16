@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.protobuf) apply false
     if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
         alias(libs.plugins.google.services) apply false
         alias(libs.plugins.firebase.crashlytics) apply false
