@@ -1,6 +1,7 @@
 package com.rob729.newsfeed.utils
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -21,7 +22,15 @@ object CommonUtils {
             .diskCachePolicy(CachePolicy.DISABLED)
             .build()
 
-    fun openCustomTab(context: Context, url: String) {
+    fun openNewsArticle(context: Context, url: String, shouldOpenUsingInAppBrowser: Boolean) {
+        if (shouldOpenUsingInAppBrowser) {
+            openUrlUsingInAppBrowser(context, url)
+        } else {
+            openUrlInBrowser(context, url)
+        }
+    }
+
+    private fun openUrlUsingInAppBrowser(context: Context, url: String) {
         if (url.isBlank()) {
             return
         }
@@ -40,5 +49,11 @@ object CommonUtils {
             context,
             Uri.parse(url)
         )
+    }
+
+    private fun openUrlInBrowser(context: Context, url: String) {
+        context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+        })
     }
 }

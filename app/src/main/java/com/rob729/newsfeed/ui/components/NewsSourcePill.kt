@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.rob729.newsfeed.model.ui.NewsSourceUiData
+import com.rob729.newsfeed.AppPreferences.NewsSource
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 
 @Composable
 fun NewsSourcePill(
     itemSize: Dp,
-    newsSourceUiData: NewsSourceUiData,
+    newsSource: NewsSource,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -48,7 +48,7 @@ fun NewsSourcePill(
 
         Spacer(modifier = Modifier.height(4.dp))
         AsyncImage(
-            model = newsSourceUiData.imageUrl,
+            model = newsSource.imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -58,7 +58,7 @@ fun NewsSourcePill(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = newsSourceUiData.name,
+            text = newsSource.name,
             maxLines = 2,
             minLines = 2,
             fontWeight = FontWeight.Normal,

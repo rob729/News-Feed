@@ -14,11 +14,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -33,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,7 +53,8 @@ import com.rob729.newsfeed.ui.components.NewsSourceExtendedFab
 import com.rob729.newsfeed.ui.components.NoInternetView
 import com.rob729.newsfeed.ui.components.ScrollToTopFab
 import com.rob729.newsfeed.ui.components.Toolbar
-import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
+import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
+import com.rob729.newsfeed.utils.CommonUtils.openNewsArticle
 import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
@@ -80,7 +86,10 @@ fun HomeScreen(
     val toolbarElevation by remember {
         derivedStateOf {
             if (listState.firstVisibleItemIndex == 0) {
-                minOf(listState.firstVisibleItemScrollOffset.toFloat().dp, Constants.MAX_TOOLBAR_ELEVATION.dp)
+                minOf(
+                    listState.firstVisibleItemScrollOffset.toFloat().dp,
+                    Constants.MAX_TOOLBAR_ELEVATION.dp
+                )
             } else {
                 Constants.MAX_TOOLBAR_ELEVATION.dp
             }
@@ -98,7 +107,11 @@ fun HomeScreen(
             }
 
             is HomeFeedSideEffect.FeedItemClicked -> {
-                openCustomTab(context, it.selectedItemUrl)
+                openNewsArticle(
+                    context,
+                    it.selectedItemUrl,
+                    newsState.shouldOpenLinksUsingInAppBrowser
+                )
             }
 
             HomeFeedSideEffect.NewsSourceFabClicked -> {
@@ -176,6 +189,7 @@ fun HomeScreen(
     }
 
     NewsSourceBottomSheet(
+        newsState.newsSources,
         bottomSheetState,
         isNewsSourceBottomSheetVisible,
         viewModel::newsSourceClicked,
@@ -202,7 +216,26 @@ private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController
             navController.navigate(NavigationScreens.BOOKMARKED_ARTICLES.routeName)
         },
         toolbarElevation
-    )
+    ) { isOverflowMenuExpanded, dismissOverflowMenu ->
+        DropdownMenu(
+            expanded = isOverflowMenuExpanded,
+            onDismissRequest = dismissOverflowMenu,
+            content = {
+                MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape((12.dp)))) {
+                    DropdownMenuItem(text = {
+                        Text(
+                            text = Constants.OVERFLOW_MENU_ITEM_SETTINGS,
+                            fontFamily = lexendDecaFontFamily,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }, onClick = {
+                        dismissOverflowMenu()
+                        navController.navigate(NavigationScreens.SETTINGS.routeName)
+                    })
+                }
+            }
+        )
+    }
 }
 
 @Composable

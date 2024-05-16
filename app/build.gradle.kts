@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.protobuf)
     if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
         alias(libs.plugins.google.services)
         alias(libs.plugins.firebase.crashlytics)
@@ -94,7 +95,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -108,6 +109,22 @@ baselineProfile {
     dexLayoutOptimization = true
     baselineProfileRulesRewrite = true
     baselineProfileOutputDir = "../../src/main/baselineProfiles"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.17.3"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+
+        }
+    }
 }
 
 dependencies {
@@ -135,6 +152,8 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.startup.runtime)
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.runtime.tracing)
 

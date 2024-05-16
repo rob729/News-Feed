@@ -33,7 +33,7 @@ import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import com.rob729.newsfeed.utils.CommonUtils
 import kotlinx.datetime.Clock
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.Instant
 
 @Composable
 fun NewsFeedItem(
@@ -113,7 +113,7 @@ fun NewsFeedItem(
 }
 
 fun getHowOldIsArticle(publishedAt: String): String {
-    val timeDiff = Clock.System.now() - publishedAt.toInstant()
+    val timeDiff = Clock.System.now() - Instant.parse(publishedAt)
     return if (timeDiff.inWholeDays != 0L) {
         " ${timeDiff.inWholeDays}d"
     } else if (timeDiff.inWholeHours != 0L) {

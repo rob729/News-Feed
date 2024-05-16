@@ -18,24 +18,24 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.rob729.newsfeed.utils.Constants
+import com.rob729.newsfeed.AppPreferences
 
 private const val VISIBLE_CARDS = 4.25f
 private const val ITEM_SPACING = 12
 
 @Composable
 fun NewsSourceBottomSheetContent(
+    newsSources: List<AppPreferences.NewsSource>,
     onNewsSourceClicked: (String) -> Unit,
-    currentSelectedNewsSource: String
+    currentSelectedNewsSource: String,
 ) {
     val vibrator = LocalContext.current.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    val newsSourceList = Constants.newsSourceUiDataLists
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val itemWidth = (screenWidthDp - (ITEM_SPACING * VISIBLE_CARDS)).div(VISIBLE_CARDS)
     val rowState = rememberLazyListState()
 
-    LaunchedEffect(currentSelectedNewsSource, newsSourceList) {
-        rowState.scrollToItem(newsSourceList.indexOfFirst { it.domain == currentSelectedNewsSource })
+    LaunchedEffect(currentSelectedNewsSource, newsSources) {
+        rowState.scrollToItem(newsSources.indexOfFirst { it.domainUrl == currentSelectedNewsSource })
     }
 
     Box(
@@ -49,14 +49,14 @@ fun NewsSourceBottomSheetContent(
                 horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING.dp),
                 state = rowState
             ) {
-                items(Constants.newsSourceUiDataLists.size,
-                    { index: Int -> newsSourceList[index].domain }) { index ->
+                items(newsSources.size,
+                    { index: Int -> newsSources[index].domainUrl }) { index ->
                     NewsSourcePill(
                         itemSize = itemWidth.dp,
-                        newsSourceUiData = newsSourceList[index],
-                        isSelected = newsSourceList[index].domain == currentSelectedNewsSource
+                        newsSource = newsSources[index],
+                        isSelected = newsSources[index].domainUrl == currentSelectedNewsSource
                     ) {
-                        onNewsSourceClicked(newsSourceList[index].domain)
+                        onNewsSourceClicked(newsSources[index].domainUrl)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                             val vibrationEffect2 =
                                 VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)

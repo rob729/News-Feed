@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_package = "com.rob729.newsfeed";
+option java_multiple_files = true;
+
+message AppPreferences {
+
+  AppTheme theme = 1;
+
+  repeated NewsSource newsSources = 2;
+
+  bool ShouldOpenLinksUsingInAppBrowser = 3;
+
+  enum AppTheme {
+    SYSTEM_DEFAULT = 0;
+    LIGHT = 1;
+    DARK = 2;
+  }
+
+
+  message NewsSource {
+    string name = 1;
+    string imageUrl = 2;
+    string domainUrl = 3;
+  }
+}

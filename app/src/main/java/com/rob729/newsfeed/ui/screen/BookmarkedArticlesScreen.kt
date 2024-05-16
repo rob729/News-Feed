@@ -2,8 +2,7 @@ package com.rob729.newsfeed.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,7 +23,7 @@ import com.rob729.newsfeed.model.ui.IconData
 import com.rob729.newsfeed.ui.components.NewsFeedItem
 import com.rob729.newsfeed.ui.components.NoBookmarkedItems
 import com.rob729.newsfeed.ui.components.Toolbar
-import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
+import com.rob729.newsfeed.utils.CommonUtils.openNewsArticle
 import com.rob729.newsfeed.utils.Constants.BOOKMARK_TOOLBAR_TITLE
 import com.rob729.newsfeed.utils.Constants.MAX_TOOLBAR_ELEVATION
 import com.rob729.newsfeed.vm.BookmarkedArticlesVM
@@ -56,16 +55,16 @@ fun BookmarkedArticlesScreen(
     viewModel.collectSideEffect {
         when (it) {
             is BookmarkedArticleSideEffect.BookmarkedArticleClicked -> {
-                openCustomTab(context, it.selectedItemUrl)
+                openNewsArticle(
+                    context,
+                    it.selectedItemUrl,
+                    bookmarkedArticlesState.shouldOpenLinksUsingInAppBrowser
+                )
             }
         }
     }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-    ) {
+    Surface(modifier = Modifier.fillMaxSize()) {
 
         Column {
             Toolbar(

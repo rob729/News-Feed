@@ -9,11 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import com.rob729.newsfeed.AppPreferences.NewsSource
 import com.rob729.newsfeed.ui.components.NewsSourceBottomSheetContent
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewsSourceBottomSheet(
+    newsSources: List<NewsSource>,
     bottomSheetState: SheetState,
     isBottomSheetVisible: Boolean,
     onNewsSourceClicked: (String) -> Unit,
@@ -29,8 +31,9 @@ fun NewsSourceBottomSheet(
             onDismissRequest = onDismissRequest
         ) {
             NewsSourceBottomSheetContent(
-                onNewsSourceClicked = onNewsSourceClicked,
-                currentSelectedNewsSource = selectedNewsSource
+                newsSources,
+                onNewsSourceClicked,
+                selectedNewsSource
             )
         }
     }

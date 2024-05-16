@@ -23,7 +23,7 @@ import com.rob729.newsfeed.ui.components.LoadingView
 import com.rob729.newsfeed.ui.components.NoSearchResultsFound
 import com.rob729.newsfeed.ui.components.SearchBar
 import com.rob729.newsfeed.ui.components.SearchResultItem
-import com.rob729.newsfeed.utils.CommonUtils.openCustomTab
+import com.rob729.newsfeed.utils.CommonUtils.openNewsArticle
 import com.rob729.newsfeed.utils.ScreenType
 import com.rob729.newsfeed.vm.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -47,7 +47,11 @@ fun SearchScreen(
             }
 
             is SearchSideEffects.SearchResultClicked -> {
-                openCustomTab(context, it.selectedResultUrl)
+                openNewsArticle(
+                    context,
+                    it.selectedResultUrl,
+                    searchState.shouldOpenLinksUsingInAppBrowser
+                )
             }
         }
     }

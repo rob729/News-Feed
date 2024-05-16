@@ -9,6 +9,8 @@ import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.model.state.search.SearchState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.repository.NewsRepository
+import com.rob729.newsfeed.repository.PreferenceRepository
 import com.rob729.newsfeed.utils.Constants.SEARCH_QUERY_UPDATE_DEBOUNCE_TIME
 import com.rob729.newsfeed.utils.SearchHistoryHelper
 import kotlinx.coroutines.FlowPreview
@@ -27,7 +29,8 @@ import org.orbitmvi.orbit.viewmodel.container
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val newsRepository: NewsRepository,
-    private val searchHistoryHelper: SearchHistoryHelper
+    private val searchHistoryHelper: SearchHistoryHelper,
+    private val preferenceRepository: PreferenceRepository
 ) : ViewModel(),
     ContainerHost<SearchState, SearchSideEffects> {
     override val container: Container<SearchState, SearchSideEffects> = container(
@@ -49,6 +52,14 @@ class SearchViewModel(
             searchHistoryHelper.searchHistoryFlow.collectLatest { searchHistorySet ->
                 intent {
                     reduce { state.copy(searchHistoryList = searchHistorySet?.toList().orEmpty()) }
+                }
+            }
+        }
+
+        intent {
+            preferenceRepository.shouldOpenLinksUsingInAppBrowser().collectLatest {
+                this.reduce {
+                    state.copy(shouldOpenLinksUsingInAppBrowser = it)
                 }
             }
         }

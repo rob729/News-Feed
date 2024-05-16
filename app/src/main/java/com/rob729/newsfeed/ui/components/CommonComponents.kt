@@ -1,6 +1,5 @@
 package com.rob729.newsfeed.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +12,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Web
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -89,21 +89,21 @@ fun BottomStrip(
                     bottom.linkTo(parent.bottom)
                 }
         )
-        Icon(
-            imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
-            contentDescription = "bookmark",
-            Modifier
-                .size(16.dp)
-                .constrainAs(bookmarkIcon) {
-                    end.linkTo(shareAndBookmarkSpacer.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                .clickable {
-                    isBookmarked = isBookmarked.not()
-                    onBookmarkClick(isBookmarked)
-                }
-        )
+        IconButton(onClick = {
+            isBookmarked = isBookmarked.not()
+            onBookmarkClick(isBookmarked)
+        }, Modifier
+            .size(18.dp)
+            .constrainAs(bookmarkIcon) {
+                end.linkTo(shareAndBookmarkSpacer.start)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }) {
+            Icon(
+                imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
+                contentDescription = "bookmark", modifier = Modifier.padding(2.dp)
+            )
+        }
         Spacer(modifier = Modifier
             .width(10.dp)
             .constrainAs(shareAndBookmarkSpacer) {
@@ -122,13 +122,13 @@ fun BottomStrip(
 @Composable
 fun ShareIcon(modifier: Modifier = Modifier, shareUrl: String) {
     val context = LocalContext.current
-    Icon(
-        imageVector = Icons.Filled.Share,
-        contentDescription = "share",
-        modifier
-            .size(16.dp)
-            .clickable { shareArticle(context, shareUrl) }
-    )
+    IconButton(onClick = { shareArticle(context, shareUrl) }, modifier.size(18.dp)) {
+        Icon(
+            imageVector = Icons.Filled.Share,
+            contentDescription = "share",
+            modifier = Modifier.padding(2.dp)
+        )
+    }
 }
 
 @Composable
@@ -137,5 +137,6 @@ fun TimeIcon(modifier: Modifier = Modifier) {
         imageVector = Icons.Default.Schedule, contentDescription = "time",
         modifier
             .size(16.dp)
+            .padding(2.dp)
     )
 }

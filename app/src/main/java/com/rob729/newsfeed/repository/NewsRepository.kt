@@ -1,4 +1,4 @@
-package com.rob729.newsfeed.vm
+package com.rob729.newsfeed.repository
 
 import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.model.NewsResource
