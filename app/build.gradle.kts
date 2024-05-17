@@ -113,7 +113,7 @@ baselineProfile {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.17.3"
+        artifact = "com.google.protobuf:protoc:4.26.1"
     }
     generateProtoTasks {
         all().forEach { task ->
