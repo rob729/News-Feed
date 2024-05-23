@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.detekt)
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.compose.compiler)
     if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
         alias(libs.plugins.google.services)
         alias(libs.plugins.firebase.crashlytics)
@@ -94,8 +95,10 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+    composeCompiler {
+        enableStrongSkippingMode = true
+        reportsDestination = layout.buildDirectory.dir("compose_compiler")
+
     }
     packaging {
         resources {
