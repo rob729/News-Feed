@@ -56,4 +56,7 @@ object CommonUtils {
             data = Uri.parse(url)
         })
     }
+
+    fun getAppVersion(context: Context): String =
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
 }

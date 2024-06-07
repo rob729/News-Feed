@@ -64,12 +64,18 @@ object Constants {
     const val PREFS_NAME = "prefs_name"
     const val MAX_TOOLBAR_ELEVATION = 12
     const val OVERFLOW_MENU_ITEM_SETTINGS = "Settings"
+    val themes = listOf(
+        Theme.SYSTEM to "System default",
+        Theme.LIGHT to "Light",
+        Theme.DARK to "Dark"
+    )
 }
 
 object SettingsConstants {
     const val THEME_PREF_TITLE = "Theme"
     const val IN_APP_BROWSER_PREF_TITLE = "Use in-app browser"
     const val IN_APP_BROWSER_PREF_SUBTITLE = "When turned off, links open in your default browser"
+    const val INTERFACE_SECTION_HEADER_TITLE = "Interface"
 }
 
 enum class ScreenType {
