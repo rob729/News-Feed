@@ -2,12 +2,13 @@ package com.rob729.newsfeed.vm
 
 import androidx.lifecycle.ViewModel
 import com.rob729.newsfeed.model.NewsResource
-import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.mapper.mapArticleDbDataToNewsArticleUiData
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
 import com.rob729.newsfeed.model.state.home.HomeFeedState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.model.ui.NewsEntityUiData
 import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -31,7 +32,7 @@ class HomeViewModel(
 
     init {
         intent {
-            newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+            newsRepository.fetchNewsArticles(state.selectedNewsSource).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
             preferenceRepository.getNewsSources().collectLatest {
@@ -50,41 +51,13 @@ class HomeViewModel(
         }
     }
 
-    private suspend fun SimpleSyntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
-        newsResource: NewsResource
-    ) {
-        when (newsResource) {
-            is NewsResource.Error -> {
-                reduce {
-                    state.copy(uiStatus = UiStatus.Error)
-                }
-            }
-
-            NewsResource.Loading -> {
-                reduce {
-                    state.copy(uiStatus = UiStatus.Loading)
-                }
-            }
-
-            is NewsResource.Success<*> -> {
-                (newsResource.data as? List<ArticleDbData>)?.let {
-                    reduce {
-                        state.copy(
-                            uiStatus = UiStatus.Success(it.mapNotNull(::mapArticleDbDataToNewsArticleUiData))
-                        )
-                    }
-                }
-            }
-        }
-    }
-
     fun newsSourceClicked(newsSource: String) = intent {
         postSideEffect(HomeFeedSideEffect.NewsSourceClicked(newsSource))
         if (state.selectedNewsSource != newsSource) {
             reduce {
                 state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
             }
-            newsRepository.getNewsArticles(newsSource).collectLatest {
+            newsRepository.fetchNewsArticles(newsSource).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
         } else {
@@ -110,8 +83,14 @@ class HomeViewModel(
     }
 
     fun tryAgainClicked() = intent {
-        newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+        newsRepository.fetchNewsArticles(state.selectedNewsSource).collectLatest {
             this.updateStateFromNewsResource(it)
+        }
+    }
+
+    fun fetchMoreNewsArticles() = intent {
+        newsRepository.fetchMoreNewsArticles(state.selectedNewsSource).collectLatest {
+            this.updateStateFromNewsResource(it, isPrimaryApiCall = false)
         }
     }
 
@@ -123,5 +102,75 @@ class HomeViewModel(
                 newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
             }
         }
+
+    private suspend fun SimpleSyntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
+        newsResource: NewsResource, isPrimaryApiCall: Boolean = true
+    ) {
+        when (newsResource) {
+            is NewsResource.Error -> {
+                reduce { handleError(isPrimaryApiCall) }
+            }
+
+            NewsResource.Loading -> {
+                reduce { handleLoading(isPrimaryApiCall) }
+            }
+
+            is NewsResource.Success<*> -> {
+                reduce { handleSuccess(newsResource, isPrimaryApiCall) }
+            }
+        }
+    }
+
+    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    private fun handleError(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
+        state.copy(uiStatus = UiStatus.Error)
+    } else {
+        (state.uiStatus as? UiStatus.Success)?.let { currentState ->
+            state.copy(uiStatus = currentState.copy(showPaginationLoader = false))
+        } ?: state
+    }
+
+    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    private fun handleLoading(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
+        state.copy(uiStatus = UiStatus.Loading)
+    } else {
+        (state.uiStatus as? UiStatus.Success)?.let { currentState ->
+            state.copy(uiStatus = currentState.copy(showPaginationLoader = true))
+        } ?: state
+    }
+
+    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    private fun handleSuccess(
+        newsResource: NewsResource.Success<*>,
+        isPrimaryApiCall: Boolean
+    ): HomeFeedState = if (isPrimaryApiCall) {
+        (newsResource.data as? NewsDbEntity)?.let {
+            state.copy(
+                uiStatus = UiStatus.Success(
+                    NewsEntityUiData(
+                        it.articles.mapNotNull(::mapArticleDbDataToNewsArticleUiData),
+                        it.totalResultCount
+                    )
+                )
+            )
+        } ?: state
+    } else {
+        (newsResource.data as? NewsDbEntity)?.let { newsDbEntity ->
+            (state.uiStatus as? UiStatus.Success)?.let { currentState ->
+                state.copy(
+                    uiStatus = UiStatus.Success(
+                        NewsEntityUiData(
+                            currentState.newsEntityUiData.articles +
+                                    newsDbEntity.articles.mapNotNull(
+                                        ::mapArticleDbDataToNewsArticleUiData
+                                    ),
+                            newsDbEntity.totalResultCount
+                        ),
+                        showPaginationLoader = false
+                    ),
+                )
+            }
+        } ?: state
+    }
 }
 

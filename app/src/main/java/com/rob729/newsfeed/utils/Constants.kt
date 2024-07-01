@@ -63,6 +63,7 @@ object Constants {
     const val SEARCH_QUERY_UPDATE_DEBOUNCE_TIME = 1000L
     const val PREFS_NAME = "prefs_name"
     const val MAX_TOOLBAR_ELEVATION = 12
+    const val PAGINATION_TRIGGER_THRESHOLD = 3
     const val OVERFLOW_MENU_ITEM_SETTINGS = "Settings"
     val themes = listOf(
         Theme.SYSTEM to "System default",

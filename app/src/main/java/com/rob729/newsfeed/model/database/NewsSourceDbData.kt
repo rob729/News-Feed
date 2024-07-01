@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class NewsSourceDbData(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "news_source_domain") val newsSourceDomain: String,
-    @ColumnInfo(name = "news_article") val newsArticle: ArticleDbData,
+    @ColumnInfo(name = "news_entity") val newsDbEntity: NewsDbEntity,
     @ColumnInfo(name = "news_source_fetch_time") val newsSourceFetchTimeInMillis: Long,
+    @ColumnInfo(name = "page") val page: Int
 )
