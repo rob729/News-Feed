@@ -2,12 +2,13 @@ package com.rob729.newsfeed.vm
 
 import androidx.lifecycle.ViewModel
 import com.rob729.newsfeed.model.NewsResource
-import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.mapper.mapArticleDbDataToNewsArticleUiData
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
 import com.rob729.newsfeed.model.state.home.HomeFeedState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.model.ui.NewsEntityUiData
 import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -29,9 +30,11 @@ class HomeViewModel(
         HomeFeedState()
     )
 
+    private var currentPage = 1
+
     init {
         intent {
-            newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+            newsRepository.getNewsArticles(state.selectedNewsSource, currentPage).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
             preferenceRepository.getNewsSources().collectLatest {
@@ -67,10 +70,15 @@ class HomeViewModel(
             }
 
             is NewsResource.Success<*> -> {
-                (newsResource.data as? List<ArticleDbData>)?.let {
+                (newsResource.data as? NewsDbEntity)?.let {
                     reduce {
                         state.copy(
-                            uiStatus = UiStatus.Success(it.mapNotNull(::mapArticleDbDataToNewsArticleUiData))
+                            uiStatus = UiStatus.Success(
+                                NewsEntityUiData(
+                                    it.articles.mapNotNull(::mapArticleDbDataToNewsArticleUiData),
+                                    it.totalResultCount
+                                )
+                            )
                         )
                     }
                 }
@@ -81,10 +89,11 @@ class HomeViewModel(
     fun newsSourceClicked(newsSource: String) = intent {
         postSideEffect(HomeFeedSideEffect.NewsSourceClicked(newsSource))
         if (state.selectedNewsSource != newsSource) {
+            currentPage = 1
             reduce {
                 state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
             }
-            newsRepository.getNewsArticles(newsSource).collectLatest {
+            newsRepository.getNewsArticles(newsSource, currentPage).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
         } else {
@@ -110,7 +119,7 @@ class HomeViewModel(
     }
 
     fun tryAgainClicked() = intent {
-        newsRepository.getNewsArticles(state.selectedNewsSource).collectLatest {
+        newsRepository.getNewsArticles(state.selectedNewsSource, currentPage).collectLatest {
             this.updateStateFromNewsResource(it)
         }
     }
