@@ -1,8 +1,10 @@
 package com.rob729.newsfeed.model.mapper
 
 import com.rob729.newsfeed.model.api.NetworkArticle
+import com.rob729.newsfeed.model.api.NewsApiResponse
 import com.rob729.newsfeed.model.database.ArticleDbData
 import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
+import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 
 fun mapNetworkArticleToArticleDbData(networkArticle: NetworkArticle): ArticleDbData {
@@ -66,4 +68,10 @@ fun mapBookmarkedNewsArticleToNewsArticleUiData(bookmarkedNewsArticleDbData: Boo
         bookmarkedNewsArticleDbData.url,
         bookmarkedNewsArticleDbData.publishedAt,
         bookmarkedNewsArticleDbData.source
+    )
+
+fun NewsApiResponse.mapNewsApiResponseToNewsDbEntity() =
+    NewsDbEntity(
+        articles = this.networkArticles.map(::mapNetworkArticleToArticleDbData),
+        totalResultCount = this.totalResultCount
     )

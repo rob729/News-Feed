@@ -3,12 +3,13 @@ package com.rob729.newsfeed.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rob729.newsfeed.model.NewsResource
-import com.rob729.newsfeed.model.api.NetworkNews
+import com.rob729.newsfeed.model.api.NewsApiResponse
 import com.rob729.newsfeed.model.mapper.mapNetworkArticleToNewsArticleUiData
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.model.state.search.SearchState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
+import com.rob729.newsfeed.model.ui.NewsEntityUiData
 import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
 import com.rob729.newsfeed.utils.Constants.SEARCH_QUERY_UPDATE_DEBOUNCE_TIME
@@ -129,13 +130,16 @@ class SearchViewModel(
             }
 
             is NewsResource.Success<*> -> {
-                (newsResource.data as? NetworkNews)?.let {
+                (newsResource.data as? NewsApiResponse)?.let {
                     reduce {
                         state.copy(
                             uiStatus = UiStatus.Success(
-                                it.networkArticles
-                                    .distinctBy { it.imageUrl }
-                                    .mapNotNull(::mapNetworkArticleToNewsArticleUiData)
+                                NewsEntityUiData(
+                                    it.networkArticles
+                                        .distinctBy { it.imageUrl }
+                                        .mapNotNull(::mapNetworkArticleToNewsArticleUiData),
+                                    it.totalResultCount
+                                )
                             )
                         )
                     }

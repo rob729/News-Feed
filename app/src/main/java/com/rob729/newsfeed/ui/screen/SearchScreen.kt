@@ -83,11 +83,11 @@ fun SearchScreen(
                 }
 
                 is UiStatus.Success -> {
-                    if (searchState.uiStatus.news.isEmpty()) {
+                    if (searchState.uiStatus.newsEntityUiData.articles.isEmpty()) {
                         NoSearchResultsFound()
                     } else {
                         LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
-                            items(searchState.uiStatus.news) { item ->
+                            items(searchState.uiStatus.newsEntityUiData.articles) { item ->
                                 SearchResultItem(newsArticleUiData = item, onItemClick = {
                                     viewModel.newsFeedItemClicked(item)
                                 }, onBookmarkClick = { isBookmarked ->

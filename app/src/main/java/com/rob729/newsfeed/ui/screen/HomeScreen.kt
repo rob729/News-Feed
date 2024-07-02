@@ -144,7 +144,7 @@ fun HomeScreen(
 
                 is UiStatus.Success -> {
                     LazyColumn(Modifier.testTag("news_list"), listState) {
-                        items(newsState.uiStatus.news, key = {
+                        items(newsState.uiStatus.newsEntityUiData.articles, key = {
                             it.url
                         }) { item ->
                             NewsFeedItem(

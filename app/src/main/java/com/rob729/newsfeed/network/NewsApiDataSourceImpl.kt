@@ -18,12 +18,13 @@ class NewsApiDataSourceImpl(
     private val newsApi: NewsApi
 ) : NewsApiDataSource {
 
-    override suspend fun getNews(domain: String): NewsResource {
+    override suspend fun getNews(domain: String, page: Int): NewsResource {
         return getDataFromService(
             newsApi.getNews(
                 domain,
                 BuildConfig.NEWS_FEED_API_KEY,
                 Constants.API_RESULT_LANGUAGE,
+                page,
                 Constants.PAGE_SIZE,
             )
         )

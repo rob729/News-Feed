@@ -12,7 +12,7 @@ import com.rob729.newsfeed.model.database.NewsSourceDbData
 @TypeConverters(DataConverter::class)
 @Database(
     entities = [NewsSourceDbData::class, BookmarkedNewsArticleDbData::class],
-    version = 3,
+    version = 4,
     autoMigrations = [AutoMigration(from = 1, to = 2)]
 )
 abstract class NewsDatabase : RoomDatabase() {

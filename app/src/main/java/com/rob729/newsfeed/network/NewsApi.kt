@@ -1,6 +1,6 @@
 package com.rob729.newsfeed.network
 
-import com.rob729.newsfeed.model.api.NetworkNews
+import com.rob729.newsfeed.model.api.NewsApiResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,8 +12,9 @@ interface NewsApi {
         @Query("domains") domain: String,
         @Query("apiKey") apiKey: String,
         @Query("language") language: String,
-        @Query("pageSize") pageSize: Int
-    ): Response<NetworkNews>
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+    ): Response<NewsApiResponse>
 
 
     @GET("everything")
@@ -24,5 +25,5 @@ interface NewsApi {
         @Query("sortBy") sortBy: String,
         @Query("language") language: String,
         @Query("pageSize") pageSize: Int,
-    ): Response<NetworkNews>
+    ): Response<NewsApiResponse>
 }
