@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -32,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +46,7 @@ import androidx.navigation.NavController
 import com.rob729.newsfeed.R
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
+import com.rob729.newsfeed.model.state.home.HomeFeedState
 import com.rob729.newsfeed.model.ui.IconData
 import com.rob729.newsfeed.ui.NavigationScreens
 import com.rob729.newsfeed.ui.bottomSheet.NewsSourceBottomSheet
@@ -51,6 +54,7 @@ import com.rob729.newsfeed.ui.components.LoadingView
 import com.rob729.newsfeed.ui.components.NewsFeedItem
 import com.rob729.newsfeed.ui.components.NewsSourceExtendedFab
 import com.rob729.newsfeed.ui.components.NoInternetView
+import com.rob729.newsfeed.ui.components.PaginationLoader
 import com.rob729.newsfeed.ui.components.ScrollToTopFab
 import com.rob729.newsfeed.ui.components.Toolbar
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
@@ -124,6 +128,19 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(listState, newsState.uiStatus) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.collect { lastVisibleItemIndex ->
+            (newsState.uiStatus as? UiStatus.Success)?.let { state ->
+                if (!state.showPaginationLoader
+                    && lastVisibleItemIndex != null && lastVisibleItemIndex
+                    >= listState.layoutInfo.totalItemsCount - Constants.PAGINATION_TRIGGER_THRESHOLD
+                ) {
+                    viewModel.fetchMoreNewsArticles()
+                }
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -133,37 +150,7 @@ fun HomeScreen(
         Column {
             HomeScreenToolbar(toolbarElevation, navController)
 
-            when (newsState.uiStatus) {
-                UiStatus.Error -> {
-                    NoInternetView(viewModel::tryAgainClicked)
-                }
-
-                UiStatus.Loading -> {
-                    LoadingView()
-                }
-
-                is UiStatus.Success -> {
-                    LazyColumn(Modifier.testTag("news_list"), listState) {
-                        items(newsState.uiStatus.news, key = {
-                            it.url
-                        }) { item ->
-                            NewsFeedItem(
-                                Modifier,
-                                newsArticleUiData = item,
-                                false,
-                                { viewModel.newsFeedItemClicked(item) },
-                                { isBookmarked ->
-                                    viewModel.newsFeedItemBookmarkClicked(
-                                        item,
-                                        isBookmarked
-                                    )
-                                })
-                        }
-                    }
-                }
-
-                else -> {}
-            }
+            DisplayNewsFeed(newsState, listState, viewModel)
         }
 
         if (newsState.uiStatus is UiStatus.Success) {
@@ -235,6 +222,49 @@ private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun DisplayNewsFeed(
+    newsState: HomeFeedState,
+    listState: LazyListState,
+    viewModel: HomeViewModel
+) {
+    when (newsState.uiStatus) {
+        UiStatus.Error -> {
+            NoInternetView(viewModel::tryAgainClicked)
+        }
+
+        UiStatus.Loading -> {
+            LoadingView()
+        }
+
+        is UiStatus.Success -> {
+            LazyColumn(Modifier.testTag("news_list"), listState) {
+                items(newsState.uiStatus.newsEntityUiData.articles, key = {
+                    it.url
+                }) { item ->
+                    NewsFeedItem(
+                        Modifier,
+                        newsArticleUiData = item,
+                        false,
+                        { viewModel.newsFeedItemClicked(item) },
+                        { isBookmarked ->
+                            viewModel.newsFeedItemBookmarkClicked(
+                                item,
+                                isBookmarked
+                            )
+                        })
+                }
+
+                if (newsState.uiStatus.showPaginationLoader) {
+                    item { PaginationLoader() }
+                }
+            }
+        }
+
+        else -> {}
     }
 }
 

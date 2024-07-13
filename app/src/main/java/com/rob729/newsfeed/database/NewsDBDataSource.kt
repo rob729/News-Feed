@@ -1,34 +1,32 @@
 package com.rob729.newsfeed.database
 
-import com.rob729.newsfeed.model.api.NetworkArticle
-import com.rob729.newsfeed.model.database.ArticleDbData
+import com.rob729.newsfeed.model.api.NewsApiResponse
 import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
+import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.database.NewsSourceDbData
-import com.rob729.newsfeed.model.mapper.mapNetworkArticleToArticleDbData
+import com.rob729.newsfeed.model.mapper.mapNewsApiResponseToNewsDbEntity
 
 class NewsDBDataSource(private val newsDao: NewsDao) {
 
-    suspend fun getNewsFromNewsSourceDomain(newsSourceDomain: String): List<ArticleDbData>? {
-        return newsDao.getNewsArticlesFromNewsDomain(newsSourceDomain)
+    suspend fun getNewsFromNewsSourceDomain(newsSourceDomain: String, page: Int): NewsDbEntity? {
+        return newsDao.getNewsArticlesFromNewsDomain(newsSourceDomain, page)
     }
 
     suspend fun setNewsForNewsSourceDomain(
         newsSourceDomain: String,
-        newsArticlesList: List<NetworkArticle>,
-        newsSourceFetchTimeInMillis: Long
+        newsApiResponse: NewsApiResponse,
+        newsSourceFetchTimeInMillis: Long,
+        page: Int
     ) {
         newsDao.removeSavedNewsArticlesListForNews(newsSourceDomain)
-        newsArticlesList.map(
-            ::mapNetworkArticleToArticleDbData
-        ).forEach {
-            newsDao.insertNewsArticleListForNewsSource(
-                NewsSourceDbData(
-                    newsSourceDomain = newsSourceDomain,
-                    newsArticle = it,
-                    newsSourceFetchTimeInMillis = newsSourceFetchTimeInMillis
-                )
+        newsDao.insertNewsArticleListForNewsSource(
+            NewsSourceDbData(
+                newsSourceDomain = newsSourceDomain,
+                newsDbEntity = newsApiResponse.mapNewsApiResponseToNewsDbEntity(),
+                newsSourceFetchTimeInMillis = newsSourceFetchTimeInMillis,
+                page = page
             )
-        }
+        )
     }
 
     suspend fun getNewsSourceFetchTimeInMillis(newsSourceDomain: String): Long? {

@@ -2,7 +2,7 @@ package com.rob729.newsfeed.repository
 
 import com.rob729.newsfeed.database.NewsDBDataSource
 import com.rob729.newsfeed.model.NewsResource
-import com.rob729.newsfeed.model.api.NetworkNews
+import com.rob729.newsfeed.model.api.NewsApiResponse
 import com.rob729.newsfeed.model.mapper.mapNewsArticleUiDataToBookmarkedNewsArticle
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.network.NewsApiDataSource
@@ -17,32 +17,45 @@ class NewsRepository(
     private val newsDBDataSource: NewsDBDataSource,
     private val newsApiDataSource: NewsApiDataSource
 ) {
-    suspend fun getNewsArticles(newsSourceDomain: String): Flow<NewsResource> = flow {
+    private var currentPage = 1
+
+    suspend fun fetchNewsArticles(newsSourceDomain: String): Flow<NewsResource> {
+        currentPage = 1
+        return getNewsArticles(newsSourceDomain)
+    }
+
+    suspend fun fetchMoreNewsArticles(newsSourceDomain: String): Flow<NewsResource> {
+        ++currentPage
+        return getNewsArticles(newsSourceDomain)
+    }
+
+    private suspend fun getNewsArticles(newsSourceDomain: String): Flow<NewsResource> = flow {
         emit(NewsResource.Loading)
-        val newsArticlesFromDb = newsDBDataSource.getNewsFromNewsSourceDomain(newsSourceDomain)
+        val newsDbEntity = newsDBDataSource.getNewsFromNewsSourceDomain(newsSourceDomain, currentPage)
         val newsSourceFetchTimeInMillis =
             newsDBDataSource.getNewsSourceFetchTimeInMillis(newsSourceDomain)
-        if (newsArticlesFromDb.isNullOrEmpty() || checkIfNewsSourceDataIsOutdated(
+        if (newsDbEntity == null || newsDbEntity.articles.isEmpty() || checkIfNewsSourceDataIsOutdated(
                 newsSourceFetchTimeInMillis
             )
         ) {
             emit(fetchNewsFromNetworkAndSyncDatabase(newsSourceDomain))
         } else {
-            emit(NewsResource.Success(newsArticlesFromDb))
+            emit(NewsResource.Success(newsDbEntity))
         }
     }
 
-    private suspend fun fetchNewsFromNetworkAndSyncDatabase(newsSourceDomain: String): NewsResource {
+    private suspend fun fetchNewsFromNetworkAndSyncDatabase(newsSourceDomain: String, ): NewsResource {
         try {
-            val newsResource = newsApiDataSource.getNews(newsSourceDomain)
+            val newsResource = newsApiDataSource.getNews(newsSourceDomain, currentPage)
             val currentTimeInMilliSeconds = Clock.System.now().toEpochMilliseconds()
-            return if (newsResource is NewsResource.Success<*> && newsResource.data is NetworkNews) {
+            return if (newsResource is NewsResource.Success<*> && newsResource.data is NewsApiResponse) {
                 newsDBDataSource.setNewsForNewsSourceDomain(
                     newsSourceDomain,
-                    newsResource.data.networkArticles,
-                    currentTimeInMilliSeconds
+                    newsResource.data,
+                    currentTimeInMilliSeconds,
+                    currentPage
                 )
-                NewsResource.Success(newsDBDataSource.getNewsFromNewsSourceDomain(newsSourceDomain))
+                NewsResource.Success(newsDBDataSource.getNewsFromNewsSourceDomain(newsSourceDomain, currentPage))
             } else {
                 newsResource
             }
