@@ -21,10 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
-import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.viewmodel.container
 
 @OptIn(FlowPreview::class)
@@ -113,7 +110,7 @@ class SearchViewModel(
             }
         }
 
-    private suspend fun SimpleSyntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(
+    private suspend fun Syntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(
         newsResource: NewsResource
     ) {
         when (newsResource) {

@@ -14,10 +14,7 @@ import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
-import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.viewmodel.container
 
 class HomeViewModel(
@@ -103,7 +100,7 @@ class HomeViewModel(
             }
         }
 
-    private suspend fun SimpleSyntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
+    private suspend fun Syntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
         newsResource: NewsResource, isPrimaryApiCall: Boolean = true
     ) {
         when (newsResource) {
@@ -121,7 +118,7 @@ class HomeViewModel(
         }
     }
 
-    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
     private fun handleError(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
         state.copy(uiStatus = UiStatus.Error)
     } else {
@@ -130,7 +127,7 @@ class HomeViewModel(
         } ?: state
     }
 
-    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
     private fun handleLoading(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
         state.copy(uiStatus = UiStatus.Loading)
     } else {
@@ -139,7 +136,7 @@ class HomeViewModel(
         } ?: state
     }
 
-    context(SimpleSyntax<HomeFeedState, HomeFeedSideEffect>)
+    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
     private fun handleSuccess(
         newsResource: NewsResource.Success<*>,
         isPrimaryApiCall: Boolean
