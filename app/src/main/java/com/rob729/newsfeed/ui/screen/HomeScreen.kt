@@ -131,7 +131,7 @@ fun HomeScreen(
     LaunchedEffect(listState, newsState.uiStatus) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.collect { lastVisibleItemIndex ->
             (newsState.uiStatus as? UiStatus.Success)?.let { state ->
-                if (!state.showPaginationLoader
+                if (state.paginationData.shouldTriggerPagination()
                     && lastVisibleItemIndex != null && lastVisibleItemIndex
                     >= listState.layoutInfo.totalItemsCount - Constants.PAGINATION_TRIGGER_THRESHOLD
                 ) {
@@ -258,7 +258,7 @@ private fun DisplayNewsFeed(
                         })
                 }
 
-                if (newsState.uiStatus.showPaginationLoader) {
+                if (newsState.uiStatus.paginationData.showPaginationLoader) {
                     item { PaginationLoader() }
                 }
             }
