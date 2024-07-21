@@ -13,19 +13,6 @@ class DataConverter {
         .build()
 
     @TypeConverter
-    fun toJson(articleDbData: ArticleDbData): String {
-        val jsonAdapter: JsonAdapter<ArticleDbData> = moshi.adapter(ArticleDbData::class.java)
-        return jsonAdapter.toJson(articleDbData)
-    }
-
-
-    @TypeConverter
-    fun toArticleDbDataList(json: String): ArticleDbData? {
-        val jsonAdapter: JsonAdapter<ArticleDbData> = moshi.adapter(ArticleDbData::class.java)
-        return jsonAdapter.fromJson(json)
-    }
-
-    @TypeConverter
     fun toJson(newsDbEntity: NewsDbEntity): String {
         val jsonAdapter: JsonAdapter<NewsDbEntity> = moshi.adapter(NewsDbEntity::class.java)
         return jsonAdapter.toJson(newsDbEntity)

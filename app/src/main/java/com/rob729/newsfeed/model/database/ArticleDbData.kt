@@ -1,7 +1,9 @@
 package com.rob729.newsfeed.model.database
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 
+@Keep
 data class ArticleDbData(
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "url") val url: String,
