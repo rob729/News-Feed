@@ -9,6 +9,7 @@ import com.rob729.newsfeed.model.state.home.HomeFeedSideEffect
 import com.rob729.newsfeed.model.state.home.HomeFeedState
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.model.ui.NewsEntityUiData
+import com.rob729.newsfeed.model.ui.PaginationData
 import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -123,7 +124,14 @@ class HomeViewModel(
         state.copy(uiStatus = UiStatus.Error)
     } else {
         (state.uiStatus as? UiStatus.Success)?.let { currentState ->
-            state.copy(uiStatus = currentState.copy(showPaginationLoader = false))
+            state.copy(
+                uiStatus = currentState.copy(
+                    paginationData = PaginationData(
+                        showPaginationLoader = false,
+                        hasPaginationEnded = true
+                    )
+                )
+            )
         } ?: state
     }
 
@@ -132,7 +140,14 @@ class HomeViewModel(
         state.copy(uiStatus = UiStatus.Loading)
     } else {
         (state.uiStatus as? UiStatus.Success)?.let { currentState ->
-            state.copy(uiStatus = currentState.copy(showPaginationLoader = true))
+            state.copy(
+                uiStatus = currentState.copy(
+                    paginationData = PaginationData(
+                        showPaginationLoader = true,
+                        hasPaginationEnded = false
+                    )
+                )
+            )
         } ?: state
     }
 
@@ -163,7 +178,7 @@ class HomeViewModel(
                                     ),
                             newsDbEntity.totalResultCount
                         ),
-                        showPaginationLoader = false
+                        paginationData = PaginationData(showPaginationLoader = false, hasPaginationEnded = false)
                     ),
                 )
             }
