@@ -12,7 +12,8 @@ import com.rob729.newsfeed.database.NewsDatabase
 
 class PlutoInitializer : Initializer<Unit> {
     override fun create(context: Context) {
-        Pluto.Installer(context as Application)
+        Pluto
+            .Installer(context as Application)
             .addPlugin(PlutoNetworkPlugin())
             .addPlugin(PlutoLayoutInspectorPlugin())
             .addPlugin(PlutoRoomsDatabasePlugin())
@@ -21,7 +22,5 @@ class PlutoInitializer : Initializer<Unit> {
         PlutoRoomsDBWatcher.watch("news_database", NewsDatabase::class.java)
     }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> {
-        return mutableListOf()
-    }
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
 }

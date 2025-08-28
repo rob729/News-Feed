@@ -7,5 +7,5 @@ data class SearchState(
     val editTextInput: String = "",
     val searchQuery: String = "",
     val searchHistoryList: List<String> = listOf(),
-    val shouldOpenLinksUsingInAppBrowser: Boolean = true
+    val shouldOpenLinksUsingInAppBrowser: Boolean = true,
 )

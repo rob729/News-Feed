@@ -1,16 +1,17 @@
 package com.rob729.newsfeed.database
 
 import androidx.room.TypeConverter
-import com.rob729.newsfeed.model.database.ArticleDbData
 import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class DataConverter {
-    private val moshi: Moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    private val moshi: Moshi =
+        Moshi
+            .Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
 
     @TypeConverter
     fun toJson(newsDbEntity: NewsDbEntity): String {

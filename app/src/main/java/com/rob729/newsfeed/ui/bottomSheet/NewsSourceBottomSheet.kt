@@ -20,20 +20,19 @@ fun NewsSourceBottomSheet(
     isBottomSheetVisible: Boolean,
     onNewsSourceClicked: (String) -> Unit,
     selectedNewsSource: String,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
-
     if (isBottomSheetVisible) {
         ModalBottomSheet(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             sheetState = bottomSheetState,
             scrimColor = Color.Black.copy(alpha = 0.6f),
-            onDismissRequest = onDismissRequest
+            onDismissRequest = onDismissRequest,
         ) {
             NewsSourceBottomSheetContent(
                 newsSources,
                 onNewsSourceClicked,
-                selectedNewsSource
+                selectedNewsSource,
             )
         }
     }

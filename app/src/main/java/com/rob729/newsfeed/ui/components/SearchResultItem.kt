@@ -41,28 +41,28 @@ fun SearchResultItem(
     modifier: Modifier = Modifier,
     newsArticleUiData: NewsArticleUiData,
     onItemClick: () -> Unit,
-    onBookmarkClick: (isBookmarked: Boolean) -> Unit
+    onBookmarkClick: (isBookmarked: Boolean) -> Unit,
 ) {
-
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1.0f,
-        animationSpec = tween(durationMillis = 150), label = ""
+        animationSpec = tween(durationMillis = 150),
+        label = "",
     )
 
     Surface(
-        modifier = modifier
-            .padding(8.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onItemClick
-            )
-            .scale(scale),
+        modifier =
+            modifier
+                .padding(8.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onItemClick,
+                ).scale(scale),
         tonalElevation = 4.dp,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row {
@@ -70,25 +70,28 @@ fun SearchResultItem(
                     text = newsArticleUiData.title,
                     maxLines = 2,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(end = 6.dp)
-                        .fillMaxWidth(fraction = 0.6f),
+                    modifier =
+                        Modifier
+                            .padding(end = 6.dp)
+                            .fillMaxWidth(fraction = 0.6f),
                     textAlign = TextAlign.Start,
                     overflow = TextOverflow.Ellipsis,
-                    fontFamily = lexendDecaFontFamily
+                    fontFamily = lexendDecaFontFamily,
                 )
 
                 AsyncImage(
-                    model = CommonUtils.getImageRequestModel(
-                        LocalContext.current,
-                        newsArticleUiData.imageUrl
-                    ),
+                    model =
+                        CommonUtils.getImageRequestModel(
+                            LocalContext.current,
+                            newsArticleUiData.imageUrl,
+                        ),
                     contentDescription = null,
                     alignment = Alignment.CenterEnd,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .aspectRatio(SEARCH_IMAGE_ASPECT_RATIO)
-                        .clip(RoundedCornerShape(8.dp)),
+                    modifier =
+                        Modifier
+                            .aspectRatio(SEARCH_IMAGE_ASPECT_RATIO)
+                            .clip(RoundedCornerShape(8.dp)),
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -97,7 +100,7 @@ fun SearchResultItem(
                 newsArticleUiData.publishedAt,
                 newsArticleUiData.url,
                 false,
-                onBookmarkClick
+                onBookmarkClick,
             )
         }
     }
@@ -107,12 +110,16 @@ fun SearchResultItem(
 @Composable
 fun PreviewSearchResultItem() {
     SearchResultItem(
-        newsArticleUiData = NewsArticleUiData(
-            "News title",
-            "News Description",
-            "",
-            "",
-            "6 Sept 2023",
-            "news source"
-        ), onItemClick = {}, onBookmarkClick = {})
+        newsArticleUiData =
+            NewsArticleUiData(
+                "News title",
+                "News Description",
+                "",
+                "",
+                "6 Sept 2023",
+                "news source",
+            ),
+        onItemClick = {},
+        onBookmarkClick = {},
+    )
 }

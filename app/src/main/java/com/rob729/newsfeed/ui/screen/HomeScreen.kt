@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rob729.newsfeed.R
@@ -72,7 +73,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = koinViewModel(),
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     var isNewsSourceBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -92,7 +93,7 @@ fun HomeScreen(
             if (listState.firstVisibleItemIndex == 0) {
                 minOf(
                     listState.firstVisibleItemScrollOffset.toFloat().dp,
-                    Constants.MAX_TOOLBAR_ELEVATION.dp
+                    Constants.MAX_TOOLBAR_ELEVATION.dp,
                 )
             } else {
                 Constants.MAX_TOOLBAR_ELEVATION.dp
@@ -114,7 +115,7 @@ fun HomeScreen(
                 openNewsArticle(
                     context,
                     it.selectedItemUrl,
-                    newsState.shouldOpenLinksUsingInAppBrowser
+                    newsState.shouldOpenLinksUsingInAppBrowser,
                 )
             }
 
@@ -129,10 +130,14 @@ fun HomeScreen(
     }
 
     LaunchedEffect(listState, newsState.uiStatus) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.collect { lastVisibleItemIndex ->
+        snapshotFlow {
+            listState.layoutInfo.visibleItemsInfo
+                .lastOrNull()
+                ?.index
+        }.collect { lastVisibleItemIndex ->
             (newsState.uiStatus as? UiStatus.Success)?.let { state ->
-                if (state.paginationData.shouldTriggerPagination()
-                    && lastVisibleItemIndex != null && lastVisibleItemIndex
+                if (state.paginationData.shouldTriggerPagination() &&
+                    lastVisibleItemIndex != null && lastVisibleItemIndex
                     >= listState.layoutInfo.totalItemsCount - Constants.PAGINATION_TRIGGER_THRESHOLD
                 ) {
                     viewModel.fetchMoreNewsArticles()
@@ -142,13 +147,22 @@ fun HomeScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(paddingValues)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(
+                    start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Column {
-            HomeScreenToolbar(toolbarElevation, navController)
+            HomeScreenToolbar(
+                toolbarElevation,
+                navController,
+                Modifier.padding(top = paddingValues.calculateTopPadding()),
+            )
 
             DisplayNewsFeed(newsState, listState, viewModel)
         }
@@ -158,20 +172,28 @@ fun HomeScreen(
                 modifier = Modifier.align(Alignment.BottomStart),
                 visible = listState.isScrollingUp() && isMinItemsScrolledForScrollToTopVisibility,
                 enter = fadeIn(),
-                exit = fadeOut()
+                exit = fadeOut(),
             ) {
-                ScrollToTopFab(modifier = Modifier
-                    .padding(16.dp)
-                    .testTag("scroll_up_fab"), onClick = { viewModel.scrollToTopClicked() })
+                ScrollToTopFab(
+                    modifier =
+                        Modifier
+                            .padding(16.dp)
+                            .testTag("scroll_up_fab"),
+                    onClick = { viewModel.scrollToTopClicked() },
+                )
             }
 
-            NewsSourceExtendedFab(modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomEnd)
-                .testTag("news_source_fab"), isExpanded = listState.isScrollingUp(),
+            NewsSourceExtendedFab(
+                modifier =
+                    Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomEnd)
+                        .testTag("news_source_fab"),
+                isExpanded = listState.isScrollingUp(),
                 onClick = {
                     viewModel.newsSourceFabClicked()
-                })
+                },
+            )
         }
     }
 
@@ -180,7 +202,7 @@ fun HomeScreen(
         bottomSheetState,
         isNewsSourceBottomSheetVisible,
         viewModel::newsSourceClicked,
-        newsState.selectedNewsSource
+        newsState.selectedNewsSource,
     ) {
         isNewsSourceBottomSheetVisible = false
     }
@@ -191,9 +213,14 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController) {
+private fun HomeScreenToolbar(
+    toolbarElevation: Dp,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
     Toolbar(
         Constants.HOME_TOOLBAR_TITLE,
+        modifier,
         null,
         painterResource(id = R.mipmap.ic_launcher_foreground),
         IconData(Icons.Default.Search) {
@@ -202,7 +229,7 @@ private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController
         IconData(Icons.Default.Bookmarks) {
             navController.navigate(NavigationScreens.BOOKMARKED_ARTICLES.routeName)
         },
-        toolbarElevation
+        toolbarElevation,
     ) { isOverflowMenuExpanded, dismissOverflowMenu ->
         DropdownMenu(
             expanded = isOverflowMenuExpanded,
@@ -213,14 +240,14 @@ private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController
                         Text(
                             text = Constants.OVERFLOW_MENU_ITEM_SETTINGS,
                             fontFamily = lexendDecaFontFamily,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
                         )
                     }, onClick = {
                         dismissOverflowMenu()
                         navController.navigate(NavigationScreens.SETTINGS.routeName)
                     })
                 }
-            }
+            },
         )
     }
 }
@@ -229,7 +256,7 @@ private fun HomeScreenToolbar(toolbarElevation: Dp, navController: NavController
 private fun DisplayNewsFeed(
     newsState: HomeFeedState,
     listState: LazyListState,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
 ) {
     when (newsState.uiStatus) {
         UiStatus.Error -> {
@@ -243,7 +270,7 @@ private fun DisplayNewsFeed(
         is UiStatus.Success -> {
             LazyColumn(Modifier.testTag("news_list"), listState) {
                 items(newsState.uiStatus.newsEntityUiData.articles, key = {
-                    it.url
+                    "${it.url} ${it.publishedAt}"
                 }) { item ->
                     NewsFeedItem(
                         Modifier,
@@ -253,9 +280,10 @@ private fun DisplayNewsFeed(
                         { isBookmarked ->
                             viewModel.newsFeedItemBookmarkClicked(
                                 item,
-                                isBookmarked
+                                isBookmarked,
                             )
-                        })
+                        },
+                    )
                 }
 
                 if (newsState.uiStatus.paginationData.showPaginationLoader) {

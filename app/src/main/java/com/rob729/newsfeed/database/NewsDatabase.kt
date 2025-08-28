@@ -13,14 +13,12 @@ import com.rob729.newsfeed.model.database.NewsSourceDbData
 @Database(
     entities = [NewsSourceDbData::class, BookmarkedNewsArticleDbData::class],
     version = 4,
-    autoMigrations = [AutoMigration(from = 1, to = 2)]
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
 abstract class NewsDatabase : RoomDatabase() {
-
     abstract fun newsDao(): NewsDao
 
     companion object {
-
         @Volatile
         private var INSTANCE: NewsDatabase? = null
 
@@ -31,11 +29,14 @@ abstract class NewsDatabase : RoomDatabase() {
             }
 
             synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    NewsDatabase::class.java,
-                    "news_database"
-                ).fallbackToDestructiveMigration().build()
+                val instance =
+                    Room
+                        .databaseBuilder(
+                            context.applicationContext,
+                            NewsDatabase::class.java,
+                            "news_database",
+                        ).fallbackToDestructiveMigration()
+                        .build()
 
                 INSTANCE = instance
                 return instance

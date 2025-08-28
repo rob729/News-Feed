@@ -18,7 +18,11 @@ import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import com.rob729.newsfeed.utils.Constants
 
 @Composable
-fun NewsSourceExtendedFab(modifier: Modifier, isExpanded: Boolean, onClick: () -> Unit) {
+fun NewsSourceExtendedFab(
+    modifier: Modifier,
+    isExpanded: Boolean,
+    onClick: () -> Unit,
+) {
     ExtendedFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
@@ -27,35 +31,38 @@ fun NewsSourceExtendedFab(modifier: Modifier, isExpanded: Boolean, onClick: () -
                 text = Constants.FAB_TITLE,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Medium,
-                fontFamily = lexendDecaFontFamily
+                fontFamily = lexendDecaFontFamily,
             )
         },
         icon = {
             Icon(
                 imageVector = Icons.Default.Newspaper,
                 tint = MaterialTheme.colorScheme.onPrimary,
-                contentDescription = Constants.FAB_TITLE
+                contentDescription = Constants.FAB_TITLE,
             )
         },
         elevation = FloatingActionButtonDefaults.elevation(8.dp),
         expanded = isExpanded,
         containerColor = MaterialTheme.colorScheme.primary,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     )
 }
 
 @Composable
-fun ScrollToTopFab(modifier: Modifier, onClick: () -> Unit) {
+fun ScrollToTopFab(
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
     SmallFloatingActionButton(
         modifier = modifier,
         onClick = onClick,
         containerColor = MaterialTheme.colorScheme.primary,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
             tint = MaterialTheme.colorScheme.onPrimary,
-            contentDescription = Constants.FAB_TITLE
+            contentDescription = Constants.FAB_TITLE,
         )
     }
 }

@@ -10,5 +10,5 @@ data class NewsSourceDbData(
     @ColumnInfo(name = "news_source_domain") val newsSourceDomain: String,
     @ColumnInfo(name = "news_entity") val newsDbEntity: NewsDbEntity,
     @ColumnInfo(name = "news_source_fetch_time") val newsSourceFetchTimeInMillis: Long,
-    @ColumnInfo(name = "page") val page: Int
+    @ColumnInfo(name = "page") val page: Int,
 )

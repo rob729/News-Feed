@@ -18,43 +18,45 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NewsFeedItemShimmer(brush: Brush) {
-
     Card(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(all = 10.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(all = 10.dp),
         ) {
             Spacer(
-                modifier = Modifier
-                    .height(165.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(brush)
+                modifier =
+                    Modifier
+                        .height(165.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(brush),
             )
 
-            Spacer(modifier = Modifier.height(10.dp)) //creates an empty space between
+            Spacer(modifier = Modifier.height(10.dp)) // creates an empty space between
             Spacer(
-                modifier = Modifier
-                    .height(20.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .fillMaxWidth(fraction = 0.7f)
-                    .background(brush)
+                modifier =
+                    Modifier
+                        .height(20.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .fillMaxWidth(fraction = 0.7f)
+                        .background(brush),
             )
 
-            Spacer(modifier = Modifier.height(10.dp)) //creates an empty space between
+            Spacer(modifier = Modifier.height(10.dp)) // creates an empty space between
             Spacer(
-                modifier = Modifier
-                    .height(20.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .fillMaxWidth(fraction = 0.9f)
-                    .background(brush)
+                modifier =
+                    Modifier
+                        .height(20.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .fillMaxWidth(fraction = 0.9f)
+                        .background(brush),
             )
-
         }
     }
 }

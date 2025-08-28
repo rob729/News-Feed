@@ -24,14 +24,14 @@ import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 fun EmptySearchScreen(
     searchHistoryList: List<String>?,
     onSearchHistoryItemClick: (String) -> Unit,
-    onClearSearchHistoryClick: () -> Unit
+    onClearSearchHistoryClick: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
     ) {
-
         if (searchHistoryList.isNullOrEmpty().not()) {
             Column(modifier = Modifier.padding(start = 12.dp, top = 12.dp)) {
                 Row {
@@ -45,23 +45,23 @@ fun EmptySearchScreen(
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 12.dp)
-                            .clickable {
-                                onClearSearchHistoryClick()
-                            },
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(end = 12.dp)
+                                .clickable {
+                                    onClearSearchHistoryClick()
+                                },
                         text = "clear",
                         color = MaterialTheme.colorScheme.secondary,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = lexendDecaFontFamily
+                        fontFamily = lexendDecaFontFamily,
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 SearchHistoryList(searchHistoryList, onSearchHistoryItemClick)
             }
         }
-
     }
 }

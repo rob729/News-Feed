@@ -8,5 +8,5 @@ data class HomeFeedState(
     val selectedNewsSource: String = "theverge.com",
     val showNewsSourceBottomSheet: Boolean = false,
     val newsSources: List<NewsSource> = listOf(),
-    val shouldOpenLinksUsingInAppBrowser: Boolean = true
+    val shouldOpenLinksUsingInAppBrowser: Boolean = true,
 )

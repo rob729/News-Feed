@@ -6,10 +6,11 @@ import com.rob729.newsfeed.model.ui.PaginationData
 sealed class UiStatus {
     data class Success(
         val newsEntityUiData: NewsEntityUiData,
-        val paginationData: PaginationData = PaginationData()
+        val paginationData: PaginationData = PaginationData(),
     ) : UiStatus()
 
     data object Loading : UiStatus()
+
     data object Error : UiStatus()
 
     data object EmptyScreen : UiStatus()
