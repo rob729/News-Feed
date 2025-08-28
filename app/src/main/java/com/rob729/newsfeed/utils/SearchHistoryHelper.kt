@@ -9,28 +9,31 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-
-class SearchHistoryHelper(private val dataStore: DataStore<Preferences>) {
-
+class SearchHistoryHelper(
+    private val dataStore: DataStore<Preferences>,
+) {
     private val searchHistoryListPrefKey = stringSetPreferencesKey("search_history_list")
 
-    val searchHistoryFlow = dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
+    val searchHistoryFlow =
+        dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map {
+                it[searchHistoryListPrefKey]
             }
-        }.map {
-            it[searchHistoryListPrefKey]
-        }
 
     suspend fun addSearchQueryToHistoryList(searchQuery: String) {
         if (searchQuery.isEmpty()) {
             return
         }
         dataStore.edit { pref ->
-            pref[searchHistoryListPrefKey]?.filterNot { searchQuery.contains(it) }?.toMutableList()
+            pref[searchHistoryListPrefKey]
+                ?.filterNot { searchQuery.contains(it) }
+                ?.toMutableList()
                 ?.also {
                     it.add(searchQuery)
                     pref[searchHistoryListPrefKey] = it.toSet()

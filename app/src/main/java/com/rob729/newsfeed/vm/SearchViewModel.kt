@@ -28,18 +28,20 @@ import org.orbitmvi.orbit.viewmodel.container
 class SearchViewModel(
     private val newsRepository: NewsRepository,
     private val searchHistoryHelper: SearchHistoryHelper,
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceRepository: PreferenceRepository,
 ) : ViewModel(),
     ContainerHost<SearchState, SearchSideEffects> {
-    override val container: Container<SearchState, SearchSideEffects> = container(
-        SearchState()
-    )
+    override val container: Container<SearchState, SearchSideEffects> =
+        container(
+            SearchState(),
+        )
 
     init {
         viewModelScope.launch {
             container.stateFlow
                 .debounce(SEARCH_QUERY_UPDATE_DEBOUNCE_TIME)
-                .distinctUntilChangedBy { it.editTextInput }.collectLatest {
+                .distinctUntilChangedBy { it.editTextInput }
+                .collectLatest {
                     if (it.editTextInput != it.searchQuery) {
                         searchNewsResultsForQuery(it.editTextInput)
                     }
@@ -63,31 +65,32 @@ class SearchViewModel(
         }
     }
 
-
-    fun updateSearchQuery(query: String) = intent {
-        reduce { state.copy(editTextInput = query) }
-    }
-
-    private fun searchNewsResultsForQuery(query: String) = intent {
-        reduce {
-            state.copy(searchQuery = query, editTextInput = query)
+    fun updateSearchQuery(query: String) =
+        intent {
+            reduce { state.copy(editTextInput = query) }
         }
-        postSideEffect(SearchSideEffects.SearchQueryChanged(query))
-        if (query.isBlank()) {
-            reduce { state.copy(uiStatus = UiStatus.EmptyScreen) }
-        } else {
-            newsRepository.getSearchResults(query).collectLatest {
-                this.updateStateFromNewsResource(it)
+
+    private fun searchNewsResultsForQuery(query: String) =
+        intent {
+            reduce {
+                state.copy(searchQuery = query, editTextInput = query)
+            }
+            postSideEffect(SearchSideEffects.SearchQueryChanged(query))
+            if (query.isBlank()) {
+                reduce { state.copy(uiStatus = UiStatus.EmptyScreen) }
+            } else {
+                newsRepository.getSearchResults(query).collectLatest {
+                    this.updateStateFromNewsResource(it)
+                }
             }
         }
-    }
 
-    fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
-        postSideEffect(SearchSideEffects.SearchResultClicked(item.url))
-    }
+    fun newsFeedItemClicked(item: NewsArticleUiData) =
+        intent {
+            postSideEffect(SearchSideEffects.SearchResultClicked(item.url))
+        }
 
-    fun searchHistoryItemClicked(searchHistoryItemText: String) =
-        searchNewsResultsForQuery(searchHistoryItemText)
+    fun searchHistoryItemClicked(searchHistoryItemText: String) = searchNewsResultsForQuery(searchHistoryItemText)
 
     fun addSearchQueryToHistoryList(query: String) {
         viewModelScope.launch {
@@ -101,18 +104,18 @@ class SearchViewModel(
         }
     }
 
-    fun newsFeedItemBookmarkClicked(newsArticleUiData: NewsArticleUiData, isBookmarked: Boolean) =
-        intent {
-            if (isBookmarked) {
-                newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
-            } else {
-                newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
-            }
+    fun newsFeedItemBookmarkClicked(
+        newsArticleUiData: NewsArticleUiData,
+        isBookmarked: Boolean,
+    ) = intent {
+        if (isBookmarked) {
+            newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
+        } else {
+            newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
         }
+    }
 
-    private suspend fun Syntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(
-        newsResource: NewsResource
-    ) {
+    private suspend fun Syntax<SearchState, SearchSideEffects>.updateStateFromNewsResource(newsResource: NewsResource) {
         when (newsResource) {
             is NewsResource.Error -> {
                 reduce {
@@ -130,14 +133,15 @@ class SearchViewModel(
                 (newsResource.data as? NewsApiResponse)?.let {
                     reduce {
                         state.copy(
-                            uiStatus = UiStatus.Success(
-                                NewsEntityUiData(
-                                    it.networkArticles
-                                        .distinctBy { it.imageUrl }
-                                        .mapNotNull(::mapNetworkArticleToNewsArticleUiData),
-                                    it.totalResultCount
-                                )
-                            )
+                            uiStatus =
+                                UiStatus.Success(
+                                    NewsEntityUiData(
+                                        it.networkArticles
+                                            .distinctBy { it.imageUrl }
+                                            .mapNotNull(::mapNetworkArticleToNewsArticleUiData),
+                                        it.totalResultCount,
+                                    ),
+                                ),
                         )
                     }
                 }

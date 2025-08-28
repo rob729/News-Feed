@@ -6,7 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApi {
-
     @GET("everything")
     suspend fun getNews(
         @Query("domains") domain: String,
@@ -15,7 +14,6 @@ interface NewsApi {
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
     ): Response<NewsApiResponse>
-
 
     @GET("everything")
     suspend fun getNewsSearchResults(

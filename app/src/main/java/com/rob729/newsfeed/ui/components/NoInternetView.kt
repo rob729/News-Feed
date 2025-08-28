@@ -28,59 +28,63 @@ import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 
 @Composable
 fun NoInternetView(onTryAgainClicked: () -> Unit) {
-
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .align(Alignment.CenterHorizontally),
             text = context.getString(R.string.error_message),
             fontSize = 18.sp,
             color = Color.White,
             fontWeight = FontWeight.Normal,
-            fontFamily = lexendDecaFontFamily
+            fontFamily = lexendDecaFontFamily,
         )
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 4.dp),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 4.dp),
             text = context.getString(R.string.no_internet),
             fontSize = 32.sp,
             color = Color.White,
             fontWeight = FontWeight.SemiBold,
             fontFamily = lexendDecaFontFamily,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Image(
             painter = painterResource(id = R.drawable.no_internet),
             contentDescription = "no internet",
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 36.dp)
-                .clip(RoundedCornerShape(8.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 36.dp)
+                    .clip(RoundedCornerShape(8.dp)),
         )
 
         Button(
             onClick = onTryAgainClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
-            shape = RoundedCornerShape(8.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+            shape = RoundedCornerShape(8.dp),
         ) {
             Text(
                 text = context.getString(R.string.try_again),
                 fontWeight = FontWeight.Medium,
-                fontFamily = lexendDecaFontFamily
+                fontFamily = lexendDecaFontFamily,
             )
         }
     }
@@ -90,6 +94,5 @@ fun NoInternetView(onTryAgainClicked: () -> Unit) {
 @Composable
 fun NoInternetViewPreview() {
     NoInternetView {
-
     }
 }

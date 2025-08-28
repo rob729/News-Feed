@@ -32,8 +32,9 @@ import coil.compose.AsyncImage
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 import com.rob729.newsfeed.utils.CommonUtils
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @Composable
 fun NewsFeedItem(
@@ -41,53 +42,56 @@ fun NewsFeedItem(
     newsArticleUiData: NewsArticleUiData,
     isArticleBookmarked: Boolean,
     onItemClick: () -> Unit,
-    onBookmarkClick: (isBookmarked: Boolean) -> Unit
+    onBookmarkClick: (isBookmarked: Boolean) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1.0f,
-        animationSpec = tween(durationMillis = 150), label = ""
+        animationSpec = tween(durationMillis = 150),
+        label = "",
     )
 
     Surface(
-        modifier = modifier
-            .padding(8.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onItemClick
-            )
-            .scale(scale),
+        modifier =
+            modifier
+                .padding(8.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onItemClick,
+                ).scale(scale),
         tonalElevation = 4.dp,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Column {
             AsyncImage(
-                model = CommonUtils.getImageRequestModel(
-                    LocalContext.current,
-                    newsArticleUiData.imageUrl
-                ),
+                model =
+                    CommonUtils.getImageRequestModel(
+                        LocalContext.current,
+                        newsArticleUiData.imageUrl,
+                    ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(150.dp)
-                    .padding(bottom = 4.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                modifier =
+                    Modifier
+                        .height(150.dp)
+                        .padding(bottom = 4.dp)
+                        .clip(RoundedCornerShape(12.dp)),
             )
             Text(
                 text = newsArticleUiData.title,
                 maxLines = 2,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(horizontal = 6.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 6.dp)
+                        .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = lexendDecaFontFamily,
-                lineHeight = 22.sp
+                lineHeight = 22.sp,
             )
             Text(
                 text = newsArticleUiData.description,
@@ -97,7 +101,7 @@ fun NewsFeedItem(
                 fontSize = 12.sp,
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = lexendDecaFontFamily,
-                lineHeight = 18.sp
+                lineHeight = 18.sp,
             )
             BottomStrip(
                 newsArticleUiData.source,
@@ -105,13 +109,13 @@ fun NewsFeedItem(
                 newsArticleUiData.url,
                 isArticleBookmarked,
                 onBookmarkClick,
-                Modifier.padding(start = 12.dp, end = 12.dp, bottom = 8.dp)
+                Modifier.padding(start = 12.dp, end = 12.dp, bottom = 8.dp),
             )
         }
     }
-
 }
 
+@OptIn(ExperimentalTime::class)
 fun getHowOldIsArticle(publishedAt: String): String {
     val timeDiff = Clock.System.now() - Instant.parse(publishedAt)
     return if (timeDiff.inWholeDays != 0L) {
@@ -123,12 +127,16 @@ fun getHowOldIsArticle(publishedAt: String): String {
     }
 }
 
-fun shareArticle(context: Context, articleUrl: String) {
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, articleUrl)
-        type = "text/plain"
-    }
+fun shareArticle(
+    context: Context,
+    articleUrl: String,
+) {
+    val sendIntent: Intent =
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, articleUrl)
+            type = "text/plain"
+        }
 
     val shareIntent = Intent.createChooser(sendIntent, null)
     startActivity(context, shareIntent, null)

@@ -14,13 +14,12 @@ import org.orbitmvi.orbit.viewmodel.container
 
 class BookmarkedArticlesVM(
     private val newsRepository: NewsRepository,
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceRepository: PreferenceRepository,
 ) : ViewModel(),
     ContainerHost<BookmarkedArticlesState, BookmarkedArticleSideEffect> {
-
     override val container: Container<BookmarkedArticlesState, BookmarkedArticleSideEffect> =
         container(
-            BookmarkedArticlesState()
+            BookmarkedArticlesState(),
         )
 
     init {
@@ -29,7 +28,7 @@ class BookmarkedArticlesVM(
                 reduce {
                     state.copy(
                         bookmarkedArticles =
-                        bookmarkedArticles.map(::mapBookmarkedNewsArticleToNewsArticleUiData)
+                            bookmarkedArticles.map(::mapBookmarkedNewsArticleToNewsArticleUiData),
                     )
                 }
             }
@@ -44,16 +43,19 @@ class BookmarkedArticlesVM(
         }
     }
 
-    fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
-        postSideEffect(BookmarkedArticleSideEffect.BookmarkedArticleClicked(item.url))
-    }
-
-    fun newsFeedItemBookmarkClicked(newsArticleUiData: NewsArticleUiData, isBookmarked: Boolean) =
+    fun newsFeedItemClicked(item: NewsArticleUiData) =
         intent {
-            if (isBookmarked) {
-                newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
-            } else {
-                newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
-            }
+            postSideEffect(BookmarkedArticleSideEffect.BookmarkedArticleClicked(item.url))
         }
+
+    fun newsFeedItemBookmarkClicked(
+        newsArticleUiData: NewsArticleUiData,
+        isBookmarked: Boolean,
+    ) = intent {
+        if (isBookmarked) {
+            newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
+        } else {
+            newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
+        }
+    }
 }

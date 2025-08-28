@@ -37,9 +37,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class KoinInitializer : Initializer<KoinApplication> {
-
-    override fun create(context: Context): KoinApplication {
-        return startKoin {
+    override fun create(context: Context): KoinApplication =
+        startKoin {
             androidContext(context)
             modules(
                 module {
@@ -52,25 +51,30 @@ class KoinInitializer : Initializer<KoinApplication> {
                     single {
                         val loggingInterceptor =
                             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                        val okHttpClient = OkHttpClient.Builder()
-                            .addInterceptor(loggingInterceptor)
-                            .also { it.addPlutoOkhttpInterceptor() }
-                            .build()
+                        val okHttpClient =
+                            OkHttpClient
+                                .Builder()
+                                .addInterceptor(loggingInterceptor)
+                                .also { it.addPlutoOkhttpInterceptor() }
+                                .build()
 
-                        val retrofitInstance = Retrofit.Builder()
-                            .baseUrl(Constants.BASE_URL)
-                            .addConverterFactory(MoshiConverterFactory.create())
-                            .client(okHttpClient)
-                            .build()
+                        val retrofitInstance =
+                            Retrofit
+                                .Builder()
+                                .baseUrl(Constants.BASE_URL)
+                                .addConverterFactory(MoshiConverterFactory.create())
+                                .client(okHttpClient)
+                                .build()
 
                         retrofitInstance.create(NewsApi::class.java)
                     }
                 },
                 module {
                     single {
-                        val dataStore = PreferenceDataStoreFactory.create(produceFile = {
-                            context.preferencesDataStoreFile(Constants.PREFS_NAME)
-                        })
+                        val dataStore =
+                            PreferenceDataStoreFactory.create(produceFile = {
+                                context.preferencesDataStoreFile(Constants.PREFS_NAME)
+                            })
                         SearchHistoryHelper(dataStore)
                     }
                     single {
@@ -78,7 +82,7 @@ class KoinInitializer : Initializer<KoinApplication> {
                             serializer = AppPreferencesSerializer,
                             produceFile = { context.dataStoreFile("app_pref.pb") },
                             corruptionHandler = null,
-                            scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+                            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
                         )
                     }
                 },
@@ -91,12 +95,9 @@ class KoinInitializer : Initializer<KoinApplication> {
                     viewModelOf(::SearchViewModel)
                     viewModelOf(::BookmarkedArticlesVM)
                     viewModelOf(::SettingsViewModel)
-                }
+                },
             )
         }
-    }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> {
-        return mutableListOf()
-    }
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
 }

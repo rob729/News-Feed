@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
@@ -21,12 +22,13 @@ val debugAppSuffix = ".debug"
 
 val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
-var newsFeedApiKey = if (localPropertiesFile.exists()) {
-    localProperties.load(localPropertiesFile.inputStream())
-    localProperties.getProperty("NEWS_FEED_API_KEY") ?: "\"${System.getenv("NEWS_FEED_API_KEY")}\""
-} else {
-    "\"${System.getenv("NEWS_FEED_API_KEY")}\""
-}
+var newsFeedApiKey =
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+        localProperties.getProperty("NEWS_FEED_API_KEY") ?: "\"${System.getenv("NEWS_FEED_API_KEY")}\""
+    } else {
+        "\"${System.getenv("NEWS_FEED_API_KEY")}\""
+    }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
@@ -39,18 +41,18 @@ android {
     experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
     signingConfigs {
         create("release") {
-                storeFile = file("../Keystore.p12")
-                storePassword = keystoreProperties["storePassword"] as? String
-                keyAlias = keystoreProperties["keyAlias"] as? String
-                keyPassword = keystoreProperties["keyPassword"] as? String
+            storeFile = file("../Keystore.p12")
+            storePassword = keystoreProperties["storePassword"] as? String
+            keyAlias = keystoreProperties["keyAlias"] as? String
+            keyPassword = keystoreProperties["keyPassword"] as? String
         }
     }
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.rob729.newsfeed"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 5
         versionName = "1.2.1"
 
@@ -88,11 +90,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += listOf(
-            "-Xcontext-receivers",
-        )
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     buildFeatures {
         compose = true
@@ -101,7 +102,6 @@ android {
     composeCompiler {
         enableStrongSkippingMode = true
         reportsDestination = layout.buildDirectory.dir("compose_compiler")
-
     }
     packaging {
         resources {
@@ -128,7 +128,6 @@ protobuf {
                     option("lite")
                 }
             }
-
         }
     }
 }
@@ -191,7 +190,9 @@ dependencies {
     debugImplementation(libs.bundle.core)
     releaseImplementation(libs.bundle.core.no.op)
 
-    if (File("${project.projectDir}/google-services.json").exists() && File("${project.projectDir}/src/debug/google-services.json").exists()) {
+    if (File("${project.projectDir}/google-services.json").exists() &&
+        File("${project.projectDir}/src/debug/google-services.json").exists()
+    ) {
         implementation(platform(libs.firebase.bom))
         implementation(libs.firebase.analytics)
         implementation(libs.firebase.crashlytics)

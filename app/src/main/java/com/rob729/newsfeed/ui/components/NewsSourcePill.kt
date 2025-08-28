@@ -34,27 +34,27 @@ fun NewsSourcePill(
     newsSource: NewsSource,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-
     Column(
-        modifier = modifier
-            .width(itemSize)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
-            .background(if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .width(itemSize)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(onClick = onClick)
+                .background(if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Spacer(modifier = Modifier.height(4.dp))
         AsyncImage(
             model = newsSource.imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .clip(CircleShape)
-                .height(75.dp)
-                .width(75.dp)
+            modifier =
+                Modifier
+                    .clip(CircleShape)
+                    .height(75.dp)
+                    .width(75.dp),
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -62,14 +62,15 @@ fun NewsSourcePill(
             maxLines = 2,
             minLines = 2,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 2.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 2.dp),
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             fontFamily = lexendDecaFontFamily,
             fontSize = 12.sp,
-            lineHeight = 16.sp
+            lineHeight = 16.sp,
         )
         Spacer(modifier = Modifier.height(4.dp))
     }

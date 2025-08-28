@@ -6,5 +6,5 @@ data class NewsArticleUiData(
     val imageUrl: String,
     val url: String,
     val publishedAt: String,
-    val source: String
+    val source: String,
 )

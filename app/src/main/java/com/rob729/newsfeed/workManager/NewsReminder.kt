@@ -6,9 +6,10 @@ import androidx.work.WorkerParameters
 import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.utils.NotificationHelper
 
-class NewsReminder(private val context: Context, params: WorkerParameters) :
-    Worker(context, params) {
-
+class NewsReminder(
+    private val context: Context,
+    params: WorkerParameters,
+) : Worker(context, params) {
     private val notificationHelper: NotificationHelper by lazy {
         NotificationHelper(context)
     }
@@ -16,7 +17,7 @@ class NewsReminder(private val context: Context, params: WorkerParameters) :
     override fun doWork(): Result {
         notificationHelper.createNotification(
             inputData.getString(Constants.NOTIFICATION_TITLE).toString(),
-            inputData.getString(Constants.NOTIFICATION_MESSAGE).toString()
+            inputData.getString(Constants.NOTIFICATION_MESSAGE).toString(),
         )
 
         notificationHelper.scheduleNotification()

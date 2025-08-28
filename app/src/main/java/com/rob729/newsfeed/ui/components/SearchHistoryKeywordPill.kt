@@ -20,22 +20,24 @@ import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 @Composable
 fun SearchHistoryKeywordPill(
     searchHistoryQuery: String,
-    onSearchHistoryPillClick: (String) -> Unit
+    onSearchHistoryPillClick: (String) -> Unit,
 ) {
     Box(modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)) {
         Surface(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .clickable { onSearchHistoryPillClick(searchHistoryQuery) },
+            modifier =
+                Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onSearchHistoryPillClick(searchHistoryQuery) },
             shadowElevation = 4.dp,
-            color = MaterialTheme.colorScheme.secondaryContainer
+            color = MaterialTheme.colorScheme.secondaryContainer,
         ) {
             Text(
                 text = searchHistoryQuery,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = lexendDecaFontFamily,
