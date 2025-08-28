@@ -34,12 +34,13 @@ fun RegularPreference(
     enabled: Boolean = true,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = enabled,
-                onClick = onClick,
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    enabled = enabled,
+                    onClick = onClick,
+                ),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
             Text(
@@ -54,9 +55,12 @@ fun RegularPreference(
                     text = it,
                     fontFamily = lexendDecaFontFamily,
                     fontWeight = FontWeight.Normal,
-                    color = if (!enabled)
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color =
+                        if (!enabled) {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        },
                 )
             }
         }
@@ -85,20 +89,23 @@ fun <T> DropDownPreference(
             DropdownMenu(
                 isOverflowMenuExpanded,
                 onDismissRequest = { isOverflowMenuExpanded = false },
-                offset = DpOffset(16.dp, 0.dp)
+                offset = DpOffset(16.dp, 0.dp),
             ) {
                 items.forEach { item ->
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            isOverflowMenuExpanded = false
-                            onItemSelected(item.first)
-                        }) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    isOverflowMenuExpanded = false
+                                    onItemSelected(item.first)
+                                },
+                    ) {
                         Text(
                             text = item.second,
                             fontFamily = lexendDecaFontFamily,
                             fontWeight = FontWeight.Medium,
-                            modifier = Modifier.padding(all = 8.dp)
+                            modifier = Modifier.padding(all = 8.dp),
                         )
                     }
                 }
@@ -110,7 +117,7 @@ fun <T> DropDownPreference(
 @Composable
 fun SettingsCategory(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text,
@@ -118,18 +125,19 @@ fun SettingsCategory(
             .padding(top = 24.dp, bottom = 8.dp),
         color = MaterialTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
-        fontFamily = lexendDecaFontFamily
+        fontFamily = lexendDecaFontFamily,
     )
 }
 
 @Composable
 fun Separator(modifier: Modifier = Modifier) {
     Spacer(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .background(Color.LightGray)
-            .height(0.25.dp)
-            .fillMaxWidth()
+        modifier =
+            modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .background(Color.LightGray)
+                .height(0.25.dp)
+                .fillMaxWidth(),
     )
 }
 

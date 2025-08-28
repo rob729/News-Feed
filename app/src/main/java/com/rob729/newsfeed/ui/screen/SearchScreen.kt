@@ -3,7 +3,9 @@ package com.rob729.newsfeed.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -13,10 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.rob729.newsfeed.R
 import com.rob729.newsfeed.model.state.UiStatus
 import com.rob729.newsfeed.model.state.search.SearchSideEffects
 import com.rob729.newsfeed.ui.components.LoadingView
@@ -33,9 +34,9 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    viewModel: SearchViewModel = koinViewModel()
+    paddingValues: PaddingValues,
+    viewModel: SearchViewModel = koinViewModel(),
 ) {
-
     val searchState = viewModel.collectAsState().value
     val listState = rememberLazyListState()
     val context = LocalContext.current
@@ -50,27 +51,35 @@ fun SearchScreen(
                 openNewsArticle(
                     context,
                     it.selectedResultUrl,
-                    searchState.shouldOpenLinksUsingInAppBrowser
+                    searchState.shouldOpenLinksUsingInAppBrowser,
                 )
             }
         }
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .testTag("search_screen_box")
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(
+                    start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ).testTag("search_screen_box"),
     ) {
-
         Column {
-
-            Surface(tonalElevation = 4.dp, color = colorResource(R.color.status_bar)) {
+            Surface(
+                tonalElevation = 4.dp,
+                color = MaterialTheme.colorScheme.surfaceVariant,
+            ) {
                 SearchBar(
                     searchState.editTextInput,
                     { viewModel.updateSearchQuery(it) },
                     { viewModel.updateSearchQuery("") },
-                    { navController.popBackStack() })
+                    { navController.popBackStack() },
+                    Modifier.padding(top = paddingValues.calculateTopPadding()),
+                )
             }
 
             when (searchState.uiStatus) {
@@ -83,7 +92,9 @@ fun SearchScreen(
                 }
 
                 is UiStatus.Success -> {
-                    if (searchState.uiStatus.newsEntityUiData.articles.isEmpty()) {
+                    if (searchState.uiStatus.newsEntityUiData.articles
+                            .isEmpty()
+                    ) {
                         NoSearchResultsFound()
                     } else {
                         LazyColumn(Modifier.testTag("search_result_news_list"), listState) {
@@ -93,7 +104,7 @@ fun SearchScreen(
                                 }, onBookmarkClick = { isBookmarked ->
                                     viewModel.newsFeedItemBookmarkClicked(
                                         item,
-                                        isBookmarked
+                                        isBookmarked,
                                     )
                                 })
                             }
@@ -105,7 +116,7 @@ fun SearchScreen(
                     EmptySearchScreen(
                         searchHistoryList = searchState.searchHistoryList,
                         viewModel::searchHistoryItemClicked,
-                        viewModel::clearSearchHistory
+                        viewModel::clearSearchHistory,
                     )
                 }
             }

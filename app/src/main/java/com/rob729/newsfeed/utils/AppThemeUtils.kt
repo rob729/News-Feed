@@ -14,22 +14,25 @@ annotation class Theme {
     }
 }
 
-fun AppTheme.name() = when (this) {
-    AppTheme.LIGHT -> Theme.LIGHT
-    AppTheme.DARK -> Theme.DARK
-    else -> Theme.SYSTEM
-}
+fun AppTheme.name() =
+    when (this) {
+        AppTheme.LIGHT -> Theme.LIGHT
+        AppTheme.DARK -> Theme.DARK
+        else -> Theme.SYSTEM
+    }
 
-fun String.toAppTheme() = when (this) {
-    Theme.LIGHT -> AppTheme.LIGHT
-    Theme.DARK -> AppTheme.DARK
-    Theme.SYSTEM -> AppTheme.SYSTEM_DEFAULT
-    else -> null
-}
+fun String.toAppTheme() =
+    when (this) {
+        Theme.LIGHT -> AppTheme.LIGHT
+        Theme.DARK -> AppTheme.DARK
+        Theme.SYSTEM -> AppTheme.SYSTEM_DEFAULT
+        else -> null
+    }
 
 @Composable
-fun AppTheme.isDarkThemeEnabled() = when (this) {
-    AppTheme.LIGHT -> false
-    AppTheme.DARK -> true
-    else -> isSystemInDarkTheme()
-}
+fun AppTheme.isDarkThemeEnabled() =
+    when (this) {
+        AppTheme.LIGHT -> false
+        AppTheme.DARK -> true
+        else -> isSystemInDarkTheme()
+    }

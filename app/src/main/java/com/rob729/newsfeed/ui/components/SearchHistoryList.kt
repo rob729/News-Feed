@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun SearchHistoryList(
     searchHistoryList: List<String>?,
-    onSearchHistoryPillClick: (String) -> Unit
+    onSearchHistoryPillClick: (String) -> Unit,
 ) {
     searchHistoryList?.let {
         FlowRow(modifier = Modifier.fillMaxSize()) {

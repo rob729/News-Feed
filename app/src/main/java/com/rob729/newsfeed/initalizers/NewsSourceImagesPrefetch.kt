@@ -9,14 +9,14 @@ import com.rob729.newsfeed.workManager.NewsSourceImagePrefetch
 
 class NewsSourceImagesPrefetch : Initializer<Unit> {
     override fun create(context: Context) {
-        val newsSourceImagePreloadRequest = OneTimeWorkRequestBuilder<NewsSourceImagePrefetch>()
-            .build()
+        val newsSourceImagePreloadRequest =
+            OneTimeWorkRequestBuilder<NewsSourceImagePrefetch>()
+                .build()
         WorkManager.getInstance(context).enqueue(newsSourceImagePreloadRequest)
     }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> {
-        return mutableListOf(
-            WorkManagerInitializer::class.java
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> =
+        mutableListOf(
+            WorkManagerInitializer::class.java,
         )
-    }
 }

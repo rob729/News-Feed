@@ -20,13 +20,13 @@ import org.orbitmvi.orbit.viewmodel.container
 
 class HomeViewModel(
     private val newsRepository: NewsRepository,
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceRepository: PreferenceRepository,
 ) : ViewModel(),
     ContainerHost<HomeFeedState, HomeFeedSideEffect> {
-
-    override val container: Container<HomeFeedState, HomeFeedSideEffect> = container(
-        HomeFeedState()
-    )
+    override val container: Container<HomeFeedState, HomeFeedSideEffect> =
+        container(
+            HomeFeedState(),
+        )
 
     init {
         intent {
@@ -49,140 +49,163 @@ class HomeViewModel(
         }
     }
 
-    fun newsSourceClicked(newsSource: String) = intent {
-        postSideEffect(HomeFeedSideEffect.NewsSourceClicked(newsSource))
-        if (state.selectedNewsSource != newsSource) {
-            reduce {
-                state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
+    fun newsSourceClicked(newsSource: String) =
+        intent {
+            postSideEffect(HomeFeedSideEffect.NewsSourceClicked(newsSource))
+            if (state.selectedNewsSource != newsSource) {
+                reduce {
+                    state.copy(selectedNewsSource = newsSource, showNewsSourceBottomSheet = false)
+                }
+                newsRepository.fetchNewsArticles(newsSource).collectLatest {
+                    this.updateStateFromNewsResource(it)
+                }
+            } else {
+                reduce {
+                    state.copy(showNewsSourceBottomSheet = false)
+                }
             }
-            newsRepository.fetchNewsArticles(newsSource).collectLatest {
+        }
+
+    fun newsFeedItemClicked(item: NewsArticleUiData) =
+        intent {
+            postSideEffect(HomeFeedSideEffect.FeedItemClicked(item.url))
+        }
+
+    fun newsSourceFabClicked() =
+        intent {
+            reduce {
+                state.copy(showNewsSourceBottomSheet = true)
+            }
+            postSideEffect(HomeFeedSideEffect.NewsSourceFabClicked)
+        }
+
+    fun scrollToTopClicked() =
+        intent {
+            postSideEffect(HomeFeedSideEffect.ScrollToTopClicked)
+        }
+
+    fun tryAgainClicked() =
+        intent {
+            newsRepository.fetchNewsArticles(state.selectedNewsSource).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
-        } else {
-            reduce {
-                state.copy(showNewsSourceBottomSheet = false)
-            }
         }
-    }
 
-    fun newsFeedItemClicked(item: NewsArticleUiData) = intent {
-        postSideEffect(HomeFeedSideEffect.FeedItemClicked(item.url))
-    }
-
-    fun newsSourceFabClicked() = intent {
-        reduce {
-            state.copy(showNewsSourceBottomSheet = true)
-        }
-        postSideEffect(HomeFeedSideEffect.NewsSourceFabClicked)
-    }
-
-    fun scrollToTopClicked() = intent {
-        postSideEffect(HomeFeedSideEffect.ScrollToTopClicked)
-    }
-
-    fun tryAgainClicked() = intent {
-        newsRepository.fetchNewsArticles(state.selectedNewsSource).collectLatest {
-            this.updateStateFromNewsResource(it)
-        }
-    }
-
-    fun fetchMoreNewsArticles() = intent {
-        newsRepository.fetchMoreNewsArticles(state.selectedNewsSource).collectLatest {
-            this.updateStateFromNewsResource(it, isPrimaryApiCall = false)
-        }
-    }
-
-    fun newsFeedItemBookmarkClicked(newsArticleUiData: NewsArticleUiData, isBookmarked: Boolean) =
+    fun fetchMoreNewsArticles() =
         intent {
-            if (isBookmarked) {
-                newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
-            } else {
-                newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
+            newsRepository.fetchMoreNewsArticles(state.selectedNewsSource).collectLatest {
+                this.updateStateFromNewsResource(it, isPrimaryApiCall = false)
             }
         }
+
+    fun newsFeedItemBookmarkClicked(
+        newsArticleUiData: NewsArticleUiData,
+        isBookmarked: Boolean,
+    ) = intent {
+        if (isBookmarked) {
+            newsRepository.addBookmarkedNewsArticle(newsArticleUiData)
+        } else {
+            newsRepository.removeBookmarkedNewsArticle(newsArticleUiData.url)
+        }
+    }
 
     private suspend fun Syntax<HomeFeedState, HomeFeedSideEffect>.updateStateFromNewsResource(
-        newsResource: NewsResource, isPrimaryApiCall: Boolean = true
+        newsResource: NewsResource,
+        isPrimaryApiCall: Boolean = true,
     ) {
         when (newsResource) {
             is NewsResource.Error -> {
-                reduce { handleError(isPrimaryApiCall) }
+                reduce { this@updateStateFromNewsResource.handleError(isPrimaryApiCall) }
             }
 
             NewsResource.Loading -> {
-                reduce { handleLoading(isPrimaryApiCall) }
+                reduce { this@updateStateFromNewsResource.handleLoading(isPrimaryApiCall) }
             }
 
             is NewsResource.Success<*> -> {
-                reduce { handleSuccess(newsResource, isPrimaryApiCall) }
+                reduce {
+                    this@updateStateFromNewsResource.handleSuccess(
+                        newsResource,
+                        isPrimaryApiCall,
+                    )
+                }
             }
         }
     }
 
-    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
-    private fun handleError(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
-        state.copy(uiStatus = UiStatus.Error)
-    } else {
-        (state.uiStatus as? UiStatus.Success)?.let { currentState ->
-            state.copy(
-                uiStatus = currentState.copy(
-                    paginationData = PaginationData(
-                        showPaginationLoader = false,
-                        hasPaginationEnded = true
-                    )
-                )
-            )
-        } ?: state
-    }
-
-    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
-    private fun handleLoading(isPrimaryApiCall: Boolean): HomeFeedState = if (isPrimaryApiCall) {
-        state.copy(uiStatus = UiStatus.Loading)
-    } else {
-        (state.uiStatus as? UiStatus.Success)?.let { currentState ->
-            state.copy(
-                uiStatus = currentState.copy(
-                    paginationData = PaginationData(
-                        showPaginationLoader = true,
-                        hasPaginationEnded = false
-                    )
-                )
-            )
-        } ?: state
-    }
-
-    context(Syntax<HomeFeedState, HomeFeedSideEffect>)
-    private fun handleSuccess(
-        newsResource: NewsResource.Success<*>,
-        isPrimaryApiCall: Boolean
-    ): HomeFeedState = if (isPrimaryApiCall) {
-        (newsResource.data as? NewsDbEntity)?.let {
-            state.copy(
-                uiStatus = UiStatus.Success(
-                    NewsEntityUiData(
-                        it.articles.mapNotNull(::mapArticleDbDataToNewsArticleUiData),
-                        it.totalResultCount
-                    )
-                )
-            )
-        } ?: state
-    } else {
-        (newsResource.data as? NewsDbEntity)?.let { newsDbEntity ->
+    private fun Syntax<HomeFeedState, HomeFeedSideEffect>.handleError(isPrimaryApiCall: Boolean): HomeFeedState =
+        if (isPrimaryApiCall) {
+            state.copy(uiStatus = UiStatus.Error)
+        } else {
             (state.uiStatus as? UiStatus.Success)?.let { currentState ->
                 state.copy(
-                    uiStatus = UiStatus.Success(
-                        NewsEntityUiData(
-                            currentState.newsEntityUiData.articles +
-                                    newsDbEntity.articles.mapNotNull(
-                                        ::mapArticleDbDataToNewsArticleUiData
-                                    ),
-                            newsDbEntity.totalResultCount
+                    uiStatus =
+                        currentState.copy(
+                            paginationData =
+                                PaginationData(
+                                    showPaginationLoader = false,
+                                    hasPaginationEnded = true,
+                                ),
                         ),
-                        paginationData = PaginationData(showPaginationLoader = false, hasPaginationEnded = false)
-                    ),
                 )
-            }
-        } ?: state
-    }
-}
+            } ?: state
+        }
 
+    private fun Syntax<HomeFeedState, HomeFeedSideEffect>.handleLoading(isPrimaryApiCall: Boolean): HomeFeedState =
+        if (isPrimaryApiCall) {
+            state.copy(uiStatus = UiStatus.Loading)
+        } else {
+            (state.uiStatus as? UiStatus.Success)?.let { currentState ->
+                state.copy(
+                    uiStatus =
+                        currentState.copy(
+                            paginationData =
+                                PaginationData(
+                                    showPaginationLoader = true,
+                                    hasPaginationEnded = false,
+                                ),
+                        ),
+                )
+            } ?: state
+        }
+
+    private fun Syntax<HomeFeedState, HomeFeedSideEffect>.handleSuccess(
+        newsResource: NewsResource.Success<*>,
+        isPrimaryApiCall: Boolean,
+    ): HomeFeedState =
+        if (isPrimaryApiCall) {
+            (newsResource.data as? NewsDbEntity)?.let {
+                state.copy(
+                    uiStatus =
+                        UiStatus.Success(
+                            NewsEntityUiData(
+                                it.articles.mapNotNull(::mapArticleDbDataToNewsArticleUiData),
+                                it.totalResultCount,
+                            ),
+                        ),
+                )
+            } ?: state
+        } else {
+            (newsResource.data as? NewsDbEntity)?.let { newsDbEntity ->
+                (state.uiStatus as? UiStatus.Success)?.let { currentState ->
+                    state.copy(
+                        uiStatus =
+                            UiStatus.Success(
+                                NewsEntityUiData(
+                                    currentState.newsEntityUiData.articles +
+                                        newsDbEntity.articles.mapNotNull(
+                                            ::mapArticleDbDataToNewsArticleUiData,
+                                        ),
+                                    newsDbEntity.totalResultCount,
+                                ),
+                                paginationData =
+                                    PaginationData(
+                                        showPaginationLoader = false,
+                                        hasPaginationEnded = false,
+                                    ),
+                            ),
+                    )
+                }
+            } ?: state
+        }
+}

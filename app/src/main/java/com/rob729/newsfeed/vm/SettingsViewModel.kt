@@ -6,8 +6,9 @@ import com.rob729.newsfeed.AppPreferences
 import com.rob729.newsfeed.repository.PreferenceRepository
 import kotlinx.coroutines.launch
 
-class SettingsViewModel(private val preferenceRepository: PreferenceRepository) : ViewModel() {
-
+class SettingsViewModel(
+    private val preferenceRepository: PreferenceRepository,
+) : ViewModel() {
     val appPreferencesFlow = preferenceRepository.data
 
     fun updatePreference(update: (AppPreferences) -> AppPreferences) {

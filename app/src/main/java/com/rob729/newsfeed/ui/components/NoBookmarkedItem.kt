@@ -31,52 +31,53 @@ private const val NO_BOOKMARKED_ITEM_IMAGE_MAX_WIDTH_FRACTION = 0.4f
 
 @Composable
 fun NoBookmarkedItems() {
-
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
-
         Image(
             imageVector = Icons.Rounded.Bookmarks,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
             contentDescription = "no internet",
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth(NO_BOOKMARKED_ITEM_IMAGE_MAX_WIDTH_FRACTION)
-                .align(Alignment.CenterHorizontally)
-                .clip(RoundedCornerShape(8.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth(NO_BOOKMARKED_ITEM_IMAGE_MAX_WIDTH_FRACTION)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(8.dp)),
         )
 
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 24.dp),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 24.dp),
             text = context.getString(R.string.no_bookmarked_item_title),
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold,
             fontFamily = lexendDecaFontFamily,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(top = 8.dp),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .padding(top = 8.dp),
             text = context.getString(R.string.no_bookmarked_item_subtitle),
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Normal,
             fontFamily = lexendDecaFontFamily,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
-
     }
 }
 

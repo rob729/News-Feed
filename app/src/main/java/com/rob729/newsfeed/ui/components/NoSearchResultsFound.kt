@@ -29,51 +29,53 @@ import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 
 @Composable
 fun NoSearchResultsFound() {
-
     val context = LocalContext.current
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             painter = painterResource(id = R.drawable.no_result_found),
             contentDescription = "no results found",
             contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .fillMaxWidth(fraction = 0.5f)
-                .padding(top = 36.dp)
-                .align(Alignment.CenterHorizontally)
-                .clip(RoundedCornerShape(8.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth(fraction = 0.5f)
+                    .padding(top = 36.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(8.dp)),
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .align(Alignment.CenterHorizontally),
             text = context.getString(R.string.no_result_found_title),
             fontSize = 24.sp,
             color = Color.White,
             fontWeight = FontWeight.SemiBold,
-            fontFamily = lexendDecaFontFamily
+            fontFamily = lexendDecaFontFamily,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 4.dp),
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 4.dp),
             text = context.getString(R.string.no_result_found_subtitle),
             fontSize = 14.sp,
             color = Color.White,
             fontWeight = FontWeight.Normal,
             fontFamily = lexendDecaFontFamily,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
-
 
 @Preview
 @Composable

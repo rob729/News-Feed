@@ -1,8 +1,9 @@
 package com.rob729.newsfeed.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.rob729.newsfeed.model.state.bookmarkedArticles.BookmarkedArticleSideEffect
@@ -31,13 +33,12 @@ import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookmarkedArticlesScreen(
     navController: NavHostController,
-    viewModel: BookmarkedArticlesVM = koinViewModel()
+    paddingValues: PaddingValues,
+    viewModel: BookmarkedArticlesVM = koinViewModel(),
 ) {
-
     val bookmarkedArticlesState = viewModel.collectAsState().value
     val context = LocalContext.current
     val listState = rememberLazyListState()
@@ -58,19 +59,28 @@ fun BookmarkedArticlesScreen(
                 openNewsArticle(
                     context,
                     it.selectedItemUrl,
-                    bookmarkedArticlesState.shouldOpenLinksUsingInAppBrowser
+                    bookmarkedArticlesState.shouldOpenLinksUsingInAppBrowser,
                 )
             }
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-
+    Surface(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
+    ) {
         Column {
             Toolbar(
                 title = BOOKMARK_TOOLBAR_TITLE,
                 leftIcon = IconData(Icons.AutoMirrored.Filled.ArrowBack) { navController.popBackStack() },
-                toolbarElevation = toolbarElevation
+                toolbarElevation = toolbarElevation,
+                modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
             )
 
             if (bookmarkedArticlesState.bookmarkedArticles.isEmpty()) {
@@ -81,16 +91,17 @@ fun BookmarkedArticlesScreen(
                         it.url
                     }) { item ->
                         NewsFeedItem(
-                            Modifier.animateItemPlacement(),
+                            Modifier.animateItem(),
                             newsArticleUiData = item,
                             true,
                             { viewModel.newsFeedItemClicked(item) },
                             { isBookmarked ->
                                 viewModel.newsFeedItemBookmarkClicked(
                                     item,
-                                    isBookmarked
+                                    isBookmarked,
                                 )
-                            })
+                            },
+                        )
                     }
                 }
             }

@@ -17,34 +17,40 @@ import com.rob729.newsfeed.utils.ScreenType
 
 @Composable
 fun LoadingView(screenType: ScreenType = ScreenType.HOME) {
-    val gradient = listOf(
-        Color.LightGray.copy(alpha = 0.8f), //darker grey (60% opacity)
-        Color.LightGray.copy(alpha = 0.3f), //lighter grey (20% opacity)
-        Color.LightGray.copy(alpha = 0.8f)
-    )
+    val gradient =
+        listOf(
+            Color.LightGray.copy(alpha = 0.8f), // darker grey (60% opacity)
+            Color.LightGray.copy(alpha = 0.3f), // lighter grey (20% opacity)
+            Color.LightGray.copy(alpha = 0.8f),
+        )
 
     val transition =
         rememberInfiniteTransition(label = "loading_shimmer_transition") // animate infinite times
 
-    val translateAnimation by transition.animateFloat( //animate the transition
+    val translateAnimation by transition.animateFloat( // animate the transition
         initialValue = 0f,
         targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1000, // duration for the animation
-                easing = LinearEasing
-            )
-        ), label = "loading_shimmer_translate_anim"
+        animationSpec =
+            infiniteRepeatable(
+                animation =
+                    tween(
+                        durationMillis = 1000, // duration for the animation
+                        easing = LinearEasing,
+                    ),
+            ),
+        label = "loading_shimmer_translate_anim",
     )
 
-    val brush = Brush.linearGradient(
-        colors = gradient,
-        start = Offset(translateAnimation, translateAnimation),
-        end = Offset(
-            x = translateAnimation + 200f,
-            y = translateAnimation + 200f
+    val brush =
+        Brush.linearGradient(
+            colors = gradient,
+            start = Offset(translateAnimation, translateAnimation),
+            end =
+                Offset(
+                    x = translateAnimation + 200f,
+                    y = translateAnimation + 200f,
+                ),
         )
-    )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         when (screenType) {

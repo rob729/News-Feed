@@ -40,21 +40,24 @@ fun NewsSourceBottomSheetContent(
 
     Box(
         modifier = Modifier.navigationBarsPadding(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column {
             LazyRow(
-                modifier = Modifier
-                    .testTag("news_source_list"),
+                modifier =
+                    Modifier
+                        .testTag("news_source_list"),
                 horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING.dp),
-                state = rowState
+                state = rowState,
             ) {
-                items(newsSources.size,
-                    { index: Int -> newsSources[index].domainUrl }) { index ->
+                items(
+                    newsSources.size,
+                    { index: Int -> newsSources[index].domainUrl },
+                ) { index ->
                     NewsSourcePill(
                         itemSize = itemWidth.dp,
                         newsSource = newsSources[index],
-                        isSelected = newsSources[index].domainUrl == currentSelectedNewsSource
+                        isSelected = newsSources[index].domainUrl == currentSelectedNewsSource,
                     ) {
                         onNewsSourceClicked(newsSources[index].domainUrl)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

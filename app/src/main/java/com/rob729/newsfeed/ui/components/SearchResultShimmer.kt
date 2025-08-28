@@ -22,58 +22,63 @@ fun SearchResultShimmer(brush: Brush) {
     Surface(
         Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
         tonalElevation = 4.dp,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row {
                 Column {
                     Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = .6f)
-                            .height(15.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(brush)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(fraction = .6f)
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(brush),
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = .6f)
-                            .height(15.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(brush)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(fraction = .6f)
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(brush),
                     )
                 }
                 Spacer(modifier = Modifier.width(6.dp))
                 Spacer(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .aspectRatio(SEARCH_IMAGE_ASPECT_RATIO)
-                        .background(brush)
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .aspectRatio(SEARCH_IMAGE_ASPECT_RATIO)
+                            .background(brush),
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row {
                 Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                        .fillMaxWidth(fraction = 0.3f)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(brush)
+                    modifier =
+                        Modifier
+                            .height(10.dp)
+                            .fillMaxWidth(fraction = 0.3f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush),
                 )
                 Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                        .weight(1f)
+                    modifier =
+                        Modifier
+                            .height(10.dp)
+                            .weight(1f),
                 )
                 Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                        .fillMaxWidth(fraction = 0.2f)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(brush)
+                    modifier =
+                        Modifier
+                            .height(10.dp)
+                            .fillMaxWidth(fraction = 0.2f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush),
                 )
             }
         }
-
     }
 }

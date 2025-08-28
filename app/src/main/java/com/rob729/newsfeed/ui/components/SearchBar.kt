@@ -27,13 +27,15 @@ fun SearchBar(
     searchQuery: String,
     updateSearchQuery: (String) -> Unit,
     clearEditText: () -> Unit,
-    onLeadingIconClick: () -> Unit
+    onLeadingIconClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TextField(
-        modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth()
-            .testTag("search_input_text_field"),
+        modifier =
+            modifier
+                .padding(12.dp)
+                .fillMaxWidth()
+                .testTag("search_input_text_field"),
         value = searchQuery,
         textStyle = TextStyle(fontFamily = lexendDecaFontFamily),
         onValueChange = {
@@ -43,31 +45,36 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "back",
-                modifier = Modifier.clickable {
-                    onLeadingIconClick()
-                })
+                modifier =
+                    Modifier.clickable {
+                        onLeadingIconClick()
+                    },
+            )
         },
         trailingIcon = {
             if (searchQuery.isNotBlank()) {
                 Icon(
                     imageVector = Icons.Default.Clear,
                     contentDescription = "clear",
-                    modifier = Modifier.clickable {
-                        clearEditText()
-                    })
+                    modifier =
+                        Modifier.clickable {
+                            clearEditText()
+                        },
+                )
             }
         },
         placeholder = { Text("search here", fontFamily = lexendDecaFontFamily) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         shape = RoundedCornerShape(12.dp),
-        colors = TextFieldDefaults.colors(
-            disabledTextColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-        )
+        colors =
+            TextFieldDefaults.colors(
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
     )
 }

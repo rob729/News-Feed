@@ -9,5 +9,5 @@ import java.io.Serializable
 @JsonClass(generateAdapter = true)
 class NewsApiResponse(
     @Json(name = "articles") val networkArticles: List<NetworkArticle>,
-    @Json(name = "totalResults") val totalResultCount: Int
+    @Json(name = "totalResults") val totalResultCount: Int,
 ) : Serializable

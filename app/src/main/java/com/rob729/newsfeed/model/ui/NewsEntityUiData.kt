@@ -1,6 +1,6 @@
 package com.rob729.newsfeed.model.ui
 
-data class NewsEntityUiData (
+data class NewsEntityUiData(
     val articles: List<NewsArticleUiData>,
-    val totalResultCount: Int
+    val totalResultCount: Int,
 )

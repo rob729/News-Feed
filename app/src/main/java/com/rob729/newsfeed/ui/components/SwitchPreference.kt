@@ -32,17 +32,19 @@ fun SwitchPreference(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                onCheckedChange(checked.not())
-            },
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable {
+                    onCheckedChange(checked.not())
+                },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             Modifier
                 .weight(1f)
-                .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)) {
+                .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+        ) {
             Text(
                 text = title,
                 fontFamily = lexendDecaFontFamily,
@@ -58,25 +60,29 @@ fun SwitchPreference(
                     fontFamily = lexendDecaFontFamily,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = if (!enabled) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-                    else Color.Unspecified,
+                    color =
+                        if (!enabled) {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        } else {
+                            Color.Unspecified
+                        },
                 )
             }
         }
         Box(
             modifier = Modifier.padding(end = 16.dp, top = 8.dp, bottom = 8.dp),
-            contentAlignment = Alignment.CenterEnd
+            contentAlignment = Alignment.CenterEnd,
         ) {
             Switch(
                 enabled = enabled,
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                colors = SwitchDefaults.colors(
-                    uncheckedThumbColor = Color.LightGray,
-                )
+                colors =
+                    SwitchDefaults.colors(
+                        uncheckedThumbColor = Color.LightGray,
+                    ),
             )
         }
-
     }
 }
 
@@ -88,5 +94,6 @@ private fun SwitchPreferencePreview() {
         subtitle = "clicking on the toggle will toggle it djndkwn nwikndjn siw",
         checked = true,
         enabled = true,
-        onCheckedChange = {})
+        onCheckedChange = {},
+    )
 }

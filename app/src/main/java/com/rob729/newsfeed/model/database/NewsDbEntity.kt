@@ -7,5 +7,5 @@ import java.io.Serializable
 @Keep
 data class NewsDbEntity(
     @ColumnInfo(name = "articles") val articles: List<ArticleDbData>,
-    @ColumnInfo(name = "totalResultCount") val totalResultCount: Int
-): Serializable
+    @ColumnInfo(name = "totalResultCount") val totalResultCount: Int,
+) : Serializable
