@@ -9,4 +9,5 @@ data class HomeFeedState(
     val showNewsSourceBottomSheet: Boolean = false,
     val newsSources: List<NewsSource> = listOf(),
     val shouldOpenLinksUsingInAppBrowser: Boolean = true,
+    val bookmarkedArticleUrls: Set<String> = emptySet()
 )

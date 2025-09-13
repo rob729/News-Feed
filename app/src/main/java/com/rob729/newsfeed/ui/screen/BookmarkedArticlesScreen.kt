@@ -93,7 +93,7 @@ fun BookmarkedArticlesScreen(
                         NewsFeedItem(
                             Modifier.animateItem(),
                             newsArticleUiData = item,
-                            true,
+                            isBookmarked = true,
                             { viewModel.newsFeedItemClicked(item) },
                             { isBookmarked ->
                                 viewModel.newsFeedItemBookmarkClicked(
