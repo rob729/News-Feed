@@ -1,8 +1,8 @@
 [versions]
-activityCompose = "1.10.1"
-androidGradlePlugin = "8.12.1"
-baselineProfile = "1.4.0"
-benchmarkMacroJunit4 = "1.4.0"
+activityCompose = "1.11.0"
+androidGradlePlugin = "8.13.0"
+baselineProfile = "1.4.1"
+benchmarkMacroJunit4 = "1.4.1"
 browser = "1.9.0"
 coil = "2.7.0"
 constraintlayoutCompose = "1.1.1"
@@ -14,25 +14,25 @@ googleServices = "4.4.3"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 koinAndroid = "4.1.0"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinx-datetime = "0.7.1"
 ksp = "2.2.10-2.0.2"
 lifecycleViewmodelCompose = "2.9.3"
 loggingInterceptor = "5.1.0"
 moshiKotlin = "1.15.2"
-navigationCompose = "2.9.3"
+navigationCompose = "2.9.4"
 orbitViewmodel = "10.0.0"
 pluto = "2.2.2"
 profileinstaller = "1.4.1"
 retrofit = "3.0.0"
-roomRuntime = "2.7.2"
+roomRuntime = "2.8.0"
 rules = "1.7.0"
-runtimeTracing = "1.9.0"
+runtimeTracing = "1.9.1"
 startupRuntime = "1.2.0"
 uiautomator = "2.3.0"
-workRuntimeKtx = "2.10.3"
+workRuntimeKtx = "2.10.4"
 datastore = "1.1.7"
-protobufJavalite = "4.32.0"
+protobufJavalite = "4.32.1"
 protobuf = "0.9.5"
 
 
@@ -67,11 +67,11 @@ bundle-core = { module = "com.plutolib.plugins:bundle-core", version.ref = "plut
 bundle-core-no-op = { module = "com.plutolib.plugins:bundle-core-no-op", version.ref = "pluto" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-compose-bom = "androidx.compose:compose-bom:2025.08.01"
+compose-bom = "androidx.compose:compose-bom:2025.09.00"
 compose-ui = { module = "androidx.compose.ui:ui" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
-firebase-bom = "com.google.firebase:firebase-bom:34.1.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.2.0"
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 junit = { module = "junit:junit", version.ref = "junit" }
