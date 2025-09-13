@@ -33,9 +33,22 @@ class HomeViewModel(
             newsRepository.fetchNewsArticles(state.selectedNewsSource).collectLatest {
                 this.updateStateFromNewsResource(it)
             }
+        }
+
+        intent {
             preferenceRepository.getNewsSources().collectLatest {
                 this.reduce {
                     state.copy(newsSources = it)
+                }
+            }
+        }
+
+        intent {
+            newsRepository.getBookmarkedNewsArticles().collectLatest { bookmarkedArticles ->
+                this.reduce {
+                    state.copy(
+                        bookmarkedArticleUrls = bookmarkedArticles.map { it.url }.toSet()
+                    )
                 }
             }
         }

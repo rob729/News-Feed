@@ -40,7 +40,7 @@ import kotlin.time.Instant
 fun NewsFeedItem(
     modifier: Modifier = Modifier,
     newsArticleUiData: NewsArticleUiData,
-    isArticleBookmarked: Boolean,
+    isBookmarked: Boolean,
     onItemClick: () -> Unit,
     onBookmarkClick: (isBookmarked: Boolean) -> Unit,
 ) {
@@ -107,7 +107,7 @@ fun NewsFeedItem(
                 newsArticleUiData.source,
                 newsArticleUiData.publishedAt,
                 newsArticleUiData.url,
-                isArticleBookmarked,
+                isBookmarked,
                 onBookmarkClick,
                 Modifier.padding(start = 12.dp, end = 12.dp, bottom = 8.dp),
             )
@@ -139,5 +139,5 @@ fun shareArticle(
         }
 
     val shareIntent = Intent.createChooser(sendIntent, null)
-    startActivity(context, shareIntent, null)
+    context.startActivity(shareIntent, null)
 }

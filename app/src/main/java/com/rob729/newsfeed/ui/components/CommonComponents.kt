@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,14 @@ fun BottomStrip(
     modifier: Modifier = Modifier,
 ) {
     var isBookmarked by remember { mutableStateOf(isArticleBookmarked) }
+
+    LaunchedEffect(isArticleBookmarked) {
+        isBookmarked = isArticleBookmarked
+    }
+
+    val timeSincePublish = remember(publishedAt) {
+        getHowOldIsArticle(publishedAt)
+    }
 
     ConstraintLayout(
         modifier =
@@ -84,7 +93,7 @@ fun BottomStrip(
             },
         )
         Text(
-            text = getHowOldIsArticle(publishedAt),
+            text = timeSincePublish,
             fontWeight = FontWeight.Light,
             fontSize = 12.sp,
             textAlign = TextAlign.End,

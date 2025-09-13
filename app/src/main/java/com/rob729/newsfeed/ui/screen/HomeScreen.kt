@@ -275,7 +275,7 @@ private fun DisplayNewsFeed(
                     NewsFeedItem(
                         Modifier,
                         newsArticleUiData = item,
-                        false,
+                        newsState.bookmarkedArticleUrls.contains(item.url),
                         { viewModel.newsFeedItemClicked(item) },
                         { isBookmarked ->
                             viewModel.newsFeedItemBookmarkClicked(

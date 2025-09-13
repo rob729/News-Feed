@@ -14,11 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.rob729.newsfeed.AppPreferences
+import androidx.compose.ui.platform.LocalResources
 
 private const val VISIBLE_CARDS = 4.25f
 private const val ITEM_SPACING = 12
@@ -30,7 +31,8 @@ fun NewsSourceBottomSheetContent(
     currentSelectedNewsSource: String,
 ) {
     val vibrator = LocalContext.current.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val screenWidthDp =
+        LocalWindowInfo.current.containerSize.width / LocalResources.current.displayMetrics.density
     val itemWidth = (screenWidthDp - (ITEM_SPACING * VISIBLE_CARDS)).div(VISIBLE_CARDS)
     val rowState = rememberLazyListState()
 
