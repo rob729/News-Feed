@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.protobuf)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.metro)
     if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
         alias(libs.plugins.google.services)
         alias(libs.plugins.firebase.crashlytics)
@@ -100,7 +101,6 @@ android {
         buildConfig = true
     }
     composeCompiler {
-        enableStrongSkippingMode = true
         reportsDestination = layout.buildDirectory.dir("compose_compiler")
     }
     packaging {
@@ -180,9 +180,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
 
     debugImplementation(libs.pluto)
     releaseImplementation(libs.pluto.no.op)

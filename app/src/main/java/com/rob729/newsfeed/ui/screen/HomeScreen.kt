@@ -64,7 +64,6 @@ import com.rob729.newsfeed.utils.Constants
 import com.rob729.newsfeed.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -72,7 +71,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel,
     paddingValues: PaddingValues,
 ) {
     var isNewsSourceBottomSheetVisible by rememberSaveable { mutableStateOf(false) }

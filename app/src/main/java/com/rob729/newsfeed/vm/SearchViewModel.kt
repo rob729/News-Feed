@@ -2,6 +2,8 @@ package com.rob729.newsfeed.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rob729.newsfeed.di.ViewModelKey
+import com.rob729.newsfeed.di.ViewModelScope
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.model.api.NewsApiResponse
 import com.rob729.newsfeed.model.mapper.mapNetworkArticleToNewsArticleUiData
@@ -14,6 +16,9 @@ import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
 import com.rob729.newsfeed.utils.Constants.SEARCH_QUERY_UPDATE_DEBOUNCE_TIME
 import com.rob729.newsfeed.utils.SearchHistoryHelper
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -25,6 +30,9 @@ import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.viewmodel.container
 
 @OptIn(FlowPreview::class)
+@ContributesIntoMap(ViewModelScope::class, binding<ViewModel>())
+@ViewModelKey(SearchViewModel::class)
+@Inject
 class SearchViewModel(
     private val newsRepository: NewsRepository,
     private val searchHistoryHelper: SearchHistoryHelper,

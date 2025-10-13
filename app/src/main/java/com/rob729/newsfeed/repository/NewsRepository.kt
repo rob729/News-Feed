@@ -7,6 +7,7 @@ import com.rob729.newsfeed.model.mapper.mapNewsArticleUiDataToBookmarkedNewsArti
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.network.NewsApiDataSource
 import com.rob729.newsfeed.utils.Constants.MAX_CACHE_DATA_VALID_DURATION_IN_HOURS
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -14,6 +15,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
+@Inject
 class NewsRepository(
     private val newsDBDataSource: NewsDBDataSource,
     private val newsApiDataSource: NewsApiDataSource,

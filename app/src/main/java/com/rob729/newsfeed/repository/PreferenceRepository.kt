@@ -2,9 +2,11 @@ package com.rob729.newsfeed.repository
 
 import androidx.datastore.core.DataStore
 import com.rob729.newsfeed.AppPreferences
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+@Inject
 class PreferenceRepository(
     private val appPreferences: DataStore<AppPreferences>,
 ) {
