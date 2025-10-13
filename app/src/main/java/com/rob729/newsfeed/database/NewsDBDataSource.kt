@@ -5,7 +5,9 @@ import com.rob729.newsfeed.model.database.BookmarkedNewsArticleDbData
 import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.database.NewsSourceDbData
 import com.rob729.newsfeed.model.mapper.mapNewsApiResponseToNewsDbEntity
+import dev.zacsweers.metro.Inject
 
+@Inject
 class NewsDBDataSource(
     private val newsDao: NewsDao,
 ) {

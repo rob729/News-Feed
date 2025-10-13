@@ -38,13 +38,12 @@ import com.rob729.newsfeed.utils.SettingsConstants
 import com.rob729.newsfeed.utils.name
 import com.rob729.newsfeed.utils.toAppTheme
 import com.rob729.newsfeed.vm.SettingsViewModel
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    viewModel: SettingsViewModel = koinViewModel(),
+    viewModel: SettingsViewModel,
 ) {
     val context = LocalContext.current
     val appPreference =

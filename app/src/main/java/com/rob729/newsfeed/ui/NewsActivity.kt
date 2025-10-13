@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -21,10 +22,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rob729.newsfeed.AppPreferences
+import com.rob729.newsfeed.NewsApplication
 import com.rob729.newsfeed.repository.PreferenceRepository
 import com.rob729.newsfeed.ui.screen.BookmarkedArticlesScreen
 import com.rob729.newsfeed.ui.screen.HomeScreen
@@ -34,7 +37,11 @@ import com.rob729.newsfeed.ui.theme.NewsFeedTheme
 import com.rob729.newsfeed.utils.Constants.ANIMATION_DURATION
 import com.rob729.newsfeed.utils.NotificationHelper
 import com.rob729.newsfeed.utils.isDarkThemeEnabled
-import org.koin.android.ext.android.inject
+import com.rob729.newsfeed.vm.BookmarkedArticlesVM
+import com.rob729.newsfeed.vm.HomeViewModel
+import com.rob729.newsfeed.vm.SearchViewModel
+import com.rob729.newsfeed.vm.SettingsViewModel
+import dev.zacsweers.metro.Inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 class NewsActivity : ComponentActivity() {
@@ -51,11 +58,18 @@ class NewsActivity : ComponentActivity() {
             }
         }
 
-    private val preferenceRepository: PreferenceRepository by inject()
+    @Inject private lateinit var preferenceRepository: PreferenceRepository
+
+    @Inject private lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
 
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as? NewsApplication)?.graph?.inject(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView).apply {
@@ -81,7 +95,8 @@ class NewsActivity : ComponentActivity() {
                                 .consumeWindowInsets(paddingValues),
                     ) {
                         composable(NavigationScreens.HOME.routeName) {
-                            HomeScreen(navController, paddingValues = paddingValues)
+                            val homeViewModel: HomeViewModel by viewModels<HomeViewModel>()
+                            HomeScreen(navController, homeViewModel, paddingValues = paddingValues)
                         }
 
                         composable(
@@ -99,7 +114,8 @@ class NewsActivity : ComponentActivity() {
                                 )
                             },
                         ) {
-                            SearchScreen(navController, paddingValues)
+                            val searchViewModel: SearchViewModel by viewModels<SearchViewModel>()
+                            SearchScreen(navController, paddingValues, searchViewModel)
                         }
 
                         composable(
@@ -117,7 +133,8 @@ class NewsActivity : ComponentActivity() {
                                 )
                             },
                         ) {
-                            BookmarkedArticlesScreen(navController, paddingValues)
+                            val bookmarkedArticlesVM: BookmarkedArticlesVM by viewModels<BookmarkedArticlesVM>()
+                            BookmarkedArticlesScreen(navController, paddingValues, bookmarkedArticlesVM)
                         }
 
                         composable(
@@ -135,7 +152,8 @@ class NewsActivity : ComponentActivity() {
                                 )
                             },
                         ) {
-                            SettingsScreen(navController, paddingValues)
+                            val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModel>()
+                            SettingsScreen(navController, paddingValues, settingsViewModel)
                         }
                     }
                 }

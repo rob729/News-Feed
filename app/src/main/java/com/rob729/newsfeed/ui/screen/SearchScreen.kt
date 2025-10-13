@@ -27,7 +27,6 @@ import com.rob729.newsfeed.ui.components.SearchResultItem
 import com.rob729.newsfeed.utils.CommonUtils.openNewsArticle
 import com.rob729.newsfeed.utils.ScreenType
 import com.rob729.newsfeed.vm.SearchViewModel
-import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -35,7 +34,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun SearchScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    viewModel: SearchViewModel = koinViewModel(),
+    viewModel: SearchViewModel,
 ) {
     val searchState = viewModel.collectAsState().value
     val listState = rememberLazyListState()

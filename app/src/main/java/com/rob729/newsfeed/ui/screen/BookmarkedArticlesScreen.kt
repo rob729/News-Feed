@@ -29,7 +29,6 @@ import com.rob729.newsfeed.utils.CommonUtils.openNewsArticle
 import com.rob729.newsfeed.utils.Constants.BOOKMARK_TOOLBAR_TITLE
 import com.rob729.newsfeed.utils.Constants.MAX_TOOLBAR_ELEVATION
 import com.rob729.newsfeed.vm.BookmarkedArticlesVM
-import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -37,7 +36,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun BookmarkedArticlesScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    viewModel: BookmarkedArticlesVM = koinViewModel(),
+    viewModel: BookmarkedArticlesVM,
 ) {
     val bookmarkedArticlesState = viewModel.collectAsState().value
     val context = LocalContext.current

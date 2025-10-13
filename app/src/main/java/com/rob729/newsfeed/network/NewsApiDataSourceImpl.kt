@@ -3,6 +3,7 @@ package com.rob729.newsfeed.network
 import com.rob729.newsfeed.BuildConfig
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.utils.Constants
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,6 +16,7 @@ import retrofit2.HttpException
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+@Inject
 class NewsApiDataSourceImpl(
     private val newsApi: NewsApi,
 ) : NewsApiDataSource {
