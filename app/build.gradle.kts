@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.metro)
+    alias(libs.plugins.kotlinx.serialization)
     if (File("app/google-services.json").exists() && File("app/src/debug/google-services.json").exists()) {
         alias(libs.plugins.google.services)
         alias(libs.plugins.firebase.crashlytics)
@@ -165,14 +166,13 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
 
-    implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.codegen)
+    implementation(libs.kotlinx.serialization)
 
     implementation(libs.orbit.viewmodel)
     implementation(libs.orbit.compose)
 
     implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
+    implementation(libs.kotlinx.serialization.convertor)
     implementation(libs.logging.interceptor)
 
     implementation(libs.kotlinx.datetime)

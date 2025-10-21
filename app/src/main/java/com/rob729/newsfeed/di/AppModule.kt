@@ -24,10 +24,12 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -48,12 +50,20 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun providesNewsApi(okHttpClient: OkHttpClient): NewsApi {
+    fun providesJson(): Json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        encodeDefaults = true
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesNewsApi(okHttpClient: OkHttpClient, json: Json): NewsApi {
         val retrofitInstance =
             Retrofit
                 .Builder()
                 .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
                 .client(okHttpClient)
                 .build()
 
