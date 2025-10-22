@@ -1,23 +1,22 @@
 package com.rob729.newsfeed.model.api
 
 import androidx.annotation.Keep
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
 import java.io.Serializable
 
 @Keep
-@JsonClass(generateAdapter = true)
+@kotlinx.serialization.Serializable
 data class NetworkArticle(
-    @Json(name = "title") val title: String?,
-    @Json(name = "url") val url: String,
-    @Json(name = "urlToImage") val imageUrl: String?,
-    @Json(name = "description") val description: String?,
-    @Json(name = "publishedAt") val publishedAt: String,
-    @Json(name = "source") val source: ArticleSource? = null,
+    @SerialName("title") val title: String?,
+    @SerialName( "url") val url: String,
+    @SerialName( "urlToImage") val imageUrl: String?,
+    @SerialName( "description") val description: String?,
+    @SerialName( "publishedAt") val publishedAt: String,
+    @SerialName( "source") val source: ArticleSource? = null,
 ) : Serializable
 
 @Keep
-@JsonClass(generateAdapter = true)
+@kotlinx.serialization.Serializable
 data class ArticleSource(
-    @Json(name = "name") val name: String? = null,
+    @SerialName("name") val name: String? = null,
 ) : Serializable

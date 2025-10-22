@@ -2,8 +2,10 @@ package com.rob729.newsfeed.model.database
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
+import kotlinx.serialization.Serializable
 
 @Keep
+@Serializable
 data class ArticleDbData(
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "url") val url: String,

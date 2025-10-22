@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import java.io.Serializable
 
 @Keep
+@kotlinx.serialization.Serializable
 data class NewsDbEntity(
     @ColumnInfo(name = "articles") val articles: List<ArticleDbData>,
     @ColumnInfo(name = "totalResultCount") val totalResultCount: Int,
