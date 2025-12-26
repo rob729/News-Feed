@@ -109,6 +109,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    lint {
+        disable += "InvalidFragmentVersionForActivityResult"
+    }
     namespace = "com.rob729.newsfeed"
 }
 
@@ -163,8 +166,10 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.runtime.tracing)
 
-    implementation(libs.coil)
+    implementation(libs.coil.ktor)
     implementation(libs.coil.compose)
+
+    implementation(libs.ktor.client.android)
 
     implementation(libs.kotlinx.serialization)
 

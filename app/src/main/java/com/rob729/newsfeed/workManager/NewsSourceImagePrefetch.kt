@@ -3,8 +3,8 @@ package com.rob729.newsfeed.workManager
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.imageLoader
+import coil3.request.ImageRequest
 import com.rob729.newsfeed.R
 import com.rob729.newsfeed.utils.Constants
 

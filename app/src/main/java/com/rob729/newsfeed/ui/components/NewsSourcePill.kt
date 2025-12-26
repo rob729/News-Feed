@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.rob729.newsfeed.AppPreferences.NewsSource
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
 

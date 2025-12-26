@@ -2,12 +2,13 @@ package com.rob729.newsfeed.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import kotlin.reflect.KClass
 
-@ContributesBinding(ViewModelScope::class)
+@ContributesBinding(AppScope::class)
 @Inject
 class MetroViewModelFactory(
     private val viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>
