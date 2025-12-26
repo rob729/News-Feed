@@ -2,7 +2,6 @@ package com.rob729.newsfeed.vm
 
 import androidx.lifecycle.ViewModel
 import com.rob729.newsfeed.di.ViewModelKey
-import com.rob729.newsfeed.di.ViewModelScope
 import com.rob729.newsfeed.model.NewsResource
 import com.rob729.newsfeed.model.database.NewsDbEntity
 import com.rob729.newsfeed.model.mapper.mapArticleDbDataToNewsArticleUiData
@@ -14,6 +13,7 @@ import com.rob729.newsfeed.model.ui.NewsEntityUiData
 import com.rob729.newsfeed.model.ui.PaginationData
 import com.rob729.newsfeed.repository.NewsRepository
 import com.rob729.newsfeed.repository.PreferenceRepository
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
@@ -23,7 +23,7 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.viewmodel.container
 
-@ContributesIntoMap(ViewModelScope::class, binding<ViewModel>())
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
 @ViewModelKey(HomeViewModel::class)
 @Inject
 class HomeViewModel(

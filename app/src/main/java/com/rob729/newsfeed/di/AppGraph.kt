@@ -13,8 +13,7 @@ import kotlin.reflect.KClass
 
 @DependencyGraph(
     scope = AppScope::class,
-    bindingContainers = [AppModule::class],
-    additionalScopes = [ViewModelScope::class]
+    bindingContainers = [AppModule::class]
 )
 interface AppGraph {
 
