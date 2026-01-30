@@ -23,16 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
-import com.rob729.newsfeed.utils.CommonUtils
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.image.LandscapistImage
 
 const val SEARCH_IMAGE_ASPECT_RATIO = 1.7f
 
@@ -79,15 +78,13 @@ fun SearchResultItem(
                     fontFamily = lexendDecaFontFamily,
                 )
 
-                AsyncImage(
-                    model =
-                        CommonUtils.getImageRequestModel(
-                            LocalContext.current,
-                            newsArticleUiData.imageUrl,
-                        ),
-                    contentDescription = null,
-                    alignment = Alignment.CenterEnd,
-                    contentScale = ContentScale.Crop,
+                LandscapistImage(
+                    imageModel = { newsArticleUiData.imageUrl },
+                    imageOptions = ImageOptions(
+                        contentDescription = null,
+                        alignment = Alignment.CenterEnd,
+                        contentScale = ContentScale.Crop,
+                    ),
                     modifier =
                         Modifier
                             .aspectRatio(SEARCH_IMAGE_ASPECT_RATIO)

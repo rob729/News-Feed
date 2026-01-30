@@ -24,9 +24,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.rob729.newsfeed.AppPreferences.NewsSource
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.image.LandscapistImage
 
 @Composable
 fun NewsSourcePill(
@@ -46,10 +47,12 @@ fun NewsSourcePill(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        AsyncImage(
-            model = newsSource.imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        LandscapistImage(
+            imageModel = { newsSource.imageUrl },
+            imageOptions = ImageOptions(
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            ),
             modifier =
                 Modifier
                     .clip(CircleShape)

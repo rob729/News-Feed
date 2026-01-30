@@ -166,8 +166,10 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.runtime.tracing)
 
-    implementation(libs.coil.ktor)
-    implementation(libs.coil.compose)
+//    implementation(libs.coil.ktor)
+//    implementation(libs.coil.compose)
+
+    implementation(libs.landscapist.image)
 
     implementation(libs.ktor.client.android)
 

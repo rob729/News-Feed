@@ -6,25 +6,22 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import coil3.request.CachePolicy
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.rob729.newsfeed.R
 
 object CommonUtils {
-    fun getImageRequestModel(
-        context: Context,
-        imageUrl: String,
-        crossFadeDuration: Int = 200,
-    ) = ImageRequest
-        .Builder(context)
-        .data(imageUrl)
-        .crossfade(true)
-        .crossfade(crossFadeDuration)
-        .networkCachePolicy(CachePolicy.ENABLED)
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .diskCachePolicy(CachePolicy.DISABLED)
-        .build()
+//    fun getImageRequestModel(
+//        context: Context,
+//        imageUrl: String,
+//        crossFadeDuration: Int = 200,
+//    ) = ImageRequest
+//        .Builder(context)
+//        .data(imageUrl)
+//        .crossfade(true)
+//        .crossfade(crossFadeDuration)
+//        .networkCachePolicy(CachePolicy.ENABLED)
+//        .memoryCachePolicy(CachePolicy.ENABLED)
+//        .diskCachePolicy(CachePolicy.DISABLED)
+//        .build()
 
     fun openNewsArticle(
         context: Context,

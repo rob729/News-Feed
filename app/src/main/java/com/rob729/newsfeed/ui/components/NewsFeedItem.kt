@@ -21,16 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.rob729.newsfeed.model.ui.NewsArticleUiData
 import com.rob729.newsfeed.ui.theme.lexendDecaFontFamily
-import com.rob729.newsfeed.utils.CommonUtils
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.image.LandscapistImage
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -60,19 +59,18 @@ fun NewsFeedItem(
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = onItemClick,
-                ).scale(scale),
+                )
+                .scale(scale),
         tonalElevation = 4.dp,
         shape = RoundedCornerShape(12.dp),
     ) {
         Column {
-            AsyncImage(
-                model =
-                    CommonUtils.getImageRequestModel(
-                        LocalContext.current,
-                        newsArticleUiData.imageUrl,
-                    ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            LandscapistImage(
+                imageModel = { newsArticleUiData.imageUrl },
+                imageOptions = ImageOptions(
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                ),
                 modifier =
                     Modifier
                         .height(150.dp)
